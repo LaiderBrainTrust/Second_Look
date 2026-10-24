@@ -23,18 +23,20 @@ Node 22.13+ is required. Open http://localhost:5173. `setup` creates `.env.local
 | --- | --- | --- | --- |
 | Akta | Key saved | Key saved; restart Codespace | Set `AKTA_API_KEY` in ignored `.env.local` |
 | Nicrron | Key saved | Key saved; restart Codespace | Set `NICRRON_API_KEY` in ignored `.env.local` |
-| Roundtable | Not shared | Not shared | Team-only workspace keys required |
+| Roundtable | Restricted app/reviewer keys saved | Keys and project saved; restart Codespace | Obtain restricted team bot keys through the team credential channel |
 | PRISM | Key and project ID saved | Key and project ID saved; restart Codespace | Set `PRISM_TRACE_KEY` and `PRISM_PROJECT_ID` |
 
-GitHub Actions secrets are not downloadable. Repository Codespaces secrets **are now configured for Akta, Nicrron and PRISM** in `LaiderBrainTrust/vc_hackathon`; a new/restarted Codespace receives them as environment variables. They do not populate ordinary local clones. The authenticated `silverstein` identity now has repository admin rights. Secret names were verified after saving; teammate Codespace injection still needs a live check.
+GitHub Actions secrets are not downloadable. Repository Codespaces secrets **are now configured for all four sponsors** in `LaiderBrainTrust/vc_hackathon`; a new/restarted Codespace receives them as environment variables. They do not populate ordinary local clones. The authenticated `silverstein` identity now has repository admin rights. Secret names were verified after saving; teammate Codespace injection still needs a live check.
 
-The Roundtable keys on Mat's host also reach his reporting workspace. They must not be distributed to this team. A team-only workspace/connection is needed, with an app coordinator and reviewer sharing access to its project. Configure `ROUNDTABLE_APP_KEY`, `ROUNDTABLE_WORKER_KEY`, `ROUNDTABLE_WORKER_ID`, and `ROUNDTABLE_PROJECT`. This is a real outstanding setup dependency, not an automatic step the repository already performs.
+Roundtable is now configured with the dedicated `second-look-team` bank and two bot identities: `second-look-team-coordinator` and `second-look-team-reviewer`. Both were verified to have no access to the `vc-hackathon` reporting bank or `shared-notes` (HTTP 403 on reads). The team parent connection is not distributed. All four `ROUNDTABLE_*` runtime settings are available in repository Codespaces and Actions secrets. The actual app completed a review in this bank: task `5828d00fdb604e7580624aa766cb835e`, PRISM trace `6d56e04d-c5ee-441d-8880-b5ae9a9d337a`.
+
+This is credential isolation inside the existing shared workspace, not a separate account: workspace co-owners can still access all data through the dashboard. The former development keys remain on the build host only. Do not use the shared workspace for private personal or client material.
 
 ## Codespaces option
 
 On branch `main`, use GitHub's Code → Codespaces → Create codespace on this branch. The devcontainer installs Node and dependencies and runs setup. Then run `npm run doctor` and `npm run dev`. Open forwarded port **5173**, keeping its visibility **Private**; do not expose port 3001. Codespaces creation may consume your account's quota. No Codespace has been created or billed by this setup task.
 
-GitHub injects configured repository Codespaces secrets into newly started environments. Restart an existing Codespace after secret changes. Until the Roundtable step above is complete, live flow will report missing settings. The devcontainer configuration has been source-checked but has not yet been launched in a teammate's Codespace.
+GitHub injects configured repository Codespaces secrets into newly started environments. Restart an existing Codespace after secret changes. All required sponsor settings have been saved. Verify injection with `npm run doctor`; do not print secret values. The devcontainer configuration has been source-checked but has not yet been launched in a teammate's Codespace.
 
 The role selector is a synthetic local demo, not participant authentication. Private Codespaces forwarding is suitable for an owner's development preview, not a multi-user hosted product. A shared team instance with one persistent case database still needs deployment and real access control.
 

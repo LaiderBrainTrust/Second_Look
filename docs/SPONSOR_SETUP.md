@@ -55,7 +55,7 @@ roundtable login
 roundtable setup
 ```
 
-### Product workflow: separate workspace credentials required
+### Product workflow: restricted team credentials configured
 
 The SDK guide distinguishes machine login from a **team key**, which is the key of an AI assistant connection. In the Roundtable workspace, use **Agents → Connect agent → AI assistant → Custom** and name the connection for the team. Its setup key can provision the individual bot keys. Event access uses code `VCHACK` on the signup waitlist screen. The machine login above cannot substitute for this team key.
 
@@ -107,7 +107,7 @@ The reviewer now validates the dated input, then calls Nicrron for a source-link
 
 Set the variables in `.env.example`: `AKTA_API_KEY`, `NICRRON_API_KEY`, `ROUNDTABLE_APP_KEY`, `ROUNDTABLE_WORKER_KEY`, `ROUNDTABLE_WORKER_ID`, and `ROUNDTABLE_PROJECT`. Both Roundtable identities need access to the same project. `ROUNDTABLE_ENV_FILE` optionally points to an owner-only environment file outside the repo. No machine CLI login is needed for SDK operation.
 
-**Team access:** cloning the repository does not copy credentials. Akta is saved in GitHub Actions secrets, which authorized workflows can consume but teammates cannot download. The app's Roundtable keys remain on Mat's server because their grants also reach the reporting workspace; do not distribute those keys. Provision a dedicated demo workspace for team keys, or use a shared authenticated deployment that keeps keys server-side. A public/shared deployment is not yet configured.
+**Team access (updated October 24, 12:35 PM Eastern):** restricted Roundtable app/reviewer credentials are now in repository Actions and Codespaces secrets, alongside Akta, Nicrron and PRISM. They use `second-look-team`; HTTP reads of `vc-hackathon` and `shared-notes` are denied. Prior setup notes above are historical. An ordinary clone cannot download GitHub secrets; use a new/restarted Codespace or the team's private credential channel. The current Roundtable account is a shared team workspace, so co-owners retain dashboard access independent of bot restrictions.
 
 ### Observed app verification
 
