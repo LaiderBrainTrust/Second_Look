@@ -12,6 +12,7 @@ These are implementation claims, not customer validation. Ryan owns when and how
 | Term checklist and consent/ROFR tracking | Backend implemented; assigned owner, deadline, evidence note, required/optional status | Ryan's UI; this records assertions, not legal consent or notices |
 | Several assigned questions | Backend implemented; role-filtered access, answer, investor resolution, reopen, overdue state | Ryan's UI and multi-browser acceptance; roles remain simulated |
 | Audit export | HTML/JSON implemented, including current workflow state and history in JSON | Final UI download control |
+| User-created cases and separate participants | Backend implemented; individual accounts, scoped invitations and revocation | Ryan UI, multi-device acceptance, hosting cutover; display names are not verified identities |
 | Other opportunities below | Not implemented or validated | Choose by user need and remaining time, not by model speed |
 
 ## Workflow

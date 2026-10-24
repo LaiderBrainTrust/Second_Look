@@ -47,6 +47,13 @@ def request_json(opener, url, body=None, headers=None):
         return json.load(response)
 
 
+def has_account_cases(database):
+    with sqlite3.connect(f'file:{database}?mode=ro', uri=True) as connection:
+        if not connection.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name='workspace_cases'").fetchone():
+            return False
+        return connection.execute('SELECT 1 FROM workspace_cases LIMIT 1').fetchone() is not None
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--commit', required=True, help='Full SHA already merged into origin/main')
@@ -72,6 +79,10 @@ def main():
     run('systemctl', '--user', 'is-active', '--quiet', service)
     run('git', '-C', str(repo), 'fetch', 'origin')
     run('git', '-C', str(repo), 'merge-base', '--is-ancestor', args.commit, 'origin/main')
+    if has_account_cases(database):
+        scoped_source = subprocess.run(['git', '-C', str(repo), 'cat-file', '-e', args.commit + ':server/workspace-routes.ts'], capture_output=True)
+        if scoped_source.returncode:
+            raise RuntimeError('Refusing a downgrade to the single-case server while account cases exist.')
     old_release = subprocess.check_output(['systemctl', '--user', 'show', service, '-p', 'WorkingDirectory', '--value'], text=True).strip()
     if not old_release.startswith(str(root / 'releases') + '/'):
         raise RuntimeError('Unexpected service working directory; leaving it unchanged.')
@@ -147,6 +158,14 @@ def main():
             if list(jar):
                 request_json(signed, origin + '/api/session/logout', {}, {'Origin': origin})
     except BaseException:
+        if has_account_cases(database) and not (Path(old_release) / 'server/workspace-routes.ts').is_file():
+            # The old example server lists all research. Never expose newly
+            # private case data by rolling it back onto the expanded database.
+            run('systemctl', '--user', 'stop', service)
+            receipt['status'] = 'stopped-unsafe-downgrade-blocked'
+            receipt_file.write_text(json.dumps(receipt, indent=2) + '\n')
+            print('Verification failed. Service stopped because the prior release cannot isolate account cases; private data was preserved.')
+            raise
         if previous is None:
             dropin.unlink(missing_ok=True)
         else:

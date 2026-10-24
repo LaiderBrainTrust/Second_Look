@@ -2,13 +2,13 @@ import { Router } from 'express';
 import { AktaError, createAktaClient } from './adapters/akta.js';
 import { recordProviderResult } from './adapters/status.js';
 
-export function researchRouter() {
+export function researchRouter(allowedOrigins?: string[]) {
   const router = Router();
   const akta = createAktaClient({ onResult: (ok, detail) => recordProviderResult('akta', ok, detail) });
   router.use((req, res, next) => {
     // Local scaffold only. JSON POSTs and explicit local origins prevent drive-by credit use.
     const origin = req.header('origin');
-    const allowed = ['http://localhost:5173', 'http://127.0.0.1:5173', 'http://localhost:3001', 'http://127.0.0.1:3001'];
+    const allowed = allowedOrigins ?? ['http://localhost:5173', 'http://127.0.0.1:5173', 'http://localhost:3001', 'http://127.0.0.1:3001'];
     if (req.method !== 'POST' || !req.is('application/json') || (origin && !allowed.includes(origin))) {
       res.status(403).json({ error: 'Use a JSON POST from the local application.' }); return;
     }

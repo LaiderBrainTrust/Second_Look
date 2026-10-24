@@ -2,6 +2,10 @@
 
 Product authority: [PLAN.md](PLAN.md). Work claims: [TEAM_BOARD.md](TEAM_BOARD.md). Setup: [TEAM_START.md](TEAM_START.md). Demo: [GAMING_BUILD.md](GAMING_BUILD.md).
 
+## New account/case API
+
+[REAL_CASE_API.md](REAL_CASE_API.md) specifies individual accounts and user-created cases under `/api/cases/:id`. The original `/api/case` remains the example. Both use the same domain calculations and revision checks. [RAILWAY.md](RAILWAY.md) covers container hosting.
+
 ## Stack and authority
 
 React 19 + Vite 6; Express 5; TypeScript/ESM; Node 22.13+; native SQLite. `npm run dev` starts UI 5173, API 3001 and the configured Roundtable worker. Use `npm ci`, not a new scaffold. The app is one fictional case per clone, persisted in ignored `.local/second-look.sqlite`.
@@ -99,7 +103,7 @@ npm run doctor
 npm run dev
 ```
 
-For changes, run `npm test` then `npm run build`. Current suite: 47 tests, including trace field-order reconciliation and rejection of actual mismatches. Do not repeat provider calls just to replace a saved source with a prettier result.
+For changes, run `npm test` then `npm run build`. Current suite: 53 tests, including trace field-order reconciliation and rejection of actual mismatches. Do not repeat provider calls just to replace a saved source with a prettier result.
 
 Check the complete browser flow in GAMING_BUILD.md. Refresh/reopen and confirm persistence. Test the game screen and decision screen on a narrow viewport. A build does not establish live provider access; a local browser pass does not establish hosted authentication or user acceptance.
 

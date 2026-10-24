@@ -2,6 +2,10 @@
 
 Owner direction: Mat, October 24, 2026. **Ryan owns the final customer experience and visual design.** This is a design brief, not a prescribed wireframe. [PLAN.md](PLAN.md) owns product scope; [BUILD.md](BUILD.md) owns API behavior.
 
+## New real-use integration priority
+
+Mat authorized user-created cases and independent participant access after this original brief. See [REAL_CASE_API.md](REAL_CASE_API.md): add account sign-in/registration, “Start a review,” a case picker, and explicit invitation acceptance. Render role-switching only in example presenter mode. Use the selected `/api/cases/:id` prefix for real account cases. The original gaming walkthrough remains an optional example. Backend implementation does not establish UI acceptance.
+
 ## The ambition
 
 Build something a real investor would want to open again tomorrow. The current interface proves the plumbing and gives us a rehearsal path; it is not the final design and does not constrain Ryan's layout, typography, color, motion, navigation or component structure. This is a substantial experience redesign, not just a coat of paint.

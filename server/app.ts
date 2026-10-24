@@ -1,3 +1,5 @@
+import { createWorkspaceAccess } from './workspace-access.js';
+import { workspaceRouter } from './workspace-routes.js';
 import { decisionRecordRouter } from './decision-record.js';
 import { diligenceRouter } from './diligence.js';
 import type { createReviewRecovery } from './review-recovery.js';
@@ -30,11 +32,16 @@ export function createApp(store: ReturnType<typeof createStore>, options: { rele
     next();
   });
   app.use(express.json({ limit: '20kb' }));
-  if (options.hosted) installHostedAuth(app, options.hosted);
+  const access = options.hosted ? createWorkspaceAccess(store.db) : undefined;
+  if (options.hosted) installHostedAuth(app, options.hosted, access);
   else app.get('/api/session', (_req, res) => res.json({ hosted: false, authenticated: true }));
   app.get('/api/health', (_req, res) => res.json({ ok: true, mode: options.rehearsal ? 'saved-research-rehearsal' : 'local-synthetic-scaffold', ...(/^[a-f0-9]{40}$/.test(options.releaseSha ?? '') ? { releaseSha: options.releaseSha } : {}) }));
   app.get('/api/providers', (_req, res) => res.json(providerStatuses()));
-  app.use('/api/research', researchRouter());
+  app.use('/api/research', (req, res, next) => {
+    if (options.hosted && res.locals.session?.mode !== 'presenter') { res.status(403).json({ error: 'Use the research tools within a case you own.' }); return; }
+    next();
+  }, researchRouter(options.hosted ? [options.hosted.origin] : undefined));
+  if (options.hosted && access) app.use('/api/cases', workspaceRouter(store, access, options.hosted.origin, options.recovery));
   app.use('/api/case', (req, res, next) => {
     // Local role simulation; hosted roles come only from the authenticated, case-scoped presenter session.
     const role = options.hosted ? res.locals.session?.role : req.header('x-demo-role');

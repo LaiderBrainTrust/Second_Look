@@ -6,7 +6,7 @@ import { createAktaClient } from './adapters/akta.js';
 import { fetchSteam } from './adapters/steam.js';
 import { recordProviderResult } from './adapters/status.js';
 import { DomainError } from './domain.js';
-import type { createStore } from './store.js';
+import type { CaseStore } from './store.js';
 
 export function studioProfile(value: unknown): StudioProfile {
   const raw = value as { firmographic?: Record<string, unknown> };
@@ -36,7 +36,7 @@ export function rankHoldings(items: HoldingEvidence[]): HoldingEvidence[] {
   return described.sort((a, b) => order[a.priority] - order[b.priority] || (a.steam?.deltaPoints ?? 0) - (b.steam?.deltaPoints ?? 0) || b.holding.fundNavExposurePercent - a.holding.fundNavExposurePercent)
     .map((item, i) => ({ ...item, rank: i + 1 }));
 }
-export function gamingRouter(store: ReturnType<typeof createStore>) {
+export function gamingRouter(store: CaseStore) {
   const router = Router();
   const akta = createAktaClient({ onResult: (ok, detail) => recordProviderResult('akta', ok, detail) });
   router.use((_req, res, next) => {

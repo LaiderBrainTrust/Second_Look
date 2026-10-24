@@ -1,21 +1,21 @@
 import { randomUUID } from 'node:crypto';
 import { Router } from 'express';
 import type { ResearchRun } from '../shared/research.js';
-import { createStore } from './store.js';
+import type { CaseStore } from './store.js';
 import { DomainError, view } from './domain.js';
 import { createAktaClient, validateCutoff } from './adapters/akta.js';
 import { configured, createRoundtableAdapter } from './adapters/roundtable.js';
 import { recordProviderResult } from './adapters/status.js';
 import { createReviewRecovery } from './review-recovery.js';
 
-export function caseResearchRouter(store: ReturnType<typeof createStore>, recovery = createReviewRecovery(store)) {
+export function caseResearchRouter(store: CaseStore, recovery = createReviewRecovery(store)) {
   const router = Router();
   const akta = createAktaClient({ onResult: (ok, detail) => recordProviderResult('akta', ok, detail) });
   const rt = createRoundtableAdapter(); const active = new Set<string>();
   const inputFor = (run: ResearchRun) => {
     const state = store.current(run.caseRevision);
     return { caseId: run.caseId, caseRevision: run.caseRevision, runId: run.id, after: run.after,
-      gamingContext: run.gamingContext, finding: run.findings.find(f => f.source.id === run.selectedFindingId)!, offer: state.offer };
+      gamingContext: run.gamingContext, finding: run.findings.find(f => f.source.id === run.selectedFindingId)!, offer: { version: state.offer.version, purchasePriceCents: state.offer.purchasePriceCents, distributionRecipient: state.offer.distributionRecipient } };
   };
   router.use((_req, res, next) => {
     if (res.locals.role !== 'lp') { res.status(403).json({ error: 'Research is private to the investor until they share a question.' }); return; }
@@ -69,11 +69,11 @@ export function caseResearchRouter(store: ReturnType<typeof createStore>, recove
     } finally { active.delete(id); }
   });
   router.post('/:id/check', async (req, res, next) => {
-    try { res.json(await recovery.check(String(req.params.id))); }
+    try { store.research(String(req.params.id)); res.json(await recovery.check(String(req.params.id))); }
     catch (error) { next(error); }
   });
   router.post('/:id/share', (req, res, next) => {
-    try { res.json(view(store.publishResearch(String(req.params.id), req.body.expectedRevision), 'lp')); }
+    try { res.json(view(store.publishResearch(String(req.params.id), req.body.expectedRevision, res.locals.actor), 'lp')); }
     catch (error) { next(error); }
   });
   return router;

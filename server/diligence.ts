@@ -2,7 +2,7 @@ import { Router } from 'express';
 import type { CaseState, Role } from '../shared/contracts.js';
 import type { ClosingCondition, ComparisonOffer, DiligenceCommand, DiligenceItem, DiligenceState, DiligenceView, OfferComparison } from '../shared/diligence.js';
 import { DomainError, diligenceBlockers, money } from './domain.js';
-import type { createStore } from './store.js';
+import type { CaseStore } from './store.js';
 
 export const emptyDiligence = (): DiligenceState => ({ offers: [], questions: [], conditions: [], history: [] });
 const text = (value: unknown, label: string, max = 2000): string => {
@@ -167,7 +167,7 @@ export function applyDiligence(state: CaseState, role: Role, expected: number, c
   return next;
 }
 
-export function diligenceRouter(store: ReturnType<typeof createStore>) {
+export function diligenceRouter(store: CaseStore) {
   const router = Router();
   router.use((_req, res, next) => { res.setHeader('Cache-Control', 'no-store'); next(); });
   router.get('/', (_req, res) => res.json(diligenceView(store.read(), res.locals.role)));
@@ -175,7 +175,7 @@ export function diligenceRouter(store: ReturnType<typeof createStore>) {
     try {
       const { expectedRevision, command } = req.body ?? {};
       if (!Number.isSafeInteger(expectedRevision) || expectedRevision < 1) throw new DomainError(400, 'Provide the current case revision.');
-      res.json(diligenceView(store.diligenceCommand(res.locals.role, expectedRevision, command), res.locals.role));
+      res.json(diligenceView(store.diligenceCommand(res.locals.role, expectedRevision, command, res.locals.actor), res.locals.role));
     } catch (error) { next(error); }
   });
   return router;

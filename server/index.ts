@@ -22,7 +22,7 @@ if (rehearsal || (hosted && store.read().revision === 1 && !store.latestGaming()
   console.log(`Saved research rehearsal: ${capture.capturedAt}. New private database: ${databasePath}`);
 }
 
-const recovery = createReviewRecovery(store);
+const recovery = createReviewRecovery(store.recoveryStore);
 const stopRecovery = startReviewRecovery(recovery);
 const reviewer = new AbortController();
 void runReviewer(reviewer.signal).catch(() => {
@@ -31,7 +31,9 @@ void runReviewer(reviewer.signal).catch(() => {
 const app = createApp(store, { recovery, releaseSha: process.env.RELEASE_SHA, rehearsal: rehearsal || hosted, ...(hosted ? { hosted: { origin: process.env.DEMO_ORIGIN!, accessCode: process.env.DEMO_ACCESS_CODE! } } : {}) });
 if (hosted) installHostedUi(app, 'dist');
 const port = hosted ? Number(process.env.PORT ?? 3187) : 3001;
-const server = app.listen(port, '127.0.0.1', () => console.log(`Second Look API: http://127.0.0.1:${port}`));
+const bindHost = process.env.BIND_HOST ?? '127.0.0.1';
+if (!['127.0.0.1', '0.0.0.0', '::'].includes(bindHost) || !Number.isSafeInteger(port) || port < 1 || port > 65535) throw new Error('Invalid BIND_HOST or PORT.');
+const server = app.listen(port, bindHost, () => console.log(`Second Look API listening on ${bindHost}:${port}`));
 const stop = () => { stopRecovery(); reviewer.abort(); server.close(() => { store.close(); process.exit(0); }); };
 process.on('SIGINT', stop);
 process.on('SIGTERM', stop);

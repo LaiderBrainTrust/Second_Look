@@ -1,4 +1,4 @@
-import type { Role } from './contracts.js';
+import type { Actor, Role } from './contracts.js';
 
 export interface ComparisonOffer {
   id: string;
@@ -41,7 +41,7 @@ export interface DiligenceState {
   questions: TrackedQuestion[];
   conditions: ClosingCondition[];
   // Immutable snapshots retain superseded answers, terms, deadlines and resolutions.
-  history: { revision: number; at: string; by: Role; kind: DiligenceCommand['kind']; item: DiligenceItem }[];
+  history: { revision: number; at: string; by: Role; kind: DiligenceCommand['kind']; item: DiligenceItem; actor?: Actor }[];
 }
 export type DiligenceCommand =
   | { kind: 'save_offer'; offer: Omit<ComparisonOffer, 'version'> }

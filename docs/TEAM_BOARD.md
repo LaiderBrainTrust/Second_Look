@@ -4,6 +4,8 @@ Read [PLAN.md](PLAN.md) first. This board records proposed work, not automatic d
 
 | Priority | Task | Owner / state | Acceptance |
 | --- | --- | --- | --- |
+| P0 | Real-use accounts, cases and participant invitations | Mat/Codex backend implemented; Ryan owns UI | [REAL_CASE_API.md](REAL_CASE_API.md); isolated memberships, fixed roles, one-time invites, revocation, persisted sessions, actor attribution |
+| P0 | Railway + custom domain | Container/config prepared by Mat/Codex; account/DNS setup pending | [RAILWAY.md](RAILWAY.md); persistent volume, private runtime secrets, tested cutover and restore |
 | P0 | Background review recovery and safe release path | Mat/Codex — merged and deployed; 34 tests/build and live checks passed | [BACKEND_READINESS.md](BACKEND_READINESS.md); queued results survive closed browser/restart, unchanged case, preserved API |
 | P1 | Darren workflow tranche: competing offers, term/consent checklist, assigned questions | Mat/Codex — backend implemented and tested; Ryan retains UI | [WORKFLOW_API.md](WORKFLOW_API.md); missing terms withheld, assigned-role responses, stale edits rejected, history durable |
 | P1 | Downloadable decision record | Mat/Codex backend implemented; Ryan owns button integration | [DECISION_RECORD.md](DECISION_RECORD.md); HTML/JSON, investor-only, guarded revision, original approval history |
