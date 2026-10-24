@@ -1,6 +1,6 @@
 # Nicrron / Ninoo sponsor requirements — October 24
 
-Source: owner-supplied `NicrronNinoo-Betaworks-VC-Hack-GTM.docx.pdf`, pages 1–3. These are statements from a sponsor guide, not verified organizer rulings. The guide is titled "VC Hack GTM"; the event is "Deal Flow". Applicability needs clarification.
+Source: owner-supplied `NicrronNinoo-Betaworks-VC-Hack-GTM.docx.pdf`, pages 1–3, and the live guide directly linked by the event’s Resources tab, checked October 24. The guide is officially linked, not an unrelated attachment. Its qualification section conflicts with its alternative build paths; no organizer ruling resolving that conflict was found. See [DEVPOST_RULES_CHECK.md](DEVPOST_RULES_CHECK.md).
 
 ## Eligibility issue to resolve before submission
 
@@ -10,7 +10,7 @@ The guide says all three are required:
 2. Publish a Ninoo Marketplace listing before judging (Builder → More → Marketplace).
 3. Route application AI calls through `https://api.nicrron.ai/v1`.
 
-This is stricter than the pasted Devpost requirement to use all four sponsors. We cannot claim that adding a Nicrron API call alone meets the PDF's rules. Ask the sponsor/organizer whether these rules apply to the whole event or a separate sponsor competition, and whether importing today's existing repo and continuing development in Ninoo qualifies.
+This is stricter than the live Devpost Overview requirement to use all four sponsors. We cannot claim that adding a Nicrron API call alone meets the PDF's rules. Ask the sponsor/organizer whether these rules apply to the whole event or a separate sponsor competition, and whether importing today's existing repo and continuing development in Ninoo qualifies.
 
 The guide expressly supports importing a GitHub project or ZIP (page 2). Preserve the current app: import `LaiderBrainTrust/vc_hackathon` branch `main` if that route is approved. Do not import `.env.local`, `.local`, runtime credentials, or personal records. An import is not yet evidence the Express/SQLite/backend worker stack runs on Ninoo. Verify server execution, secret storage, durable storage, and background worker support. No import, listing or publication has been performed.
 
@@ -33,10 +33,14 @@ Current status: the API key and model variables already exist in `.env.example`.
 
 The guide offers code `BETAWORKS250`: $250 promotional credit plus $10 signup credit, one redemption per account. The promotional credit expires October 24, 2026 at 11:59 PM Eastern. One account spans Nicrron, Builder and Code; the guide warns against redeeming through both signup paths. Credits and redemption have not been verified for this team's account.
 
+## Current implementation decision
+
+Preserve the working Nicrron API and public backend. Ryan owns the final UI and should continue against existing APIs; see [RYAN_PRODUCT_BRIEF.md](RYAN_PRODUCT_BRIEF.md). The guide’s “or” signup links refer to the shared account, not an explicit exemption from Builder/Marketplace qualification. Its later standalone API path makes clarification necessary. The optional proxy and listing materials are merged in PR #5; no import or listing is complete. Owner authorization already covers import/listing if needed; account authentication remains a dependency.
+
 ## Suggested team sequence
 
 1. Clarify the eligibility scope/import interpretation with the sponsor in the room.
 2. Create/redeem one account and configure a server-only Nicrron key.
 3. Keep the current app and implement model reasoning inside its existing Roundtable reviewer.
 4. If required and accepted, import into Ninoo, make the actual app changes there, and verify backend/runtime support.
-5. Prepare the Marketplace listing for owner review and publish only with explicit authorization. Record the resulting URL and complete all four sponsor checks before claiming eligibility.
+5. If required, use the existing owner-authorized listing scope; finish and verify publication. Record the resulting URL and all four sponsor checks before claiming eligibility.

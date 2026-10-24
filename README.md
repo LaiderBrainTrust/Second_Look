@@ -12,6 +12,10 @@ Deal Flow @ Betaworks, October 24, 2026. **Track 4: Funds. Submission closes 4 P
 
 Current status: all four sponsor integrations are implemented and live calls have succeeded. **29 tests and the build pass.** [Ryan's launch and demo guide](docs/RYAN_DEMO.md) covers the hosted team login and the local fallback. The hosted mode is a protected synthetic demo, not a service for real client data. X1 is not connected.
 
+### Final product design: Ryan owns the UI
+
+Read **[Ryan's product brief](docs/RYAN_PRODUCT_BRIEF.md)**. The current page is the working engineering/rehearsal reference, not the finished customer experience. Ryan has creative control over `src/`, `index.html` and public visual assets; preserve API behavior, not the existing layout. Mat/Codex owns backend integration and deployment. The brief includes a copyable coding-agent handoff and acceptance checks.
+
 ### Present today
 
 Use the hosted URL and team access code in [RYAN_DEMO.md](docs/RYAN_DEMO.md). For an independent local rehearsal, run `npm ci` then **`npm run demo`**. This opens the same app with a saved, real sponsor review and a fresh separate database; no API keys are needed for the saved-evidence path. Explicitly say the research was captured earlier. Each launch preserves previous rehearsal databases.
@@ -110,7 +114,7 @@ These are illustrative contract scenarios with explicit zero purchase-price adju
 | Live Roundtable/Nicrron review with a recorded PRISM trace | Ninoo-specific eligibility clarification |
 | Saved questions, responses, offer versions and historical approvals | Presenter rehearsal and video |
 | Integer-cent comparison and stale-revision rejection | Genuine founder-brief evidence and Devpost submission |
-| Mobile check, printable decision record, 27 tests and build | Judge-accessible demo arrangement; authenticated persistent hosting if chosen |
+| Public protected hosting, mobile check, printable record, 29 tests and build | Final UI integration, exact deployed-commit check and Ryan laptop acceptance |
 
 X1 import is optional after the critical path, not a current capability or submission prerequisite. See [PLAN.md](docs/PLAN.md) and [TEAM_BOARD.md](docs/TEAM_BOARD.md) for the complete strategy, boundaries and acceptance criteria.
 
@@ -129,17 +133,19 @@ A changed case makes earlier research historical. Saved gaming evidence can be r
 
 ## Team access and credentials
 
-**Cloning the repo does not download secrets.** Akta, Nicrron and PRISM secrets in GitHub Actions are available only to authorized workflows, not retrievable as a local environment file. This setup has no publicly deployed shared app yet.
+**Cloning the repo does not download secrets.** Akta, Nicrron and PRISM secrets in GitHub Actions are available only to authorized workflows, not retrievable as a local environment file. The public hosted app is available through the team login in [RYAN_DEMO.md](docs/RYAN_DEMO.md); using it does not require provider keys.
 
 For local development, run `npm run setup` to create `.env.local` without overwriting it, then configure Akta, `NICRRON_API_KEY`, plus `ROUNDTABLE_APP_KEY`, `ROUNDTABLE_WORKER_KEY`, `ROUNDTABLE_WORKER_ID`, and `ROUNDTABLE_PROJECT`. The app and reviewer need separate bot identities with access to the same project. Obtain these from your team's approved credential channel or provision your own Roundtable workspace. Never commit credentials. The live setup on Mat's machine uses a private runtime env file and will not exist on a teammate's clone.
 
 The new Roundtable app and reviewer credentials are saved in repository Actions and Codespaces secrets. Both can use `second-look-team` and their own agent folder; actual reads of `vc-hackathon` and `shared-notes` returned HTTP 403. The old development credentials were not distributed. This restricts the bot keys, not workspace co-owners: co-owners retain dashboard access to all workspace data. Do not put private assistant history in this shared team workspace. The reporting key is never needed by the app.
 
-A future deployed app can hold the provider keys on its server so teammates use the UI without receiving them. Participant authentication and persistent deployment storage are still required; the current server deliberately remains loopback-only.
+The deployed app holds provider keys on the server and persists case data outside the release directory. HTTPS Funnel exposes the protected app while its Node process remains loopback-bound. The team login authorizes fictional presenter roles; independently authenticated real counterparties remain future work.
 
 ## Team documents
 
 - [Canonical full product and strategy plan](docs/PLAN.md)
+- [Ryan’s final product design brief and coding-agent prompt](docs/RYAN_PRODUCT_BRIEF.md)
+- [Live Devpost tab check and unresolved eligibility details](docs/DEVPOST_RULES_CHECK.md)
 - [Team work board and acceptance criteria](docs/TEAM_BOARD.md)
 - [Integration/API contracts and work split](docs/BUILD.md)
 - [Sponsor setup, shared secret and live research endpoints](docs/SPONSOR_SETUP.md)
@@ -153,7 +159,7 @@ A future deployed app can hold the provider keys on its server so teammates use 
 Use [TEAM_BOARD.md](docs/TEAM_BOARD.md) for the current work list and claim a lane in the team chat before editing. The names below are responsibilities, not claims that someone has accepted them:
 
 - **Mat / Codex initial scaffold:** this bootstrap, financial scenario and X1 integration contract. Initial scaffold completion does not reserve every module forever.
-- **UI lane:** `src/`.
+- **Ryan / UI lane:** `src/`, `index.html` and public visual assets; final customer experience, not just styling.
 - **Domain/auth lane:** `server/app.ts`, `server/domain.ts`, `server/store.ts`, participant authentication and tests.
 - **Sponsor lane:** `server/adapters/` and provider-specific tests.
 - **Submission lane:** customer evidence, founder brief, demo video and Devpost.

@@ -1,5 +1,9 @@
 # Ryan: present Second Look
 
+## Product design and rehearsal are separate
+
+[RYAN_PRODUCT_BRIEF.md](RYAN_PRODUCT_BRIEF.md) is the final UI direction. The hosted reference proves the workflow; it is not a finished visual design. Ryan may replace its layout and navigation. The button names below describe the reference build, not mandatory final labels. Update the click path after the redesign is deployed and rehearse that actual build.
+
 ## Hosted demo
 
 **Live URL: https://x1cloud.tail6fbca0.ts.net/**

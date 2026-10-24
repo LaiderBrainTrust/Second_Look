@@ -31,7 +31,11 @@ React 19 + Vite 6; Express 5; TypeScript/ESM; Node 22.13+; native SQLite. `npm r
 
 ## Main API
 
-All `/api/case` routes require `x-demo-role: lp | gp | buyer`. This is development impersonation, not authentication. Mutations require JSON; browser origins are restricted to local development and the current Codespace URL.
+Local `/api/case` requests use `x-demo-role: lp | gp | buyer`; this is development impersonation. In hosted mode the header is ignored: the secure session owns the role and case grant. Use relative `/api/*` URLs. Mutations require JSON and an allowed origin; hosted requests require the exact configured HTTPS origin.
+
+Hosted UI session contract: `GET /api/session` returns `{ hosted, authenticated, role? }`; `POST /api/session/login` takes `{ code }`; `POST /api/session/role` takes `{ role }`; `POST /api/session/logout` takes `{}`. Login sets the HttpOnly session cookie. Keep it browser/server managed. A 401 should lead back to sign-in; a 409 requires refreshing current state and reviewing the change before retrying. Never auto-approve after a conflict.
+
+Ryan owns UI composition; see [RYAN_PRODUCT_BRIEF.md](RYAN_PRODUCT_BRIEF.md). No backend migration is required for his redesign.
 
 | Route | Contract |
 | --- | --- |

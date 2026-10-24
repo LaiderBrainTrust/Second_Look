@@ -8,6 +8,14 @@ This is the canonical product and strategy plan. Read it before changing scope. 
 
 Repository: [LaiderBrainTrust/vc_hackathon](https://github.com/LaiderBrainTrust/vc_hackathon). Team branch: `main`. [PR #1](https://github.com/LaiderBrainTrust/vc_hackathon/pull/1) is merged. Further work uses small reviewed branches.
 
+## Product experience directive — October 24
+
+**Ryan owns the final customer-facing product experience. The current hosted interface is a working engineering and rehearsal reference, not the finished UI or a design to merely reskin.** Read [Ryan's product brief](RYAN_PRODUCT_BRIEF.md) for creative ownership, functional boundaries and acceptance. Preserve the engine; give Ryan room to design the product.
+
+Lead with the investment and a meaningful next action. Let the user investigate a recognizable game, ask the manager, and see the consequence of changed terms. Keep diagnostics, raw sponsor receipts and presenter controls in secondary surfaces. Keep synthetic-data labels and dated evidence honest. The final journey must run on the real APIs and persist changes; it must not be a presentation-only mockup.
+
+The intended result today is a compelling, functioning product slice. The existing hosted team login is not independent real-world counterparty authentication; full production readiness remains a separate claim.
+
 ## 1. The product in ordinary language
 
 An investor is considering selling an interest in a venture fund. The last fund report is old. The games behind some of its investments are still being played, reviewed and updated. There may be useful evidence outside that report—but game popularity does not tell you what the investor legally owns or what cash a sale includes.
@@ -72,11 +80,11 @@ Investigation order is a disclosed prototype rule: a sample decline of at least 
 
 **Step 3 — Review the deal.** The shared question retains its selected game, studio and source snapshot. The decision screen follows that game to the manager-entered cash assumption and current distribution recipient. Each new approval preserves the exact question, answer and game context, even when a later question replaces them. The presenter inserts an explicitly labeled fictional manager response; the model does not invent one. The manager role enters the fictional distribution response. The investor reviews the calculated gross proceeds and approves the current version. The buyer role changes the distribution recipient. Back in investor view, the prior approval remains on record but no longer applies; the $100,000 difference is visible. Reload to show persistence and print the decision record.
 
-Today's roles are simulated in one local application. They exercise server-side projections and command checks, but a role-selection header is not real authentication. Do not describe this as a deployed multi-party service.
+Today's participant roles are simulated. Local development uses a role header; the public hosted app uses a secure team session with a server-owned role and case grant, and ignores forged role headers. Neither establishes the identities of real counterparties. Move the simulator into presenter controls; preserve the server's projections and checks.
 
 ## 6. Sponsor use and verified state
 
-All four sponsors are required by the supplied Devpost requirements. Functional API use and sponsor-specific prize eligibility are separate checks.
+All four sponsors are required by the live Devpost Overview. [DEVPOST_RULES_CHECK.md](DEVPOST_RULES_CHECK.md) records the Chrome check of all relevant event tabs and the linked live guide. Functional API use and sponsor-specific prize eligibility are separate checks. Resources directly links the guide requiring Ninoo Builder and Marketplace; standalone API paths in the same guide do not clearly waive those requirements. Preserve the current backend and continue Ryan’s UI while the organizer resolves that conflict.
 
 | Sponsor | Real role in this product | Current evidence |
 | --- | --- | --- |
@@ -103,16 +111,18 @@ For today's critical path, finish the team setup and coherent presentation first
 
 **Built and locally exercised:** React/Vite UI; Express API; three-game evidence scan; saved studio profiles; bounded news results; investigation ordering; versioned Roundtable/Nicrron review; PRISM trace; explicit sharing; manager answer; deterministic cash comparison; stale-revision rejection; visible historical approvals; SQLite persistence; printable decision record; setup script and private Codespaces instructions.
 
-Verification: 27 tests pass, TypeScript/Vite build passes, the actual gaming review completed, and the browser walkthrough covered the financial sequence and reload. A 390px mobile check found no horizontal overflow. The PRISM integration check caught and fixed a JSON field-order comparison bug; regression tests also prove that a genuinely different trace ID remains rejected.
+Recorded verification: 29 tests pass, TypeScript/Vite build passes, the actual gaming review completed, and the browser walkthrough covered the financial sequence and reload. A 390px mobile check found no horizontal overflow. The PRISM integration check caught and fixed a JSON field-order comparison bug; regression tests also prove that a genuinely different trace ID remains rejected.
 
-**Not built/verified:** public hosting with real authentication, cross-device participant accounts, real investment/document import, valuation models, executed transactions, true customer returns, teammate Codespace acceptance, spoken presenter rehearsal, submission/video completion.
+**Hosted and verified:** public HTTPS access with a protected team login, server-owned fictional participant roles, persistent database, complete browser flow, restart recovery, and fresh calls through all four sponsors. See [DEPLOYMENT_RECEIPT.json](DEPLOYMENT_RECEIPT.json) for the exact deployed source and checks. This records previous verification, not acceptance of a future redesign.
+
+**Not built/verified:** final customer-facing design, independently authenticated counterparties, real investment/document import, valuation models, executed transactions, true customer returns, teammate Codespace acceptance, Ryan laptop acceptance and spoken rehearsal, submission/video completion.
 
 ## 9. Team execution and ownership
 
-No other teammate had started editing these screens when Mat confirmed the lane. Mat/Codex owns the current integration branch. See [TEAM_BOARD.md](TEAM_BOARD.md) for claimable tasks and exact acceptance.
+Mat has assigned the final UI and product design to Ryan. Mat/Codex owns backend integration and deployment. See [TEAM_BOARD.md](TEAM_BOARD.md) for file ownership and acceptance; other agents must not treat the original scaffold ownership as a reservation of the UI.
 
 - Mat: financial narrative, sponsor/access resolution and integration acceptance.
-- Ryan: proposed lead presenter and gaming-domain reviewer, consistent with Mat's intended pitch role. Choose a game he can explain convincingly; help catch nonsensical model inferences.
+- Ryan: owner of the final UI/product design per Mat, plus intended lead presenter and gaming-domain reviewer. Creative control includes layout, navigation, typography, color, motion and component organization. Preserve working contracts, not the old screen design. Ryan's own acceptance and final branch/commit are still to be recorded.
 - Other teammates: choose concrete lanes from the board, especially setup verification, founder brief, eligibility clarification, video and submission. These are proposed responsibilities until accepted, not claims that anyone has already completed them.
 - Coding agents: read this plan and BUILD.md, state the files you intend to edit, preserve other work, and use a bounded branch. Do not rebuild the scaffold, substitute sponsors, add fake findings or deploy publicly to “help.”
 
@@ -120,15 +130,15 @@ No other teammate had started editing these screens when Mat confirmed the lane.
 
 | Time gate | Result needed |
 | --- | --- |
-| By 2:11 PM | Working scope stable; team can run it; sponsor API receipts retained; one coherent complete walkthrough |
+| By 2:11 PM | Ryan's customer experience integrated with the working API; sponsor receipts retained; one coherent complete walkthrough |
 | 2:11–2:45 PM | Presenter rehearses; fix only concrete failures; finish founder brief and capture video |
 | 2:45 PM | Feature freeze. No new platforms, auth rewrite or provider migration unless needed to unblock the actual submission |
 | By 3:30 PM | Submit early: project description, Track 4, source repository, usable demo link, founder brief, ≤3-minute video and sponsor list |
 | 3:30–4:00 PM | Verify submitted links/access and correct submission issues |
 
-The initial implementation was completed well before the two-hour target. That time should become setup, rehearsal and submission margin—not permission to triple scope.
+The working engine is implemented. The next build priority is Ryan's cohesive customer experience, followed by integration and rehearsal. Do not expand the product's functional scope to use remaining time.
 
-**Demo-link decision is unresolved:** the current app is local/private development only. The supplied Devpost requirements ask for a live-demo link. A localhost URL or a private Codespace unavailable to judges does not satisfy that for remote viewers. The team must confirm an acceptable judge-accessible demonstration or explicitly authorize and build a hosted, authenticated deployment with persistent storage. Do not silently expose the present role-impersonation API.
+**Live link is available:** https://x1cloud.tail6fbca0.ts.net/ is public through HTTPS Funnel, with a separate team login. It does not require judges to join Mat's tailnet. Keep the working backend. Ryan's UI must be merged, built, deployed and checked at this URL before calling that design live. See [RYAN_DEMO.md](RYAN_DEMO.md) for access and operations. Use 4:00 PM Eastern as the hard deadline despite conflicting later text on Devpost; target submission at 3:30 PM.
 
 ## 11. Commercial hypothesis and validation
 
