@@ -82,6 +82,11 @@ export function createStore(path: string) {
         state.revision++;
         state.question = run.result.question;
         state.questionSource = finding.source;
+        state.researchContext = run.gamingContext ? {
+          runId: run.id, snapshotId: run.gamingContext.snapshotId,
+          game: run.gamingContext.holding.game, studio: run.gamingContext.holding.studio,
+          sharedAtRevision: state.revision,
+        } : undefined;
         state.answer = null;
         state.events.push({ revision: state.revision, text: 'Investor shared a source-backed question with the fund manager. A fresh answer and review are required.', at: new Date().toISOString() });
         db.prepare('UPDATE cases SET body = ? WHERE id = ?').run(JSON.stringify(state), state.id);

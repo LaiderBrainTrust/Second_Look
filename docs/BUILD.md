@@ -104,3 +104,7 @@ Before public hosting, replace role impersonation with authenticated identities 
 - Roundtable: https://roundtable.bot/docs/bots
 - PRISM: https://blockconvey.com/docs
 - Optional X1: https://x1wealth.com/connect/other
+
+## Source-to-decision continuity
+
+Sharing gaming research stores only its game/studio identifiers, research run, snapshot and shared revision in `researchContext`; it does not expose private raw research to counterparties. Replacing the shared question clears this context for non-gaming research and clears the old answer. New approvals snapshot the exact question, answer and game context. Older stored approvals remain readable without those optional fields; their missing history is never fabricated. Tests cover question replacement and database reopening.

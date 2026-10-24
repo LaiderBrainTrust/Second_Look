@@ -6,7 +6,7 @@
 
 This is the canonical product and strategy plan. Read it before changing scope. Implementation contracts are in [BUILD.md](BUILD.md), setup in [TEAM_START.md](TEAM_START.md), assignments in [TEAM_BOARD.md](TEAM_BOARD.md), and the live presentation in [GAMING_BUILD.md](GAMING_BUILD.md). Older proposals in `archive/` are historical, not instructions for today's build.
 
-Repository: [LaiderBrainTrust/vc_hackathon](https://github.com/LaiderBrainTrust/vc_hackathon). Working branch: `codex/sponsor-setup`, [PR #1](https://github.com/LaiderBrainTrust/vc_hackathon/pull/1). Do not assume this is on `main` until the PR is merged.
+Repository: [LaiderBrainTrust/vc_hackathon](https://github.com/LaiderBrainTrust/vc_hackathon). Team branch: `main`. [PR #1](https://github.com/LaiderBrainTrust/vc_hackathon/pull/1) is merged. Further work uses small reviewed branches.
 
 ## 1. The product in ordinary language
 
@@ -30,6 +30,8 @@ The demo's concrete consequence is deliberately simple: a $700,000 purchase paym
 A VC/GP could benefit from a clear record of what an LP or secondary buyer requested, what the manager answered and which terms remain unresolved. That is a possible second buyer, not a validated purchase commitment. We should lead with the LP's decision in Track 4 rather than claim to solve all VC workflows.
 
 ## 3. Why this is more than a document chat
+
+Competitive check: [COMPETITION.md](COMPETITION.md). Harmonic already has AI research and continuous company context; DiligenceVault already has manager diligence, collaboration, versioned knowledge and MCP. Those features alone are not our differentiation. Our narrow hypothesis is a source-linked path from a specific operating asset, through a manager-confirmed cash assumption, to the LP sale terms and exact approval it affects. It is not a claim that no competitor can do this.
 
 Claude or ChatGPT can help interpret documents, research a company and write the proposed question. We use a model for exactly that. We should not pretend those abilities are unique.
 
@@ -68,7 +70,7 @@ Investigation order is a disclosed prototype rule: a sample decline of at least 
 
 **Step 2 — Ask the manager.** The app stores a case-specific research run. Roundtable saves the input version and assigns the reviewer; Nicrron drafts a focused question and explanation; PRISM records the actual model request/response. The result remains a proposal. The investor reads it and explicitly shares it. Sharing replaces the case question and requires a fresh manager answer.
 
-**Step 3 — Review the deal.** The manager role enters the fictional distribution response. The investor reviews the calculated gross proceeds and approves the current version. The buyer role changes the distribution recipient. Back in investor view, the prior approval remains on record but no longer applies; the $100,000 difference is visible. Reload to show persistence and print the decision record.
+**Step 3 — Review the deal.** The shared question retains its selected game, studio and source snapshot. The decision screen follows that game to the manager-entered cash assumption and current distribution recipient. Each new approval preserves the exact question, answer and game context, even when a later question replaces them. The presenter inserts an explicitly labeled fictional manager response; the model does not invent one. The manager role enters the fictional distribution response. The investor reviews the calculated gross proceeds and approves the current version. The buyer role changes the distribution recipient. Back in investor view, the prior approval remains on record but no longer applies; the $100,000 difference is visible. Reload to show persistence and print the decision record.
 
 Today's roles are simulated in one local application. They exercise server-side projections and command checks, but a role-selection header is not real authentication. Do not describe this as a deployed multi-party service.
 
@@ -101,7 +103,7 @@ For today's critical path, finish the team setup and coherent presentation first
 
 **Built and locally exercised:** React/Vite UI; Express API; three-game evidence scan; saved studio profiles; bounded news results; investigation ordering; versioned Roundtable/Nicrron review; PRISM trace; explicit sharing; manager answer; deterministic cash comparison; stale-revision rejection; visible historical approvals; SQLite persistence; printable decision record; setup script and private Codespaces instructions.
 
-Verification: 26 tests pass, TypeScript/Vite build passes, the actual gaming review completed, and the browser walkthrough covered the financial sequence and reload. A 390px mobile check found no horizontal overflow. The PRISM integration check caught and fixed a JSON field-order comparison bug; regression tests also prove that a genuinely different trace ID remains rejected.
+Verification: 27 tests pass, TypeScript/Vite build passes, the actual gaming review completed, and the browser walkthrough covered the financial sequence and reload. A 390px mobile check found no horizontal overflow. The PRISM integration check caught and fixed a JSON field-order comparison bug; regression tests also prove that a genuinely different trace ID remains rejected.
 
 **Not built/verified:** public hosting with real authentication, cross-device participant accounts, real investment/document import, valuation models, executed transactions, true customer returns, automatic team credential provisioning for Roundtable, teammate Codespace acceptance, spoken presenter rehearsal, submission/video completion.
 

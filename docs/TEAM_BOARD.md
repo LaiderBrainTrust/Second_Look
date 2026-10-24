@@ -4,10 +4,10 @@ Read [PLAN.md](PLAN.md) first. This board records proposed work, not automatic d
 
 | Priority | Task | Owner / state | Acceptance |
 | --- | --- | --- | --- |
-| P0 | Core gaming → review → changed-offer workflow | Mat/Codex — implemented and locally verified | 26 tests/build; live source/task/trace receipts; browser financial sequence |
+| P0 | Core gaming → review → changed-offer workflow | Mat/Codex — implemented and locally verified | 27 tests/build; live source/task/trace receipts; browser financial sequence |
 | P0 | PRISM setup | Mat/Codex — live verified | Actual model trace accepted; setup doctor reports live/app connected |
 | P0 | Team-only Roundtable credentials | Unclaimed — needs workspace owner | App/reviewer identities and shared project in team-safe credentials; no private reporting-bank access distributed |
-| P0 | Fresh teammate setup | Unclaimed — needs teammate's environment | Follow README on `codex/sponsor-setup`; doctor; live task; screenshot/URL and exact commit. Codespaces secrets exist for Akta, Nicrron and PRISM |
+| P0 | Fresh teammate setup | Unclaimed — needs teammate's environment | Follow README on `main`; doctor; live task; screenshot/URL and exact commit. Codespaces secrets exist for Akta, Nicrron and PRISM |
 | P0 | Judge-accessible demo link | Unclaimed — decision and execution | Confirm permitted access arrangement or explicitly authorize authenticated hosting; judge can actually open submitted link |
 | P0 | Ninoo Builder/Marketplace eligibility | Mat / sponsor conversation — unresolved | Written clarification of which rules apply and any required submission/listing completed |
 | P0 | Gaming narrative + spoken rehearsal | Ryan proposed; confirm acceptance | Explain one game accurately and complete a timed ≤3-minute run without unsupported financial claims |

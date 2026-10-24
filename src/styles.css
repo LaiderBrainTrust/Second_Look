@@ -76,3 +76,7 @@ h1 { font-size: clamp(38px, 4.5vw, 58px); }
 .toolbar { margin: 18px 0; }
 .gaming { margin-top: 1.5rem; }
 .game-tab:hover:enabled, button.secondary:hover:enabled { background: #eaf0e5; color: var(--accent); }
+
+.decision-chain { margin: 1.5rem 0; padding: 1.25rem; border: 1px solid var(--line, #d6d4cd); border-radius: 12px; }
+.decision-chain h2 { font-size: 1.35rem; }
+.decision-chain li { margin: .7rem 0; }

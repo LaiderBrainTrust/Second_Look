@@ -6,7 +6,7 @@ For a copyable coding-agent prompt and fresh-clone instructions, start with [REA
 
 ```sh
 git fetch origin
-git switch codex/sponsor-setup
+git switch main
 npm ci
 npm run setup
 npm run doctor
@@ -32,7 +32,7 @@ The Roundtable keys on Mat's host also reach his reporting workspace. They must 
 
 ## Codespaces option
 
-On branch `codex/sponsor-setup`, use GitHub's Code → Codespaces → Create codespace on this branch. The devcontainer installs Node and dependencies and runs setup. Then run `npm run doctor` and `npm run dev`. Open forwarded port **5173**, keeping its visibility **Private**; do not expose port 3001. Codespaces creation may consume your account's quota. No Codespace has been created or billed by this setup task.
+On branch `main`, use GitHub's Code → Codespaces → Create codespace on this branch. The devcontainer installs Node and dependencies and runs setup. Then run `npm run doctor` and `npm run dev`. Open forwarded port **5173**, keeping its visibility **Private**; do not expose port 3001. Codespaces creation may consume your account's quota. No Codespace has been created or billed by this setup task.
 
 GitHub injects configured repository Codespaces secrets into newly started environments. Restart an existing Codespace after secret changes. Until the Roundtable step above is complete, live flow will report missing settings. The devcontainer configuration has been source-checked but has not yet been launched in a teammate's Codespace.
 

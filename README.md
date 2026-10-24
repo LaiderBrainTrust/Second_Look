@@ -10,17 +10,17 @@ Deal Flow @ Betaworks, October 24, 2026. **Track 4: Funds. Submission closes 4 P
 
 **Read [PLAN.md](docs/PLAN.md) first.** It covers the product, strategy, gaming example, sponsor use, X1 boundary, commercial hypothesis and path to submission. Claim work in [TEAM_BOARD.md](docs/TEAM_BOARD.md); use [BUILD.md](docs/BUILD.md) for implementation and [GAMING_BUILD.md](docs/GAMING_BUILD.md) for the presentation.
 
-Current status: the gaming workflow is built, and live Steam/Akta → Roundtable/Nicrron → PRISM checks succeeded. **26 tests and the build pass.** Remaining event work includes team-only Roundtable access, teammate setup verification, Ninoo eligibility clarification, a judge-accessible demo arrangement, presenter rehearsal and submission. This is not a publicly deployed product; X1 is not connected.
+Current status: the gaming workflow is built, and live Steam/Akta → Roundtable/Nicrron → PRISM checks succeeded. **27 tests and the build pass.** Remaining event work includes team-only Roundtable access, teammate setup verification, Ninoo eligibility clarification, a judge-accessible demo arrangement, presenter rehearsal and submission. This is not a publicly deployed product; X1 is not connected.
 
 ## Start here — teammates and coding agents
 
-**Use branch `codex/sponsor-setup` ([PR #1](https://github.com/LaiderBrainTrust/vc_hackathon/pull/1)). The setup below is on that branch; do not assume it is already on `main`.**
+**Use `main`. [PR #1](https://github.com/LaiderBrainTrust/vc_hackathon/pull/1) has merged; the app, sponsor adapters and team setup are available there.**
 
 Paste this into Claude Code, Codex, or your coding agent:
 
 ```text
 Set up and run https://github.com/LaiderBrainTrust/vc_hackathon on branch
-codex/sponsor-setup. Read README.md, AGENTS.md, docs/PLAN.md, and docs/TEAM_START.md first.
+main. Read README.md, AGENTS.md, docs/PLAN.md, and docs/TEAM_START.md first.
 Preserve any existing local changes; use a fresh directory if this checkout
 belongs to another task. Do not rebuild the app or replace its configuration.
 
@@ -42,7 +42,7 @@ actually passed. Stop after setup unless I assign you an implementation lane.
 From a **new directory**, with access to the private GitHub repository:
 
 ```sh
-git clone --branch codex/sponsor-setup https://github.com/LaiderBrainTrust/vc_hackathon.git
+git clone --branch main https://github.com/LaiderBrainTrust/vc_hackathon.git
 cd vc_hackathon
 node --version                 # must be 22.13 or newer
 npm ci
@@ -51,7 +51,7 @@ npm run doctor                # lists configured/missing variable names only
 npm run dev                   # run even if doctor reports missing credentials
 ```
 
-For an existing clean checkout: `git fetch origin`, `git switch codex/sponsor-setup`, then `git pull --ff-only`. Preserve dirty work; never reset or overwrite it to follow these instructions.
+For an existing clean checkout: `git fetch origin`, `git switch main`, then `git pull --ff-only`. Preserve dirty work; never reset or overwrite it to follow these instructions.
 
 Open **http://localhost:5173**. The API is **http://127.0.0.1:3001/api/health**. `npm run dev` starts the UI, API, and configured Roundtable reviewer together; you do not need to launch the sponsor template or Roundtable CLI. Each clone keeps its own case in `.local/second-look.sqlite`, surviving restarts.
 
@@ -84,7 +84,7 @@ Use an ignored `.env.local` for local development, or environment injection in C
 
 ### Prefer a browser-based development environment?
 
-Select **`codex/sponsor-setup` → Code → Codespaces → Create codespace**. The checked-in devcontainer installs dependencies and runs setup. Run `npm run doctor`, then `npm run dev`, and open forwarded port **5173** with **Private** visibility. The Codespaces route still needs the credential provisioning above; it has not yet been verified in a teammate's Codespace.
+Select **`main` → Code → Codespaces → Create codespace**. The checked-in devcontainer installs dependencies and runs setup. Run `npm run doctor`, then `npm run dev`, and open forwarded port **5173** with **Private** visibility. The Codespaces route still needs the credential provisioning above; it has not yet been verified in a teammate's Codespace.
 
 This is a working synthetic development app. Steam, Akta, Nicrron, Roundtable and PRISM adapters are integrated. Live PRISM verification passed; optional X1 reads are not connected. The role selector is development impersonation, **not authentication**. Do not expose the server publicly or use real client data. The entrypoint refuses production mode until real participant authentication is implemented.
 
@@ -106,7 +106,7 @@ These are illustrative contract scenarios with explicit zero purchase-price adju
 | Live Roundtable/Nicrron review with a recorded PRISM trace | Ninoo-specific eligibility clarification |
 | Saved questions, responses, offer versions and historical approvals | Presenter rehearsal and video |
 | Integer-cent comparison and stale-revision rejection | Genuine founder-brief evidence and Devpost submission |
-| Mobile check, printable decision record, 26 tests and build | Judge-accessible demo arrangement; authenticated persistent hosting if chosen |
+| Mobile check, printable decision record, 27 tests and build | Judge-accessible demo arrangement; authenticated persistent hosting if chosen |
 
 X1 import is optional after the critical path, not a current capability or submission prerequisite. See [PLAN.md](docs/PLAN.md) and [TEAM_BOARD.md](docs/TEAM_BOARD.md) for the complete strategy, boundaries and acceptance criteria.
 

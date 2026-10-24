@@ -27,7 +27,7 @@ export function view(state: CaseState, role: Role): CaseView {
   const status = !state.answer ? 'awaiting_answer' : currentApproval ? 'approved' : state.reviews.length ? 'terms_changed' : 'needs_review';
   return {
     id: state.id, title: state.title, revision: state.revision, offer: state.offer,
-    question: state.question, questionSource: state.questionSource, answer: state.answer, nextOwner: state.answer ? 'lp' : 'gp',
+    question: state.question, questionSource: state.questionSource, researchContext: state.researchContext, answer: state.answer, nextOwner: state.answer ? 'lp' : 'gp',
     ...(role === 'lp' ? { privateReview: {
       lastTermChange: state.lastTermChange, ownerEntity: state.ownerEntity, report: state.report, grossReceiptsCents: grossReceipts(state),
       responseText: responseText(state), status, reviews: state.reviews, events: state.events,
@@ -61,7 +61,9 @@ export function applyCommand(state: CaseState, role: Role, expectedRevision: num
   if (command.kind === 'approve') {
     if (grossReceipts(next) === null) throw new DomainError(422, 'Resolve the distribution and adjustment before approving a response.');
     if (!next.reviews.some(r => r.revision === next.revision)) {
-      next.reviews.push({ revision: next.revision, responseText: responseText(next), approvedAt: new Date().toISOString() });
+      next.reviews.push({ revision: next.revision, responseText: responseText(next), approvedAt: new Date().toISOString(),
+        question: next.question, answer: structuredClone(next.answer!),
+        researchContext: next.researchContext ? structuredClone(next.researchContext) : undefined });
     }
     return next;
   }

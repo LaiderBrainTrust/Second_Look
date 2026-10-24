@@ -27,6 +27,16 @@ export interface Review {
   revision: number;
   responseText: string;
   approvedAt: string;
+  question?: string;
+  answer?: Answer;
+  researchContext?: ResearchContext;
+}
+export interface ResearchContext {
+  runId: string;
+  snapshotId: string;
+  game: string;
+  studio: string;
+  sharedAtRevision: number;
 }
 export interface TermChange {
   atRevision: number;
@@ -43,6 +53,7 @@ export interface CaseState {
   offer: Offer;
   question: string;
   questionSource?: SourceRef;
+  researchContext?: ResearchContext;
   answer: Answer | null;
   lastTermChange?: TermChange;
   reviews: Review[];
@@ -55,6 +66,7 @@ export interface CaseView {
   offer: Offer;
   question: string;
   questionSource?: SourceRef;
+  researchContext?: ResearchContext;
   answer: Answer | null;
   nextOwner: Role;
   // Private fields are omitted for GP/buyer, not merely hidden in the UI.
