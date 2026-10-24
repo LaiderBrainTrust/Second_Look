@@ -22,6 +22,14 @@ Mat has prioritized making the app usable for user-entered cases, beyond the pre
 
 This supersedes earlier single-case/presenter-only implementation limits below, but not the truth boundary: UI integration, multi-device acceptance and the Railway/domain cutover remain open. Entered source references are not parsed or verified documents; account display names are not verified legal identities. Before confidential customer use, provider tenancy, recovery, retention and security review still need completion.
 
+## Decision comparison and assistant access — October 24
+
+The investor screen now begins with comparing offers: which leaves more cash, and what missing fact could reverse that result? The new comparison computes the distribution break-even amount from entered payment, adjustment, fees and distribution rights. It can save the decisive manager question, preserve the answer, and require explicit confirmation of each quote against that answer. Gaming remains supporting research, not an invented distribution forecast.
+
+Mat authorized Codex to wire quote entry, editing, withdrawal and comparison into the existing screen while Ryan retains final design ownership. The shared example is wired; account selection remains a separate UI integration. See [DECISIVE_QUESTION.md](DECISIVE_QUESTION.md).
+
+Claude Code and Codex can access a single authorized case through the local MCP bridge. Seven tools read the case or save permitted work, with expiring keys, revision checks and attribution. No tool approves deals or grants access. See [MCP.md](MCP.md). MCP itself is interoperability, not a uniqueness claim.
+
 ## 1. The product in ordinary language
 
 An investor is considering selling an interest in a venture fund. The last fund report is old. The games behind some of its investments are still being played, reviewed and updated. There may be useful evidence outside that report—but game popularity does not tell you what the investor legally owns or what cash a sale includes.

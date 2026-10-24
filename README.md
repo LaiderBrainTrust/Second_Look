@@ -187,3 +187,7 @@ npm run build
 New app code was written on build day. X1 is proposed existing infrastructure. Confirm the organizer's interpretation of existing-service use; use all four required sponsors for prize eligibility. Observed Akta/Nicrron/Roundtable/PRISM checks are documented in [sponsor setup](docs/SPONSOR_SETUP.md); they do not establish full sponsor eligibility, customer validation, fair value or financial gain.
 
 No project license or ownership allocation is implied by this bootstrap. Agree those with the team before publishing code under a license. Never commit `.env`, `.local`, credentials, or private financial records.
+
+## Offer decisions and Claude / Codex
+
+Run `npm run connect:agent` in your terminal to create a private, expiring connection to one case. See [MCP setup and permissions](docs/MCP.md), [decisive-question API](docs/DECISIVE_QUESTION.md), and the additive [Ryan comparison component](integration/DecisionWorkbench.tsx). The investor screen now opens with the comparison and quote-entry workflow. Ryan retains overall design ownership.

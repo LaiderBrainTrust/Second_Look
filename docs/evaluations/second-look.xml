@@ -1,0 +1,12 @@
+<evaluation>
+  <qa_pair><question>Read the case and compare its offers. Which buyer has the greatest conditional cash at the manager-entered distribution, before confirming quote entitlements? Return the buyer name only.</question><answer>Retain Capital</answer></qa_pair>
+  <qa_pair><question>Check the manager response and the competing offers. At what distribution do the strongest retaining and assigning offers tie? Return USD as an integer.</question><answer>60000</answer></qa_pair>
+  <qa_pair><question>Read the manager response and compare offers. How much does the retaining winner exceed the assigning winner at that entered amount? Return USD as an integer; this is arithmetic, not realized savings.</question><answer>40000</answer></qa_pair>
+  <qa_pair><question>After reading the case and the comparison, can the highest conditional cash offer be described as the confirmed winner without another entitlement check? Return yes or no.</question><answer>no</answer></qa_pair>
+  <qa_pair><question>Inspect the case response and offer comparison. What source ID would the investor need to check each quote against to confirm the current distribution basis? Return only the ID.</question><answer>evaluation-notice</answer></qa_pair>
+  <qa_pair><question>Read the case and inspect the comparison frontier. How many active quotes can never lead at any nonnegative distribution within this fixed cash model? Return an integer.</question><answer>1</answer></qa_pair>
+  <qa_pair><question>Read the case, then compare the quotes at one cent below the switch amount. Which buyer leads? Return only the buyer name.</question><answer>Headline Capital</answer></qa_pair>
+  <qa_pair><question>Read the manager response and compare the quotes. At the switch amount, how many buyers share the highest conditional cash amount? Return an integer.</question><answer>2</answer></qa_pair>
+  <qa_pair><question>Inspect your case connection and comparison. Can this connection save a quote or approve a decision? Return yes or no.</question><answer>no</answer></qa_pair>
+  <qa_pair><question>Read the case and comparison assumptions. Does the entered distribution establish a completed cash payment? Return yes or no.</question><answer>no</answer></qa_pair>
+</evaluation>

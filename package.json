@@ -18,16 +18,21 @@
     "doctor": "tsx scripts/setup.ts --check",
     "demo": "concurrently -k -n api,web \"tsx server/index.ts --demo\" \"npm:dev:web\"",
     "capture:demo": "tsx scripts/capture-demo.ts",
-    "start": "node --import tsx server/index.ts"
+    "start": "node --import tsx server/index.ts",
+    "mcp": "node --import tsx scripts/mcp.ts",
+    "connect:agent": "node --import tsx scripts/connect-agent.ts"
   },
   "dependencies": {
+    "@modelcontextprotocol/server": "2.4.0",
     "@roundtable/sdk": "https://github.com/roundtable-bot/roundtable-cli/releases/download/sdk-v0.1.1/roundtable-sdk-0.1.1.tgz",
     "express": "^5.1.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "tsx": "^4.19.0"
+    "tsx": "^4.19.0",
+    "zod": "4.3.6"
   },
   "devDependencies": {
+    "@modelcontextprotocol/client": "2.4.0",
     "@types/express": "^5.0.0",
     "@types/node": "^22.15.0",
     "@types/react": "^19.1.0",
