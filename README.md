@@ -4,6 +4,8 @@
 
 Deal Flow @ Betaworks, October 24, 2026. **Track 4: Funds. Submission closes 4 PM Eastern.** Target sponsor award: Best Use of External Data.
 
+**Teammates: [start with the reproducible setup and access checklist](docs/TEAM_START.md).**
+
 ## Start here
 
 ```sh
@@ -32,7 +34,7 @@ These are illustrative contract scenarios with explicit zero purchase-price adju
 | React/TypeScript UI and Express API | Actual X1 reads from a synthetic demo account |
 | Persistent offer versions, question/answer and historical review | Confirm materiality and connect the remaining sponsors |
 | Akta company search, discovery, enrichment and dated news API | Materiality review of external findings; a company mention is not a valuation |
-| Integer-cent calculations and unknown-total handling | Actual Nicrron model request and PRISM trace |
+| Integer-cent calculations and unknown-total handling | PRISM trace for the actual Nicrron model request |
 | Atomic stale-revision rejection | Authenticated participants and case-scoped sharing |
 | Role-specific response projection | Deployment with persistent storage and real auth |
 | Tests for changed terms, stale requests and restart continuity | Source extraction/correction, final rehearsal, video and founder brief |
@@ -48,13 +50,13 @@ With Akta and Roundtable credentials configured, `npm run dev` starts the UI, AP
 5. Read the proposed question and source versions, then **Share question with fund manager**.
 6. Switch to Fund manager: the shared question and article link are visible. A new answer is needed before the investor can approve again.
 
-A changed case makes earlier research historical. The current reviewer performs deterministic source/date checks and proposes a question; it does not call a model, assess fair value or verify the publisher's claim. Nicrron model integration remains outstanding.
+A changed case makes earlier research historical. The reviewer validates source/date fields, then calls Nicrron for a proposed question and explanation. It does not assess fair value or verify the publisher's claim. PRISM tracing remains outstanding.
 
 ## Team access and credentials
 
 **Cloning the repo does not download secrets.** `AKTA_API_KEY` in GitHub Actions is available only to authorized workflows, not retrievable as a local environment file. This setup has no publicly deployed shared app yet.
 
-For local development, copy `.env.example` to `.env.local` and configure Akta plus `ROUNDTABLE_APP_KEY`, `ROUNDTABLE_WORKER_KEY`, `ROUNDTABLE_WORKER_ID`, and `ROUNDTABLE_PROJECT`. The app and reviewer need separate bot identities with access to the same project. Obtain these from your team's approved credential channel or provision your own Roundtable workspace. Never commit credentials. The live setup on Mat's machine uses a private runtime env file and will not exist on a teammate's clone.
+For local development, copy `.env.example` to `.env.local` and configure Akta, `NICRRON_API_KEY`, plus `ROUNDTABLE_APP_KEY`, `ROUNDTABLE_WORKER_KEY`, `ROUNDTABLE_WORKER_ID`, and `ROUNDTABLE_PROJECT`. The app and reviewer need separate bot identities with access to the same project. Obtain these from your team's approved credential channel or provision your own Roundtable workspace. Never commit credentials. The live setup on Mat's machine uses a private runtime env file and will not exist on a teammate's clone.
 
 Roundtable credentials used on Mat's machine remain server-local; they are **not** in GitHub secrets. These provider grants can access the workspace beyond this app's folder, so they are not a safe substitute for a narrowly scoped team credential. Use a dedicated demo workspace before distributing keys. The personal reporting key is never needed by the app.
 

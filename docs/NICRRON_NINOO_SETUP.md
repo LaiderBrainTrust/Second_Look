@@ -20,14 +20,14 @@ Official quickstart verified: https://nicrron.ai/docs/quickstart
 
 - OpenAI-compatible chat completions: `POST https://api.nicrron.ai/v1/chat/completions`.
 - Server-only `NICRRON_API_KEY`; create it at https://nicrron.ai/dashboard/keys.
-- Start with `NICRRON_MODEL=nicrron/auto`; use live model discovery before choosing a specific model. The PDF's example model names need not match the current catalogue.
+- The app defaults to `NICRRON_MODEL=nicrron/fastest`; use live model discovery before choosing a specific model. The PDF's example model names need not match the current catalogue.
 - Insert reasoning in the existing `server/adapters/roundtable.ts` reviewer after input validation. Supply the pinned Akta finding and synthetic case terms as untrusted data.
 - Ask for a concise proposed fund-manager question plus explanation of relevance and limitations. Do not let model output change price, distribution ownership, case revision, or approval state.
 - Validate the returned structure, preserve the existing pinned input/output references and explicit human sharing step, and identify the model-backed method separately from the current `rule-based` method.
 - Record safe request/model metadata and wire the actual call into PRISM once its current trace contract and credentials are available.
 - Fail visibly on missing credentials/provider errors; do not silently label a deterministic fallback as a successful model call.
 
-Current status: the API key and model variables already exist in `.env.example`. Nicrron model calls and PRISM traces are not implemented or live-verified. Akta and Roundtable are integrated and verified independently.
+Current status: the API key and model variables already exist in `.env.example`. Nicrron model calls are implemented in the Roundtable reviewer; PRISM traces remain unimplemented. See TEAM_START.md for current credential provisioning. Akta and Roundtable are integrated and verified independently.
 
 ## Account / credits in the supplied guide
 

@@ -51,7 +51,7 @@ Documentation:
 
 ## Next complete slice
 
-Connect Nicrron reasoning and PRISM tracing to the integrated Roundtable reviewer. Replace the synthetic report source with one permitted X1 read if retained in the final scope. Preserve the existing deterministic changed-offer flow. In parallel, replace the development role header with authenticated participant sessions and configure deployment persistence. Do not spend the remaining time rebuilding the domain loop from scratch.
+Connect PRISM tracing to the integrated Nicrron/Roundtable reviewer. Replace the synthetic report source with one permitted X1 read if retained in the final scope. Preserve the existing deterministic changed-offer flow. In parallel, replace the development role header with authenticated participant sessions and configure deployment persistence. Do not spend the remaining time rebuilding the domain loop from scratch.
 
 Before public deployment: real sessions, case membership checks, CSRF/origin protection for cookie-based mutations, request/body validation, secret configuration, durable storage, provider failure states and a complete rehearsal. Native SQLite on an ephemeral serverless filesystem is not persistent deployment storage; use a persistent host/volume or adapt the store to the chosen hosted database.
 
@@ -68,7 +68,7 @@ One real external finding, one explicit question/answer, one changed offer that 
 - `POST /api/case/research/:id/check`: `{}`. Reconciles the same task ID and verifies the returned output file and source versions. UI polls pending work every five seconds.
 - `POST /api/case/research/:id/share`: `{ expectedRevision }`. A current completed review can replace the shared question. This advances the case revision and clears its answer; prior approvals remain historical.
 
-`server/adapters/roundtable.ts` runs an app-specific SDK worker as part of API startup. It reads only the pinned task input path under `second-look/` and writes a task-specific output. It is separate from the earlier sponsor template. Its current reasoning is deterministic; the method is explicitly returned as `rule-based`. Model reasoning via Nicrron and its PRISM trace are still unimplemented.
+`server/adapters/roundtable.ts` runs an app-specific SDK worker as part of API startup. It reads only the pinned task input path under `second-look/` and writes a task-specific output. It is separate from the earlier sponsor template. New tasks call Nicrron after deterministic input validation; the returned method is `nicrron`, with model and request identifiers. Older saved `rule-based` results remain readable. PRISM tracing remains unimplemented.
 
 The SQLite research table preserves selected findings, task IDs, remote write request IDs, snapshots and completed results across restart. Interrupted Akta fetches become retryable blocked runs. An uncertain Roundtable dispatch retains its original request IDs: reconcile it rather than creating another task. Historical tasks may finish, but cannot apply to a newer case.
 

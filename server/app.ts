@@ -9,10 +9,14 @@ import { AktaError } from './adapters/akta.js';
 
 export function createApp(store: ReturnType<typeof createStore>) {
   const app = express();
+  const allowedOrigins = ['http://localhost:5173', 'http://127.0.0.1:5173', 'http://localhost:3001', 'http://127.0.0.1:3001'];
+  if (process.env.CODESPACES === 'true' && /^[a-z0-9-]+$/.test(process.env.CODESPACE_NAME ?? '')) {
+    allowedOrigins.push(`https://${process.env.CODESPACE_NAME}-5173.app.github.dev`);
+  }
   app.use((req, res, next) => {
     if (['POST', 'PUT', 'PATCH', 'DELETE'].includes(req.method)) {
       const origin = req.header('origin');
-      if (!req.is('application/json') || (origin && !['http://localhost:5173', 'http://127.0.0.1:5173', 'http://localhost:3001', 'http://127.0.0.1:3001'].includes(origin))) {
+      if (!req.is('application/json') || (origin && !allowedOrigins.includes(origin))) {
         res.status(403).json({ error: 'Use the local app with a JSON request.' }); return;
       }
     }

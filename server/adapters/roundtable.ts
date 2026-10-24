@@ -1,6 +1,7 @@
 import { Roundtable } from '@roundtable/sdk';
 import type { ResearchInput, ResearchResult, ResearchRun, VersionSource } from '../../shared/research.js';
 import { recordProviderResult } from './status.js';
+import { reviewWithNicrron } from './nicrron.js';
 
 export function configured() { return Boolean(process.env.ROUNDTABLE_APP_KEY && process.env.ROUNDTABLE_PROJECT && process.env.ROUNDTABLE_WORKER_ID); }
 function client(key: string | undefined) {
@@ -45,7 +46,7 @@ export function createRoundtableAdapter() {
       const sources = task.result?.sources as VersionSource[] | undefined;
       if (!data || data.caseId !== run.caseId || data.caseRevision !== run.caseRevision || data.findingId !== run.selectedFindingId
         || typeof data.question !== 'string' || data.question.length > 8000 || typeof data.explanation !== 'string'
-        || data.method !== 'rule-based' || !Array.isArray(sources) || !run.inputSource
+        || !['rule-based', 'nicrron'].includes(data.method) || !Array.isArray(sources) || !run.inputSource
         || !sources.some(s => s.bank === run.inputSource!.bank && s.path === run.inputSource!.path && s.version === run.inputSource!.version)
         || !sources.some(s => s.bank === run.inputSource!.bank && s.path === `second-look/reviews/${run.taskId}.json` && typeof s.version === 'string')) {
         return { status: 'blocked', error: 'The returned review does not match this case revision and its source versions.' };
@@ -53,7 +54,7 @@ export function createRoundtableAdapter() {
       const output = sources.find(s => s.path === `second-look/reviews/${run.taskId}.json`)!;
       const saved = await client(process.env.ROUNDTABLE_APP_KEY).call('read_file', { bank: output.bank, path: output.path, version: output.version });
       const savedResult = JSON.parse(saved.content) as ResearchResult;
-      if (savedResult.question !== data.question || savedResult.caseId !== run.caseId || savedResult.caseRevision !== run.caseRevision || savedResult.findingId !== run.selectedFindingId) {
+      if (savedResult.question !== data.question || savedResult.explanation !== data.explanation || savedResult.method !== data.method || savedResult.model !== data.model || savedResult.modelRequestId !== data.modelRequestId || savedResult.caseId !== run.caseId || savedResult.caseRevision !== run.caseRevision || savedResult.findingId !== run.selectedFindingId) {
         return { status: 'blocked', error: 'The saved review file does not match the task result.' };
       }
       recordProviderResult('roundtable', true, 'Live review completed with matching case revision and source versions.');
@@ -72,7 +73,8 @@ export async function runReviewer(signal: AbortSignal) {
       const source = await ctx.read(path, { version });
       const input = JSON.parse(source.content) as ResearchInput;
       if (input.caseId !== task.input.caseId || input.caseRevision !== task.input.caseRevision) throw new Error('Task and source revisions differ.');
-      const result = reviewInput(input);
+      reviewInput(input); // Validate source/date/terms before exposing evidence to a model.
+      const result = await reviewWithNicrron(input);
       const saved = await ctx.save(`second-look/reviews/${task.id}.json`, JSON.stringify(result), 'Source-backed question proposal');
       return { summary: result.question, data: result, sources: [source.source, saved] };
     }).run({ signal, pollMs: 2000, maxIdleMs: 10000 });

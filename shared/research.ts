@@ -8,7 +8,8 @@ export interface Finding {
 export interface VersionSource { bank: string; path: string; version: string }
 export interface ResearchResult {
   caseId: string; caseRevision: number; findingId: string;
-  question: string; explanation: string; method: 'rule-based'; sources: VersionSource[];
+  question: string; explanation: string; method: 'rule-based' | 'nicrron'; sources: VersionSource[];
+  model?: string; modelRequestId?: string;
 }
 export interface ResearchRun {
   id: string; caseId: string; caseRevision: number; company: Company; after: string;
