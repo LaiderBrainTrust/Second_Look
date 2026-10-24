@@ -1177,6 +1177,29 @@ function AnswerForm({
       }}
     >
       <h2>{data.answer ? "Update your answer" : "Answer the investor"}</h2>
+      {example && (
+        <aside className="funding-example">
+          <p>
+            For this walkthrough, fill in the prepared $100,000 fund answer.
+            Review it below, then choose Save my answer.
+          </p>
+          <button
+            className="secondary"
+            disabled={busy}
+            type="button"
+            onClick={() => {
+              if (!confirmDiscardChanges()) return;
+              draft.markDirty();
+              setAmount("100000");
+              setText(
+                "Fictional fund response: the example distribution notice allocates $100,000 to this LP interest. This is an illustrative contractual assumption, not a forecast from game performance. The signed sale terms determine whether the seller or buyer receives it.",
+              );
+            }}
+          >
+            Use the labeled fictional example
+          </button>
+        </aside>
+      )}
       <label>
         How much will this fund interest receive? (USD)
         <input
@@ -1198,21 +1221,6 @@ function AnswerForm({
           placeholder="e.g. The October distribution notice lists $100,000 for this fund interest."
         />
       </label>
-      {example && (
-        <button
-          className="sl-text-button"
-          type="button"
-          onClick={() => {
-            draft.markDirty();
-            setAmount("100000");
-            setText(
-              "Fictional fund response: the example distribution notice allocates $100,000 to this LP interest. This is an illustrative contractual assumption, not a forecast from game performance. The signed sale terms determine whether the seller or buyer receives it.",
-            );
-          }}
-        >
-          Use the labeled fictional example
-        </button>
-      )}
       {error && (
         <p className="sl-error" role="alert">
           {error}
