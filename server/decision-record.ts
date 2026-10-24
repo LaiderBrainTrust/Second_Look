@@ -2,6 +2,8 @@ import { Router } from 'express';
 import type { SourceRef } from '../shared/contracts.js';
 import { DomainError, view } from './domain.js';
 import type { createStore } from './store.js';
+import { diligenceView } from './diligence.js';
+import type { DiligenceView } from '../shared/diligence.js';
 
 export function decisionRecord(store: ReturnType<typeof createStore>, revision?: number) {
   const state = revision === undefined ? store.read() : store.current(revision);
@@ -13,6 +15,7 @@ export function decisionRecord(store: ReturnType<typeof createStore>, revision?:
     disclosure: 'Illustrative fund and deal. Participant roles are simulated; identities are not independently verified. An approval records an app review, not a signature, accepted sale or money movement.',
     assumptions: 'Gross receipts use the stated purchase payment, price adjustment and distribution recipient. Taxes, fees and timing are excluded. Game popularity does not establish distributions or fund value.',
     case: current,
+    ...(state.diligence ? { diligence: diligenceView(state, 'lp') } : {}),
     approvals: state.reviews.map(review => ({ ...review, status: review.revision === state.revision ? 'current' : 'historical' })),
     historyLimit: 'Earlier approvals contain only the information saved at the time. Missing historical fields are not reconstructed from current terms. This export is a snapshot, not a live status page.',
   };
@@ -27,6 +30,16 @@ function source(ref?: SourceRef) {
   try { const parsed = new URL(ref.url ?? ''); if (['http:', 'https:'].includes(parsed.protocol) && !parsed.username && !parsed.password) url = parsed; } catch { /* no link */ }
   return `<p class="source">Source: ${url ? `<a href="${escape(url.href)}" rel="noopener noreferrer">${escape(ref.label)}</a>` : escape(ref.label)} · ${escape(ref.kind)}${ref.locator ? ` · ${escape(ref.locator)}` : ''}${ref.revision ? ` · version ${escape(ref.revision)}` : ''}</p>`;
 }
+function diligenceHtml(d: DiligenceView) {
+  const p = d.privateDiligence!;
+  return `<h2>Competing offers and outstanding work</h2>${paragraph(p.comparison.assumptions)}
+${p.comparison.reasons.map(paragraph).join('')}
+${p.comparison.offers.length ? `<table><thead><tr><th>Buyer / version</th><th>Purchase payment</th><th>Seller fees</th><th>Cash before tax</th><th>Terms / status</th></tr></thead><tbody>${p.comparison.offers.map(o => `<tr><td>${escape(o.buyer)} / ${o.version}</td><td>${money(o.purchasePriceCents)}</td><td>${money(o.sellerFeesCents)}</td><td>${money(o.netBeforeTaxCents)}${p.comparison.highestNetOfferIds.includes(o.id) ? ' · Highest comparable amount' : ''}</td><td>${escape(o.withdrawn ? 'Withdrawn' : o.expired ? 'Expired' : 'Active')}<br>Record date: ${escape(o.recordDate ?? 'Unknown')}<br>Recipient: ${escape(o.distributionRecipient ?? 'Unknown')}<br>${escape(o.missing.join('; '))}<br>${escape(o.conditions)}<br>Source: ${escape(o.sourceNote)}</td></tr>`).join('')}</tbody></table>` : '<p>No comparison offers recorded.</p>'}
+<h3>Questions</h3>${d.questions.map(q => `<article><h4>${escape(q.question)}</h4><p>Assigned to ${escape(q.owner)} · ${escape(q.status)}${q.overdue ? ' · Overdue' : ''} · Due ${escape(q.dueAt ?? 'Not set')}</p>${paragraph(q.answer?.text ?? 'Awaiting answer')}${q.resolution ? paragraph(q.resolution) : ''}</article>`).join('') || '<p>No additional questions recorded.</p>'}
+<h3>Closing conditions</h3>${p.conditions.map(c => `<article><h4>${escape(c.title)}</h4><p>${escape(c.owner)} · ${escape(c.status)}${c.required ? ' · Required for review' : ''}${c.overdue ? ' · Overdue' : ''} · Due ${escape(c.dueAt ?? 'Not set')}</p>${paragraph(c.evidenceNote ?? 'Supporting evidence not yet recorded.')}</article>`).join('') || '<p>No closing conditions recorded. This does not establish that none apply.</p>'}
+${p.blockers.length ? `<h3>Before approving</h3><ul>${p.blockers.map(b => `<li>${escape(b)}</li>`).join('')}</ul>` : ''}
+<p class="muted">These are participant-recorded terms and assertions. No legal consent, waiver, signature, external notification or transfer is created by this record. The JSON export preserves every saved item revision.</p>`;
+}
 export function decisionRecordHtml(record: Record) {
   const c = record.case; const review = c.privateReview!;
   const statuses = { awaiting_answer: 'Waiting for the manager’s answer', needs_review: 'Ready for investor review', approved: 'Approved for this version', terms_changed: 'Changed since the previous approval — review required' };
@@ -39,6 +52,7 @@ export function decisionRecordHtml(record: Record) {
 <h2>Current deal</h2><p>Owner: ${escape(review.ownerEntity)}</p><table><tbody><tr><th scope="row">Purchase payment</th><td>${money(c.offer.purchasePriceCents)}</td></tr><tr><th scope="row">Price adjustment</th><td>${money(c.offer.priceAdjustmentCents)}</td></tr><tr><th scope="row">Distribution reported by manager</th><td>${money(c.answer?.distributionCents)}</td></tr><tr><th scope="row">Distribution recipient</th><td>${escape(c.offer.distributionRecipient)}</td></tr><tr><th scope="row">Scenario gross receipts to seller</th><td><strong>${money(review.grossReceiptsCents)}</strong></td></tr></tbody></table>${paragraph(record.assumptions)}${source(c.offer.source)}${source(review.report)}
 <h2>Question and supporting answer</h2>${c.researchContext ? paragraph(`Selected game: ${c.researchContext.game} · Studio: ${c.researchContext.studio} · Shared at revision ${c.researchContext.sharedAtRevision}`) : ''}<h3>Question</h3>${paragraph(c.question)}${source(c.questionSource)}<h3>Manager’s answer</h3>${paragraph(c.answer?.text ?? 'No answer recorded. The distribution remains unresolved.')}${c.answer ? source(c.answer.source) : ''}
 ${change ? `<h2>Last recorded offer change</h2><p>At case revision ${change.atRevision}. These amounts describe that change, not any later change to the manager’s answer.</p><p>Prior purchase payment: ${money(change.previousOffer.purchasePriceCents)} · Prior distribution recipient: ${escape(change.previousOffer.distributionRecipient)}</p><p>Gross receipts at that change: ${money(change.previousGrossReceiptsCents)} → ${money(change.revisedGrossReceiptsCents)}</p><p><strong>Difference at that change: ${money(delta)}</strong></p>${source(change.previousOffer.source)}` : ''}
+${record.diligence ? diligenceHtml(record.diligence) : ''}
 <h2>Approval history</h2>${approvals || '<p>No approval has been recorded.</p>'}
 <h2>Recorded changes</h2>${review.events.length ? `<ol>${review.events.map(e => `<li>${escape(e.at)} · revision ${e.revision}: ${escape(e.text)}</li>`).join('')}</ol>` : '<p>No changes recorded.</p>'}<footer>${paragraph(record.historyLimit)}</footer></body></html>`;
 }

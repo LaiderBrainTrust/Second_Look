@@ -3,6 +3,8 @@ import { applyCommand, seedCase, DomainError, type Command } from './domain.js';
 import type { CaseState, Role } from '../shared/contracts.js';
 import type { GamingSnapshot, GamingHolding } from '../shared/gaming.js';
 import type { ResearchRun } from '../shared/research.js';
+import type { DiligenceCommand } from '../shared/diligence.js';
+import { applyDiligence } from './diligence.js';
 
 // Read older demo snapshots without changing their evidence or deleting history.
 function holdingFromStorage(raw: GamingHolding & { exposurePercent?: number }): GamingHolding {
@@ -106,6 +108,15 @@ export function createStore(path: string) {
       db.exec('BEGIN IMMEDIATE');
       try {
         const next = applyCommand(read(), role, expected, command);
+        db.prepare('UPDATE cases SET body = ? WHERE id = ?').run(JSON.stringify(next), next.id);
+        db.exec('COMMIT');
+        return next;
+      } catch (error) { db.exec('ROLLBACK'); throw error; }
+    },
+    diligenceCommand(role: Role, expected: number, command: DiligenceCommand) {
+      db.exec('BEGIN IMMEDIATE');
+      try {
+        const next = applyDiligence(read(), role, expected, command);
         db.prepare('UPDATE cases SET body = ? WHERE id = ?').run(JSON.stringify(next), next.id);
         db.exec('COMMIT');
         return next;

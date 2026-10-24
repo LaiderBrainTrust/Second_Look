@@ -22,6 +22,12 @@ export function responseText(state: CaseState): string {
     ? 'The distribution or price adjustment remains unresolved. Obtain the missing terms before reviewing this response.'
     : `Offer v${state.offer.version}: ${usd(state.offer.purchasePriceCents)} purchase payment; distribution goes to the ${state.offer.distributionRecipient}. Scenario gross receipts: ${usd(total)}. Taxes, fees and timing are excluded. Please confirm these terms in the written agreement.`;
 }
+export function diligenceBlockers(state: CaseState): string[] {
+  return [
+    ...(state.diligence?.questions ?? []).filter(q => q.status !== 'resolved').map(q => `Resolve question: ${q.question}`),
+    ...(state.diligence?.conditions ?? []).filter(c => c.required && c.status === 'pending').map(c => `Confirm condition: ${c.title}`),
+  ];
+}
 export function view(state: CaseState, role: Role): CaseView {
   const currentApproval = state.reviews.some(r => r.revision === state.revision);
   const status = !state.answer ? 'awaiting_answer' : currentApproval ? 'approved' : state.reviews.length ? 'terms_changed' : 'needs_review';
@@ -31,6 +37,7 @@ export function view(state: CaseState, role: Role): CaseView {
     ...(role === 'lp' ? { privateReview: {
       lastTermChange: state.lastTermChange, ownerEntity: state.ownerEntity, report: state.report, grossReceiptsCents: grossReceipts(state),
       responseText: responseText(state), status, reviews: state.reviews, events: state.events,
+      ...(state.diligence ? { diligenceBlockers: diligenceBlockers(state) } : {}),
     } } : {}),
   };
 }
@@ -60,10 +67,12 @@ export function applyCommand(state: CaseState, role: Role, expectedRevision: num
   let event = '';
   if (command.kind === 'approve') {
     if (grossReceipts(next) === null) throw new DomainError(422, 'Resolve the distribution and adjustment before approving a response.');
+    if (diligenceBlockers(next).length) throw new DomainError(422, 'Resolve tracked questions and required closing conditions before approving this version.');
     if (!next.reviews.some(r => r.revision === next.revision)) {
       next.reviews.push({ revision: next.revision, responseText: responseText(next), approvedAt: new Date().toISOString(),
         question: next.question, answer: structuredClone(next.answer!),
-        researchContext: next.researchContext ? structuredClone(next.researchContext) : undefined });
+        researchContext: next.researchContext ? structuredClone(next.researchContext) : undefined,
+        ...(next.diligence ? { diligence: structuredClone(next.diligence) } : {}) });
     }
     return next;
   }

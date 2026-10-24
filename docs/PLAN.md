@@ -136,7 +136,7 @@ Mat has assigned the final UI and product design to Ryan. Mat/Codex owns backend
 | By 3:30 PM | Submit early: project description, Track 4, source repository, usable demo link, founder brief, ≤3-minute video and sponsor list |
 | 3:30–4:00 PM | Verify submitted links/access and correct submission issues |
 
-The working engine is implemented. The next build priority is Ryan's cohesive customer experience, followed by integration and rehearsal. Do not expand the product's functional scope to use remaining time.
+The working engine is implemented. Ryan owns the cohesive customer experience, followed by integration and rehearsal. **Mat authorized a bounded expansion on October 24 while Ryan works:** competing-offer comparison, a term/consent checklist, and several assigned questions from Darren's roadmap. These are additive backend APIs; the existing main journey remains usable without creating workflow items. See [WORKFLOW_API.md](WORKFLOW_API.md) and [ROADMAP.md](ROADMAP.md). No unrelated platform or authentication rewrite is included. Preserve the feature freeze, rehearsal and submission gates above.
 
 **Live link is available:** https://x1cloud.tail6fbca0.ts.net/ is public through HTTPS Funnel, with a separate team login. It does not require judges to join Mat's tailnet. Keep the working backend. Ryan's UI must be merged, built, deployed and checked at this URL before calling that design live. See [RYAN_DEMO.md](RYAN_DEMO.md) for access and operations. Use 4:00 PM Eastern as the hard deadline despite conflicting later text on Devpost; target submission at 3:30 PM.
 
