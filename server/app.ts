@@ -52,7 +52,7 @@ export function createApp(store: ReturnType<typeof createStore>, options: { rele
   else app.get('/api/session', (_req, res) => res.json({ hosted: false, authenticated: true }));
   if (x1OAuth) app.use('/api/connections/x1', x1OAuth.privateRouter);
   app.get('/api/health', (_req, res) => res.json({ ok: true, mode: options.rehearsal ? 'saved-research-rehearsal' : 'local-synthetic-scaffold', ...(/^[a-f0-9]{40}$/.test(options.releaseSha ?? '') ? { releaseSha: options.releaseSha } : {}) }));
-  app.get('/api/providers', (_req, res) => res.json(providerStatuses()));
+  app.get('/api/providers', (_req, res) => res.json(providerStatuses({ individual: connections?.ready(), oauth: x1OAuth?.ready(), dedicated: Boolean(process.env.X1_API_KEY && process.env.X1_CASE_ID === store.read().id) })));
   app.use('/api/research', (req, res, next) => {
     if (options.hosted && res.locals.session?.mode !== 'presenter') { res.status(403).json({ error: 'Use the research tools within a case you own.' }); return; }
     next();
