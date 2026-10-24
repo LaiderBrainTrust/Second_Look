@@ -44,6 +44,8 @@ Ryan owns UI composition; see [RYAN_PRODUCT_BRIEF.md](RYAN_PRODUCT_BRIEF.md). No
 | `GET /api/case` | Role-specific CaseView; investor-private fields omitted for other roles |
 | `POST /api/case/commands` | `{ expectedRevision, command }`; atomic domain change |
 | `GET /api/case/decision-record?revision=N&format=html` | Investor-only downloadable HTML or JSON; optional revision guards against changed terms. See [DECISION_RECORD.md](DECISION_RECORD.md) |
+| `GET /api/case/diligence` | Assigned questions for participant; LP additionally gets competing offers, conditions, blockers and history. See [WORKFLOW_API.md](WORKFLOW_API.md) |
+| `POST /api/case/diligence/commands` | `{ expectedRevision, command }`; saves offers, assigned questions, responses, resolutions and closing conditions with immutable item history |
 | `GET /api/case/gaming` | Investor-only latest snapshot, catalog and fictional-ownership disclosure |
 | `POST /api/case/gaming/refresh` | `{ expectedRevision }`; persist `fetching`, return 202, fetch external evidence, save `ready` or `blocked` |
 | `POST /api/case/gaming/:snapshotId/prepare` | `{ expectedRevision, holdingId }`; prepare a research run using saved evidence and the current offer revision; reuse same snapshot/holding/revision run |
@@ -97,7 +99,7 @@ npm run doctor
 npm run dev
 ```
 
-For changes, run `npm test` then `npm run build`. Current suite: 37 tests, including trace field-order reconciliation and rejection of actual mismatches. Do not repeat provider calls just to replace a saved source with a prettier result.
+For changes, run `npm test` then `npm run build`. Current suite: 47 tests, including trace field-order reconciliation and rejection of actual mismatches. Do not repeat provider calls just to replace a saved source with a prettier result.
 
 Check the complete browser flow in GAMING_BUILD.md. Refresh/reopen and confirm persistence. Test the game screen and decision screen on a narrow viewport. A build does not establish live provider access; a local browser pass does not establish hosted authentication or user acceptance.
 

@@ -1,3 +1,4 @@
+import type { DiligenceState } from './diligence.js';
 export type Role = 'lp' | 'gp' | 'buyer';
 export type Provider = 'x1' | 'nicrron' | 'akta' | 'roundtable' | 'prism';
 
@@ -30,6 +31,7 @@ export interface Review {
   question?: string;
   answer?: Answer;
   researchContext?: ResearchContext;
+  diligence?: DiligenceState;
 }
 export interface ResearchContext {
   runId: string;
@@ -57,6 +59,7 @@ export interface CaseState {
   answer: Answer | null;
   lastTermChange?: TermChange;
   reviews: Review[];
+  diligence?: DiligenceState;
   events: { revision: number; text: string; at: string }[];
 }
 export interface CaseView {
@@ -79,6 +82,7 @@ export interface CaseView {
     status: 'awaiting_answer' | 'needs_review' | 'approved' | 'terms_changed';
     reviews: Review[];
     events: CaseState['events'];
+    diligenceBlockers?: string[];
   };
 }
 export interface ProviderStatus {

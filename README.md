@@ -10,7 +10,11 @@ Deal Flow @ Betaworks, October 24, 2026. **Track 4: Funds. Submission closes 4 P
 
 **Read [PLAN.md](docs/PLAN.md) first.** It covers the product, strategy, gaming example, sponsor use, X1 boundary, commercial hypothesis and path to submission. Claim work in [TEAM_BOARD.md](docs/TEAM_BOARD.md); use [BUILD.md](docs/BUILD.md) for implementation and [GAMING_BUILD.md](docs/GAMING_BUILD.md) for the presentation.
 
-Current status: all four sponsor integrations are implemented and live calls have succeeded. **29 tests and the build pass.** [Ryan's launch and demo guide](docs/RYAN_DEMO.md) covers the hosted team login and the local fallback. The hosted mode is a protected synthetic demo, not a service for real client data. X1 is not connected.
+Current status: all four sponsor integrations are implemented and live calls have succeeded. **47 tests and the build pass.** [Ryan's launch and demo guide](docs/RYAN_DEMO.md) covers the hosted team login and the local fallback. The hosted mode is a protected synthetic demo, not a service for real client data. X1 is not connected.
+
+### New backend capabilities for Ryan
+
+[Darren’s workflow tranche](docs/WORKFLOW_API.md) adds competing-offer comparison, assigned questions and a closing-condition checklist. Existing screens remain compatible. The API guide contains request examples, role permissions and integration behavior; these additions still need Ryan’s UI. [Roadmap and delivery status](docs/ROADMAP.md).
 
 ### Final product design: Ryan owns the UI
 
@@ -22,12 +26,12 @@ Use the hosted URL and team access code in [RYAN_DEMO.md](docs/RYAN_DEMO.md). Fo
 
 ## Start here — teammates and coding agents
 
-**Use `main`. [PR #1](https://github.com/LaiderBrainTrust/vc_hackathon/pull/1) has merged; the app, sponsor adapters and team setup are available there.**
+**Use `main`. [PR #1](https://github.com/LaiderBrainTrust/Second_Look/pull/1) has merged; the app, sponsor adapters and team setup are available there.**
 
 Paste this into Claude Code, Codex, or your coding agent:
 
 ```text
-Set up and run https://github.com/LaiderBrainTrust/vc_hackathon on branch
+Set up and run https://github.com/LaiderBrainTrust/Second_Look on branch
 main. Read README.md, AGENTS.md, docs/PLAN.md, and docs/TEAM_START.md first.
 Preserve any existing local changes; use a fresh directory if this checkout
 belongs to another task. Do not rebuild the app or replace its configuration.
@@ -50,7 +54,7 @@ actually passed. Stop after setup unless I assign you an implementation lane.
 From a **new directory**, with access to the private GitHub repository:
 
 ```sh
-git clone --branch main https://github.com/LaiderBrainTrust/vc_hackathon.git
+git clone --branch main https://github.com/LaiderBrainTrust/Second_Look.git vc_hackathon
 cd vc_hackathon
 node --version                 # must be 22.13 or newer
 npm ci

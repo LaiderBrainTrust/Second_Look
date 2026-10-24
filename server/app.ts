@@ -1,4 +1,5 @@
 import { decisionRecordRouter } from './decision-record.js';
+import { diligenceRouter } from './diligence.js';
 import type { createReviewRecovery } from './review-recovery.js';
 import { installHostedAuth, type HostedOptions } from './hosted-auth.js';
 import express from 'express';
@@ -43,6 +44,7 @@ export function createApp(store: ReturnType<typeof createStore>, options: { rele
   });
   app.get('/api/case', (_req, res) => res.json(view(store.read(), res.locals.role)));
   app.use('/api/case/decision-record', decisionRecordRouter(store));
+  app.use('/api/case/diligence', diligenceRouter(store));
   app.use('/api/case/gaming', gamingRouter(store));
   app.use('/api/case/research', caseResearchRouter(store, options.recovery));
   app.post('/api/case/commands', (req, res, next) => {
