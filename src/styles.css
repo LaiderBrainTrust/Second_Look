@@ -249,6 +249,7 @@ button:active:enabled { transform: translateY(0); }
 button.primary { white-space: nowrap; }
 button.primary::after { content: '\2192'; display: inline-block; margin-left: 8px; transition: transform .2s var(--ease); }
 button.primary:hover:enabled::after { transform: translateX(4px); }
+button.primary:disabled::after { display: none; }
 button.secondary:hover:enabled, .button-link:hover { border-color: var(--accent); color: var(--accent); background: var(--tint); }
 button.link, .tab, .segmented button, .case-list button, .holding, .decision-table button { transform: none; }
 button.link:hover:enabled, .tab:hover:enabled { transform: none; }
