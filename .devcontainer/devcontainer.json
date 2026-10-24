@@ -1,0 +1,20 @@
+{
+  "name": "Second Look hackathon",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:1-22-bookworm",
+  "forwardPorts": [
+    5173
+  ],
+  "portsAttributes": {
+    "5173": {
+      "label": "Second Look (keep private)",
+      "onAutoForward": "notify"
+    }
+  },
+  "otherPortsAttributes": {
+    "onAutoForward": "ignore"
+  },
+  "postCreateCommand": "npm ci && npm run setup",
+  "remoteEnv": {
+    "NICRRON_MODEL": "nicrron/fastest"
+  }
+}

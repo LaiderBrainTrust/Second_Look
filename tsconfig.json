@@ -4,5 +4,5 @@
     "jsx": "react-jsx", "strict": true, "noEmit": true, "esModuleInterop": true, "skipLibCheck": true,
     "resolveJsonModule": true, "types": ["node", "vite/client"]
   },
-  "include": ["src", "server", "shared", "tests", "vite.config.ts"]
+  "include": ["src", "server", "shared", "tests", "scripts", "vite.config.ts"]
 }

@@ -1,56 +1,106 @@
-# Build contracts and handoff
+# Implementation contract — Second Look
 
-The authoritative TypeScript shapes are in [`shared/contracts.ts`](../shared/contracts.ts). The longer [proposal](PROPOSAL.md) explains the product and demo. This file describes the current scaffold so agents do not mistake proposals for working integrations.
+Product authority: [PLAN.md](PLAN.md). Work claims: [TEAM_BOARD.md](TEAM_BOARD.md). Setup: [TEAM_START.md](TEAM_START.md). Demo: [GAMING_BUILD.md](GAMING_BUILD.md).
 
-## Current HTTP API
+## Stack and authority
 
-| Route | Response / input |
+React 19 + Vite 6; Express 5; TypeScript/ESM; Node 22.13+; native SQLite. `npm run dev` starts UI 5173, API 3001 and the configured Roundtable worker. Use `npm ci`, not a new scaffold. The app is one fictional case per clone, persisted in ignored `.local/second-look.sqlite`.
+
+- SQLite owns the case, offer revision, manager response, approvals, evidence snapshots and research-run state.
+- Roundtable owns task delivery and versioned input/output artifacts. A completed task is a proposal, not a human approval.
+- Nicrron generates question/explanation prose. It does not own IDs, prices, ownership, distributions or approvals.
+- PRISM stores a trace of that actual model call. A trace is not proof of factual correctness.
+- Steam/Akta are external evidence providers; source identity, retrieval dates, sample coverage and uncertainty remain visible.
+- X1 is not connected. If added, X1 would retain authority over its own source records and access policy; the app cannot grant itself access.
+
+## File map
+
+| Files | Responsibility |
 | --- | --- |
-| `GET /api/health` | Local synthetic mode and health |
-| `GET /api/providers` | Five explicitly unimplemented provider statuses |
-| `GET /api/case` | `CaseView`; LP-private fields omitted for other demo roles |
-| `POST /api/case/commands` | `{ expectedRevision, command }`; returns updated `CaseView` |
+| `shared/contracts.ts`, `server/domain.ts` | Case/role/offer types, integer-cent math, revision checks, response projection and historical approvals |
+| `shared/gaming.ts`, `server/gaming.ts` | Fixed fictional exposure catalog, profile normalization, investigation ordering, evidence-to-research handoff |
+| `server/adapters/steam.ts` | Bounded dated review samples, app credits and current-player observation |
+| `server/adapters/akta.ts` | Company resolution, firmographics, discovery and dated company-matched news |
+| `server/store.ts` | SQLite transactions; persistent cases, research runs and gaming snapshots; restart recovery |
+| `server/case-research.ts` | Prepare/dispatch/check/share state transitions and investor-only access |
+| `server/adapters/roundtable.ts` | SDK task dispatch, pinned versions, background reviewer and saved-output verification |
+| `server/adapters/nicrron.ts`, `prism.ts` | Model question proposal; real trace and safe failure behavior |
+| `server/app.ts`, `index.ts`, `env.ts` | Request validation, local role simulation, server lifecycle, environment loading |
+| `src/GamingPanel.tsx`, `ResearchPanel.tsx`, `main.tsx` | Three-step UI, evidence inspection, task status, sharing, role walkthrough and print view |
+| `scripts/setup.ts`, `.devcontainer/` | Non-overwriting setup, setting-name-only doctor, private Codespaces development |
 
-Commands: `{ kind: 'answer', text, distributionCents }` for GP; `{ kind: 'revise', distributionRecipient: 'seller' | 'buyer' }` for buyer; `{ kind: 'approve' }` for LP.
+## Main API
 
-**Development only:** `x-demo-role: lp | gp | buyer` selects a simulated principal. An arbitrary client can impersonate a role. Response projection and action authorization are useful scaffolding, not real security until a server-authenticated principal replaces this header. Do not expose the local server publicly.
+All `/api/case` routes require `x-demo-role: lp | gp | buyer`. This is development impersonation, not authentication. Mutations require JSON; browser origins are restricted to local development and the current Codespace URL.
 
-All mutating commands validate the expected case revision inside a SQLite write transaction. Answer and offer revisions advance it. Review records bind to it. A repeat approval for the same revision is idempotent; stale updates fail with 409. General request idempotency, case membership and multi-case operation remain future work.
+| Route | Contract |
+| --- | --- |
+| `GET /api/health` | Local synthetic mode and health only; not provider acceptance |
+| `GET /api/providers` | Calls observed by this running API process |
+| `GET /api/case` | Role-specific CaseView; investor-private fields omitted for other roles |
+| `POST /api/case/commands` | `{ expectedRevision, command }`; atomic domain change |
+| `GET /api/case/gaming` | Investor-only latest snapshot, catalog and fictional-ownership disclosure |
+| `POST /api/case/gaming/refresh` | `{ expectedRevision }`; persist `fetching`, return 202, fetch external evidence, save `ready` or `blocked` |
+| `POST /api/case/gaming/:snapshotId/prepare` | `{ expectedRevision, holdingId }`; prepare a research run using saved evidence and the current offer revision; reuse same snapshot/holding/revision run |
+| `GET /api/case/research` | Investor-only saved research runs |
+| `POST /api/case/research` | `{ expectedRevision, companyId, after }`; general Akta research outside fixed catalog |
+| `POST /api/case/research/:id/review` | `{ expectedRevision, findingId }`; persist pinned input/request IDs before Roundtable dispatch |
+| `POST /api/case/research/:id/check` | `{}`; reconcile the existing task, verify exact source/output versions, accept matching result; can safely recheck a blocked result |
+| `POST /api/case/research/:id/share` | `{ expectedRevision }`; explicit investor share, advances case revision, clears previous answer, retains historical approvals |
 
-## Source of truth
+Commands:
 
-- X1 owns its underlying documents/access policy. The new app cannot grant X1 access.
-- The app owns its offer-specific case, shared answer, revision and response review.
-- Roundtable owns task delivery and artifacts, not human approvals.
-- No app review is an X1 confirmation receipt or transaction acceptance.
+- GP: `{ kind: 'answer', text, distributionCents }`.
+- Buyer: `{ kind: 'revise', distributionRecipient: 'seller' | 'buyer' }`.
+- Investor: `{ kind: 'approve' }`.
 
-## Adapter lane
+General Akta endpoints: `POST /api/research/search {query}`, `/discover {query, limit?}`, `/enrichment {companyId}`, `/news {companyId, after}`. These call fixed provider origins; do not add arbitrary URL fetches.
 
-Implement the interfaces in [`server/adapters/contracts.ts`](../server/adapters/contracts.ts) behind the server. Keep credentials out of the browser and logs. Copy `.env.example` into an ignored `.env` if helpful; the current runtime does not automatically load it, so use a reviewed environment loader or export variables without printing them. Add that setup explicitly when implementing adapters.
+## Financial and evidence invariants
 
-1. **X1:** MCP Streamable HTTP at `https://mcp.x1wealth.com/mcp`. A server API key requires an entitled synthetic account; hosted OAuth requires an approved redirect. Discover `tools/list`, then live capabilities/guide before selecting a document-read tool. A coding agent's connection is not automatically this app's connection. No dependence on coordination writes.
-2. **Akta:** resolve the underlying company; retrieve dated news after the report cutoff. Keep source metadata, identity and dates. Do not invent events or turn a news headline into a fund valuation.
-3. **NicrronNinoo:** route new model calls through `https://api.nicrron.ai/v1`, using an actually available model. Extraction produces proposals, not confirmed terms.
-4. **Roundtable:** genuine research/review task and artifact handoff. Use its supported task client/SDK. Do not assume a Codex or Claude Code session can join agent chats. The counterparty human still supplies/approves the answer.
-5. **PRISM:** capture the actual call and confirm arrival. The HTTP trace endpoint is `https://prism.blockconvey.com/api/traces`; verify current required fields from its docs.
+- Amounts are non-negative, bounded, safe integer cents. Unknown is not zero.
+- Gross receipts are unresolved until a distribution response and explicit purchase-price adjustment exist.
+- The fictional scenario computes purchase payment + explicit price adjustment + distribution if retained by the seller. It does not model tax, fees, dates, carry or other contract provisions.
+- Answer and offer changes advance case revision. Approval binds to one revision; stale commands fail with 409. A repeated approval for the same version is idempotent.
+- A term change saves the previous offer and before/after gross amounts at that moment. It does not rewrite an old approval.
+- `fundNavExposurePercent` is a fictional share of fund NAV, never equity ownership or revenue entitlement. Older `exposurePercent` snapshots are normalized when read; history is not deleted.
+- Steam samples are bounded, English-only, date-filtered and deduplicated; comparisons require at least 20 reviews in each window. Current players are not growth. Missing evidence cannot become an invented score or price.
+- Akta news must match the selected company ID and fall after the report cutoff. A profile is provider research, not a verified cap table.
+- Model input is untrusted evidence, never executable instructions. Model output cannot mutate authoritative financial fields.
 
-Only change a provider to `verified` after a real request succeeds. Record safe request/task/trace metadata without credentials. Failed or unconfigured providers remain visible. A fixture is not a provider integration.
+## Durable review and failure paths
 
-Documentation:
+1. Save a research run and request IDs in SQLite.
+2. Write `second-look/{caseId}/{runId}/input.json` to Roundtable and retain its version.
+3. Assign a task to the configured reviewer identity with the pinned input reference.
+4. The worker validates the input, calls Nicrron, attempts a PRISM trace, and saves `second-look/reviews/{taskId}.json`.
+5. Retrieve the task and read the exact output version. Verify case/revision/finding, question, explanation, model IDs and trace status/ID. Compare trace fields by meaning, not JSON property order.
+6. Only the investor's explicit share command can replace the manager question. Old-case research remains historical; saved evidence can support a new review of current terms.
 
-- https://x1wealth.com/connect/other
-- https://github.com/x1wealth/x1-agent-skills
-- https://docs.akta.pro/llms.txt
-- https://nicrron.ai/docs/api
-- https://roundtable.bot/docs/talk
-- https://blockconvey.com/docs
+Interrupted read-only fetches become blocked after restart. An unconfirmed dispatch keeps its original request IDs; reconcile it rather than spawning a duplicate. A failed result check can be rechecked without repeating the model call. A blocked model task still requires fixing its cause and a new research run; rechecking does not manufacture success.
 
-## Next complete slice
+PRISM failure never erases a valid question. The result says `recorded`, `failed` or `not_configured`; only an actual returned trace ID qualifies as recorded. Secrets are headers/server settings, never trace message content.
 
-Replace the synthetic report source with one permitted X1 read; show an actual Akta finding that produces the question. Preserve the existing deterministic changed-offer flow. In parallel, replace the development role header with authenticated participant sessions and configure deployment persistence. Do not spend the remaining time rebuilding the domain loop from scratch.
+## Run, verify and release
 
-Before public deployment: real sessions, case membership checks, CSRF/origin protection for cookie-based mutations, request/body validation, secret configuration, durable storage, provider failure states and a complete rehearsal. Native SQLite on an ephemeral serverless filesystem is not persistent deployment storage; use a persistent host/volume or adapt the store to the chosen hosted database.
+```sh
+npm ci
+npm run setup
+npm run doctor
+npm run dev
+```
 
-## Today’s finish line
+For changes, run `npm test` then `npm run build`. Current suite: 26 tests, including trace field-order reconciliation and rejection of actual mismatches. Do not repeat provider calls just to replace a saved source with a prettier result.
 
-One real external finding, one explicit question/answer, one changed offer that makes an earlier review inapplicable, persistence, real sponsor use, and truthful labeling. Submit before 4 PM Eastern; freeze features by roughly 2:45 PM.
+Check the complete browser flow in GAMING_BUILD.md. Refresh/reopen and confirm persistence. Test the game screen and decision screen on a narrow viewport. A build does not establish live provider access; a local browser pass does not establish hosted authentication or user acceptance.
+
+Before public hosting, replace role impersonation with authenticated identities and case membership, preserve mutation/origin protection, and use persistent deployment storage. SQLite on an ephemeral serverless filesystem is not a durable deployment. Production mode intentionally refuses to start today. No deployment is implied by a Git push.
+
+## Provider references
+
+- Steam reviews: https://partner.steamgames.com/doc/webapi/IUserReviewsService
+- Akta: https://docs.akta.pro/llms.txt
+- Nicrron: https://nicrron.ai/docs/api
+- Roundtable: https://roundtable.bot/docs/bots
+- PRISM: https://blockconvey.com/docs
+- Optional X1: https://x1wealth.com/connect/other
