@@ -1,0 +1,31 @@
+{
+  "sourceSha": "1ae353a2b62c0d1d84b5f10d13780e12b7e1b0cc",
+  "worktree": "/home/mat/Sites/vc_hackathon",
+  "surface": "http://127.0.0.1:5173",
+  "data": "fictional local development case",
+  "browserSession": "second-look-product",
+  "viewports": [
+    [
+      1440,
+      1000
+    ],
+    [
+      390,
+      844
+    ]
+  ],
+  "verified": [
+    "editable manager distribution 125000 USD",
+    "editable buyer payment 720000 USD, adjustment -2000 USD, seller keeps distribution",
+    "deterministic proceeds 843000 USD",
+    "terms changed invalidates prior review",
+    "review persisted after reload",
+    "dedicated HTML decision download"
+  ],
+  "tests": "87 passed across 24 files",
+  "build": "passed",
+  "notYetVerified": [
+    "new hosted account UI acceptance",
+    "presenter machine timed rehearsal"
+  ]
+}
