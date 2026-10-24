@@ -61,6 +61,7 @@ export function createX1OAuth(db:DatabaseSync,access:WorkspaceAccess,connections
     if((db.prepare('SELECT count(*) AS n FROM x1_oauth_pending').get() as {n:number}).n>=500)throw new DomainError(429,'Too many pending X1 connections. Try again shortly.');
     // A newer attempt invalidates older attempts for this owner/case.
     db.prepare('DELETE FROM x1_oauth_pending WHERE caseId=? AND userId=?').run(caseId,userId);
+    connections.invalidate(caseId,userId); // also cancels an older exchange already in flight
     const state=secret(),binding=secret(),verifier=secret();const stateHash=hash(state);
     const p={verifier};
     db.prepare('INSERT INTO x1_oauth_pending VALUES (?,?,?,?,?,?,?,?,?)').run(stateHash,hash(binding),caseId,userId,hash(res.locals.sessionId),connections.epoch(caseId,userId),Date.now()+600000,connections.seal(JSON.stringify(p),stateHash),'started');
@@ -106,9 +107,10 @@ export function createX1OAuth(db:DatabaseSync,access:WorkspaceAccess,connections
       const live=access.session(res.locals.sessionId);
       if(!live||live.user.id!==p.userId||owner(res,p.caseId)!==p.userId||connections.epoch(p.caseId,p.userId)!==p.epoch)throw new DomainError(409,'Your session or X1 connection changed. Start again.');
       const old=connections.metadata(p.caseId,p.userId)?tokens(connections.read(p.caseId,p.userId).key):undefined;
-      connections.save(p.caseId,p.userId,JSON.stringify(received));received=undefined;
+      const saved=connections.save(p.caseId,p.userId,JSON.stringify(received));received=undefined;
       res.setHeader('Set-Cookie',cookie('',0));
       if(old)await revoke(old);
+      if(connections.metadata(p.caseId,p.userId)?.version!==saved.version)throw new DomainError(409,'Your X1 connection changed. Refresh your case.');
       res.json({configured:true,caseId:p.caseId,mode:'individual_case_read_only'});
     }catch(e){if(received)await revoke(received);next(e);}
   });

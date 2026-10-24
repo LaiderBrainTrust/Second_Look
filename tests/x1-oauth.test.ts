@@ -97,3 +97,16 @@ it('refreshes an expired OAuth credential while preserving its connection versio
   expect(await h.oauth.credential(h.caseId,h.owner.id)).toBe(accessToken);expect(h.calls).toHaveLength(1);
  }finally{await h.close();}
 });
+
+it('a newer consent attempt cancels an older token exchange already in flight',async()=>{
+ const h=await harness();try{
+  const {url,binding}=await h.start();await h.callback(url,binding);
+  let release!:()=>void;h.setWait(new Promise<void>(r=>release=r));
+  const pending=h.request('/api/connections/x1/complete','POST',`${binding}; ${h.sessionCookie}`,{});
+  await vi.waitFor(()=>expect(h.calls).toHaveLength(1));
+  const newer=await h.start();h.setWait();release();
+  expect((await pending).status).toBe(409);expect(h.connections.metadata(h.caseId,h.owner.id)).toBeUndefined();
+  expect((await h.callback(newer.url,newer.binding)).status).toBe(303);
+  expect((await h.request('/api/connections/x1/complete','POST',`${newer.binding}; ${h.sessionCookie}`,{})).status).toBe(200);
+ }finally{await h.close();}
+});

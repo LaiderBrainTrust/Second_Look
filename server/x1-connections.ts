@@ -35,8 +35,12 @@ export function createX1Connections(db: DatabaseSync) {
   function save(caseId: string, userId: string, key: string) {
     const version = randomUUID(); const connectedAt = new Date().toISOString();
     const ciphertext = seal(key, JSON.stringify([caseId,userId,version]));
-    db.prepare('INSERT INTO x1_connections VALUES (?,?,?,?,?) ON CONFLICT(case_id,user_id) DO UPDATE SET version=excluded.version,ciphertext=excluded.ciphertext,connected_at=excluded.connected_at').run(caseId, userId, version, ciphertext, connectedAt);
-    invalidate(caseId,userId);
+    db.exec('BEGIN IMMEDIATE');
+    try {
+      db.prepare('INSERT INTO x1_connections VALUES (?,?,?,?,?) ON CONFLICT(case_id,user_id) DO UPDATE SET version=excluded.version,ciphertext=excluded.ciphertext,connected_at=excluded.connected_at').run(caseId, userId, version, ciphertext, connectedAt);
+      invalidate(caseId,userId);
+      db.exec('COMMIT');
+    } catch(error) { db.exec('ROLLBACK'); throw error; }
     return { version, connectedAt };
   }
   function read(caseId: string, userId: string) {
