@@ -24,9 +24,9 @@ Node 22.13+ is required. Open http://localhost:5173. `setup` creates `.env.local
 | Akta | Key saved | Key saved; restart Codespace | Set `AKTA_API_KEY` in ignored `.env.local` |
 | Nicrron | Key saved | Key saved; restart Codespace | Set `NICRRON_API_KEY` in ignored `.env.local` |
 | Roundtable | Not shared | Not shared | Team-only workspace keys required |
-| PRISM | Not configured | Not configured | Adapter ready; trace key and project ID still needed |
+| PRISM | Key and project ID saved | Key and project ID saved; restart Codespace | Set `PRISM_TRACE_KEY` and `PRISM_PROJECT_ID` |
 
-GitHub Actions secrets are not downloadable. Repository Codespaces secrets **are now configured for Akta and Nicrron** in `LaiderBrainTrust/vc_hackathon`; a new/restarted Codespace receives them as environment variables. They do not populate ordinary local clones. The authenticated `silverstein` identity now has repository admin rights. Secret names were verified after saving; teammate Codespace injection still needs a live check.
+GitHub Actions secrets are not downloadable. Repository Codespaces secrets **are now configured for Akta, Nicrron and PRISM** in `LaiderBrainTrust/vc_hackathon`; a new/restarted Codespace receives them as environment variables. They do not populate ordinary local clones. The authenticated `silverstein` identity now has repository admin rights. Secret names were verified after saving; teammate Codespace injection still needs a live check.
 
 The Roundtable keys on Mat's host also reach his reporting workspace. They must not be distributed to this team. A team-only workspace/connection is needed, with an app coordinator and reviewer sharing access to its project. Configure `ROUNDTABLE_APP_KEY`, `ROUNDTABLE_WORKER_KEY`, `ROUNDTABLE_WORKER_ID`, and `ROUNDTABLE_PROJECT`. This is a real outstanding setup dependency, not an automatic step the repository already performs.
 
@@ -34,7 +34,7 @@ The Roundtable keys on Mat's host also reach his reporting workspace. They must 
 
 On branch `codex/sponsor-setup`, use GitHub's Code → Codespaces → Create codespace on this branch. The devcontainer installs Node and dependencies and runs setup. Then run `npm run doctor` and `npm run dev`. Open forwarded port **5173**, keeping its visibility **Private**; do not expose port 3001. Codespaces creation may consume your account's quota. No Codespace has been created or billed by this setup task.
 
-GitHub injects configured repository Codespaces secrets into newly started environments. Restart an existing Codespace after secret changes. Until the Roundtable and PRISM steps above are complete, live flow will report missing settings. The devcontainer configuration has been source-checked but has not yet been launched in a teammate's Codespace.
+GitHub injects configured repository Codespaces secrets into newly started environments. Restart an existing Codespace after secret changes. Until the Roundtable step above is complete, live flow will report missing settings. The devcontainer configuration has been source-checked but has not yet been launched in a teammate's Codespace.
 
 The role selector is a synthetic local demo, not participant authentication. Private Codespaces forwarding is suitable for an owner's development preview, not a multi-user hosted product. A shared team instance with one persistent case database still needs deployment and real access control.
 
@@ -42,7 +42,7 @@ The role selector is a synthetic local demo, not participant authentication. Pri
 
 Investor → Inspect the games → Check the three holdings → choose a game → Turn evidence into a manager question. Alternatively use the expandable company search in step 2. The Roundtable worker calls Nicrron with the saved finding and synthetic offer; it returns proposed question text and an explanation. Reload and check the saved task. Explicitly share the question, then switch to Fund manager and answer. A changed case makes older reviews historical.
 
-The model cannot approve a response or change price/ownership fields; those remain deterministic app operations. Failed model calls fail visibly, with no silent rule-based replacement. PRISM has an HTTP trace adapter, but a configured key/project and successful live receipt are still required before claiming all four sponsor integrations are complete. See NICRRON_NINOO_SETUP.md for the unresolved Builder/Marketplace eligibility rule.
+The model cannot approve a response or change price/ownership fields; those remain deterministic app operations. Failed model calls fail visibly, with no silent rule-based replacement. A real PRISM model trace was accepted locally, and its setup doctor reports live/app connected. All four sponsor APIs have been exercised in the app; this does not settle Ninoo’s separate Builder/Marketplace eligibility requirement or verify a teammate’s environment. See NICRRON_NINOO_SETUP.md for the unresolved Builder/Marketplace eligibility rule.
 
 ## Setup acceptance — what your agent should report
 

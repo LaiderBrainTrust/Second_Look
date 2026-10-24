@@ -1,6 +1,6 @@
 # Team coding-agent instructions
 
-Start with the coding-agent prompt in README.md and the environment checklist in docs/TEAM_START.md. Read docs/BUILD.md before changing code. docs/PROPOSAL.md is a proposal, not evidence that its integrations work.
+Start with the coding-agent prompt in README.md and the environment checklist in docs/TEAM_START.md. Read docs/PLAN.md for the canonical strategy, docs/TEAM_BOARD.md for work ownership, and docs/BUILD.md before changing code. docs/PROPOSAL.md points to the current plan; files under docs/archive are historical, not active instructions.
 
 - Setup-only requests: install with `npm ci`, run `npm run setup` and `npm run doctor`, start/reuse `npm run dev`, and verify the UI plus `/api/health`. Report missing variable names without values. A failed doctor check does not prevent the synthetic demo; do not claim live integrations are configured. Do not start unrelated implementation.
 - Preserve existing work. Claim a bounded lane with the team; do not rebuild the whole project independently.

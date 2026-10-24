@@ -1,14 +1,16 @@
+> Strategy: [PLAN.md](PLAN.md). Work ownership: [TEAM_BOARD.md](TEAM_BOARD.md). This file is the demo run of show.
+
 # Gaming-fund build — active owner: Mat / Codex
 
 Started October 24 at 12:11 PM Eastern. Target: a complete local demo by 2:11 PM, leaving submission time.
 
 Owned files: new shared/gaming.ts, server/gaming.ts, server/adapters/steam.ts, src/GamingPanel.tsx and associated tests. Integration touches server/store.ts, server/app.ts, shared/research.ts, server/adapters/nicrron.ts, src/main.tsx and styles.css. Coordinate before editing these concurrently.
 
-One fictional fund; three synthetic holdings in real game studios. Read real Steam review evidence and Akta company news. Rank investigation priority with a disclosed deterministic rule. User selects a holding, then a pinned Roundtable/Nicrron review returns a proposed question. The LP explicitly shares it; the GP answers; amended offer terms invalidate prior review. Include a printable memo and visible consequences.
+One fictional fund; three synthetic holdings in real game studios. Read real Steam review evidence and Akta studio profiles and company news. Rank investigation priority with a disclosed deterministic rule. User selects a holding, then a pinned Roundtable/Nicrron review returns a proposed question. The LP explicitly shares it; the GP answers; amended offer terms invalidate prior review. Include a printable memo and visible consequences.
 
 No autonomous trades, true-value claims, fabricated live data, or false claim of actual ownership in the named studios. Current player counts are snapshots, not growth. Recent-review samples are not representative polling. No model controls money or approvals.
 
-PRISM uses the documented HTTP adapter; live verification requires credentials. Existing Ninoo Builder/Marketplace interpretation remains unresolved. Akta/Nicrron Codespaces secrets now exist in the transferred repository LaiderBrainTrust/vc_hackathon; team-only Roundtable credentials remain pending.
+PRISM uses the documented HTTP adapter; a real model trace and live/app-connected setup status are verified. Existing Ninoo Builder/Marketplace interpretation remains unresolved. Akta/Nicrron/PRISM Codespaces secrets now exist in the transferred repository LaiderBrainTrust/vc_hackathon; team-only Roundtable credentials remain pending.
 
 ## Demo path (target under 3 minutes)
 

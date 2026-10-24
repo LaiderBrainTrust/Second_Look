@@ -102,7 +102,7 @@ The test worker was stopped after verification. This was a sponsor-provided synt
 
 `npm run dev` starts the actual Second Look reviewer alongside the API. Investor view searches Akta, saves dated findings against a case revision, dispatches the selected finding to Roundtable, and displays the completed question with exact input/output versions. The investor explicitly shares the question; sharing clears the old answer and requires a fresh fund-manager response. An older revision cannot replace the current question.
 
-The reviewer now validates the dated input, then calls Nicrron for a source-linked question and explanation. It cannot change offer terms or approve a response. Historical rule-based results remain readable. PRISM tracing is implemented in `server/adapters/prism.ts`; a live receipt still requires the trace key and project ID.
+The reviewer now validates the dated input, then calls Nicrron for a source-linked question and explanation. It cannot change offer terms or approve a response. Historical rule-based results remain readable. PRISM tracing is implemented in `server/adapters/prism.ts`; a real model trace and PRISM live/app-connected setup status were verified on October 24.
 
 Set the variables in `.env.example`: `AKTA_API_KEY`, `NICRRON_API_KEY`, `ROUNDTABLE_APP_KEY`, `ROUNDTABLE_WORKER_KEY`, `ROUNDTABLE_WORKER_ID`, and `ROUNDTABLE_PROJECT`. Both Roundtable identities need access to the same project. `ROUNDTABLE_ENV_FILE` optionally points to an owner-only environment file outside the repo. No machine CLI login is needed for SDK operation.
 
@@ -114,7 +114,7 @@ At source `24f0cbf7337dba066b06e4d49b960c5a27de820a`, the browser retrieved live
 
 ## Team runtime setup
 
-See [TEAM_START.md](TEAM_START.md) for local and Codespaces setup. Both Akta and Nicrron keys are saved in GitHub Actions and repository Codespaces secrets. Admin access is now active; secret names were verified in LaiderBrainTrust/vc_hackathon. Restart an existing Codespace to receive them. Roundtable team-only credential provisioning remains outstanding.
+See [TEAM_START.md](TEAM_START.md) for local and Codespaces setup. Akta and Nicrron keys plus the PRISM key/project ID are saved in GitHub Actions and repository Codespaces secrets. Admin access is now active; secret names were verified in LaiderBrainTrust/vc_hackathon. Restart an existing Codespace to receive them. Roundtable team-only credential provisioning remains outstanding.
 
 ### Nicrron through the app reviewer
 
@@ -128,3 +128,8 @@ The current entry begins with real Steam evidence plus Akta enrichment for Pounc
 Set `PRISM_TRACE_KEY` and `PRISM_PROJECT_ID` on the API server. `PRISMTRACE_API_KEY` and `PRISMTRACE_PROJECT_ID` are also accepted by the adapter, but doctor checks the preferred names. The background reviewer posts synthetic evidence, model output, model name, latency and run ID to the documented trace endpoint. A successful HTTP response must contain an ID before the app reports `recorded`. A failed trace leaves the proposed question usable and reports `failed`; missing credentials report `not_configured`. Neither state satisfies a claim of verified sponsor tracing. No provider credential is placed in the trace messages.
 
 The displayed PRISM receipt is saved in the same versioned review output as the question. Source/receipt mismatches are rejected on retrieval. Tracing is not a guarantee of factual or financial correctness.
+
+
+### PRISM live acceptance — October 24
+
+The app's real gaming-review task produced a recorded trace. PRISM's setup doctor returned HTTP 200, `live_connected: true`, `app_connected: true`, one live/application trace and `blocked_step: null`. The initial reconciliation exposed a JSON field-order comparison bug; the app now compares trace status and ID structurally and can recheck a saved blocked result without repeating the model call. All 26 tests pass, including acceptance of reordered fields and rejection of genuinely mismatched trace IDs. API operation does not settle Ninoo Builder/Marketplace eligibility.

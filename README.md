@@ -6,6 +6,12 @@ One flow: real Steam samples + Akta studio research → a saved Roundtable/Nicrr
 
 Deal Flow @ Betaworks, October 24, 2026. **Track 4: Funds. Submission closes 4 PM Eastern.** Target sponsor award: Best Use of External Data.
 
+## The full team plan
+
+**Read [PLAN.md](docs/PLAN.md) first.** It covers the product, strategy, gaming example, sponsor use, X1 boundary, commercial hypothesis and path to submission. Claim work in [TEAM_BOARD.md](docs/TEAM_BOARD.md); use [BUILD.md](docs/BUILD.md) for implementation and [GAMING_BUILD.md](docs/GAMING_BUILD.md) for the presentation.
+
+Current status: the gaming workflow is built, and live Steam/Akta → Roundtable/Nicrron → PRISM checks succeeded. **26 tests and the build pass.** Remaining event work includes team-only Roundtable access, teammate setup verification, Ninoo eligibility clarification, a judge-accessible demo arrangement, presenter rehearsal and submission. This is not a publicly deployed product; X1 is not connected.
+
 ## Start here — teammates and coding agents
 
 **Use branch `codex/sponsor-setup` ([PR #1](https://github.com/LaiderBrainTrust/vc_hackathon/pull/1)). The setup below is on that branch; do not assume it is already on `main`.**
@@ -14,7 +20,7 @@ Paste this into Claude Code, Codex, or your coding agent:
 
 ```text
 Set up and run https://github.com/LaiderBrainTrust/vc_hackathon on branch
-codex/sponsor-setup. Read README.md, AGENTS.md, and docs/TEAM_START.md first.
+codex/sponsor-setup. Read README.md, AGENTS.md, docs/PLAN.md, and docs/TEAM_START.md first.
 Preserve any existing local changes; use a fresh directory if this checkout
 belongs to another task. Do not rebuild the app or replace its configuration.
 
@@ -57,9 +63,9 @@ Open **http://localhost:5173**. The API is **http://127.0.0.1:3001/api/health**.
 | Live game evidence | Compare bounded Steam review samples and current players | No provider keys |
 | Live company research | Search Akta and save dated findings | `AKTA_API_KEY` |
 | Complete live review | Send a saved finding through Roundtable → Nicrron; retrieve and explicitly share the question | Akta, Nicrron, and all four Roundtable settings below |
-| All four sponsor integrations | PRISM adapter implemented; live verification pending | `PRISM_TRACE_KEY` + `PRISM_PROJECT_ID`, plus the review settings |
+| All four sponsor API integrations | Verified locally, including a real PRISM model trace | All listed settings; sponsor-specific eligibility still needs confirmation |
 
-**Credential status:** Repository admin access is active. `AKTA_API_KEY` and `NICRRON_API_KEY` are saved as both **repository Codespaces secrets** and **Actions secrets**. New/restarted Codespaces can receive them; cloning does not download keys. Roundtable still needs separate team-only credentials, and PRISM needs a trace key/project ID. [Access checklist](docs/TEAM_START.md).
+**Credential status:** Repository admin access is active. `AKTA_API_KEY`, `NICRRON_API_KEY`, `PRISM_TRACE_KEY` and `PRISM_PROJECT_ID` are saved as both **repository Codespaces secrets** and **Actions secrets**. New/restarted Codespaces can receive them; cloning does not download keys. Roundtable still needs separate team-only credentials for other developers. [Access checklist](docs/TEAM_START.md).
 
 For live review, `npm run doctor` checks these server-side settings:
 
@@ -80,7 +86,7 @@ Use an ignored `.env.local` for local development, or environment injection in C
 
 Select **`codex/sponsor-setup` → Code → Codespaces → Create codespace**. The checked-in devcontainer installs dependencies and runs setup. Run `npm run doctor`, then `npm run dev`, and open forwarded port **5173** with **Private** visibility. The Codespaces route still needs the credential provisioning above; it has not yet been verified in a teammate's Codespace.
 
-This is a working synthetic development app. Steam, Akta, Nicrron, Roundtable and PRISM adapters are integrated. Live PRISM verification and optional X1 reads remain outstanding. The role selector is development impersonation, **not authentication**. Do not expose the server publicly or use real client data. The entrypoint refuses production mode until real participant authentication is implemented.
+This is a working synthetic development app. Steam, Akta, Nicrron, Roundtable and PRISM adapters are integrated. Live PRISM verification passed; optional X1 reads are not connected. The role selector is development impersonation, **not authentication**. Do not expose the server publicly or use real client data. The entrypoint refuses production mode until real participant authentication is implemented.
 
 ## Try the core interaction
 
@@ -99,7 +105,7 @@ These are illustrative contract scenarios with explicit zero purchase-price adju
 | React/TypeScript UI and Express API | Optional X1 reads from a synthetic demo account |
 | Persistent offer versions, question/answer and historical review | Confirm materiality and connect the remaining sponsors |
 | Akta company search, discovery, enrichment and dated news API | Materiality review of external findings; a company mention is not a valuation |
-| Integer-cent calculations, term-change dollar comparison and unknown-total handling | Confirm a live PRISM trace for the actual Nicrron model request |
+| Integer-cent calculations, term-change dollar comparison and unknown-total handling | Verify all integrations in a teammate’s environment |
 | Atomic stale-revision rejection | Authenticated participants and case-scoped sharing |
 | Role-specific response projection | Deployment with persistent storage and real auth |
 | Tests for changed terms, stale requests and restart continuity | Source extraction/correction, final rehearsal, video and founder brief |
@@ -119,7 +125,7 @@ A changed case makes earlier research historical. Saved gaming evidence can be r
 
 ## Team access and credentials
 
-**Cloning the repo does not download secrets.** Akta and Nicrron secrets in GitHub Actions are available only to authorized workflows, not retrievable as a local environment file. This setup has no publicly deployed shared app yet.
+**Cloning the repo does not download secrets.** Akta, Nicrron and PRISM secrets in GitHub Actions are available only to authorized workflows, not retrievable as a local environment file. This setup has no publicly deployed shared app yet.
 
 For local development, run `npm run setup` to create `.env.local` without overwriting it, then configure Akta, `NICRRON_API_KEY`, plus `ROUNDTABLE_APP_KEY`, `ROUNDTABLE_WORKER_KEY`, `ROUNDTABLE_WORKER_ID`, and `ROUNDTABLE_PROJECT`. The app and reviewer need separate bot identities with access to the same project. Obtain these from your team's approved credential channel or provision your own Roundtable workspace. Never commit credentials. The live setup on Mat's machine uses a private runtime env file and will not exist on a teammate's clone.
 
@@ -129,7 +135,8 @@ A future deployed app can hold the provider keys on its server so teammates use 
 
 ## Team documents
 
-- [Detailed proposal and independent-agent review prompt](docs/PROPOSAL.md)
+- [Canonical full product and strategy plan](docs/PLAN.md)
+- [Team work board and acceptance criteria](docs/TEAM_BOARD.md)
 - [Integration/API contracts and work split](docs/BUILD.md)
 - [Sponsor setup, shared secret and live research endpoints](docs/SPONSOR_SETUP.md)
 - [X1 public builder guide](https://x1wealth.com/build)
@@ -139,7 +146,7 @@ A future deployed app can hold the provider keys on its server so teammates use 
 
 ## Work split
 
-Claim a lane in the team chat before editing. The names below are responsibilities, not claims that someone has accepted them:
+Use [TEAM_BOARD.md](docs/TEAM_BOARD.md) for the current work list and claim a lane in the team chat before editing. The names below are responsibilities, not claims that someone has accepted them:
 
 - **Mat / Codex initial scaffold:** this bootstrap, financial scenario and X1 integration contract. Initial scaffold completion does not reserve every module forever.
 - **UI lane:** `src/`.
