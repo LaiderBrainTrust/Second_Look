@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { CaseView, ProviderStatus, Role } from "../shared/contracts";
 import { DecisionWorkbench } from "../integration/DecisionWorkbench";
 import { FundingPanel } from "../integration/FundingPanel";
@@ -13,6 +13,13 @@ import {
   request,
   type Session,
 } from "./product-api";
+import { ReviewRequirements } from "./ReviewRequirements";
+import { Collaborators } from "./Collaborators";
+import {
+  confirmDiscardChanges,
+  hasUnsavedChanges,
+  useDraftGuard,
+} from "./useDraftGuard";
 import { X1Sources } from "./X1Sources";
 const names: Record<Role, string> = {
   lp: "Investor",
@@ -36,7 +43,23 @@ export function ProductApp() {
   }
   useEffect(() => {
     loadSession().catch((e) => setError(e.message));
-    const changed = () => setRoute(readRoute());
+    let lastHash = location.hash;
+    const changed = () => {
+      if (!confirmDiscardChanges()) {
+        history.replaceState(
+          null,
+          "",
+          location.pathname + location.search + lastHash,
+        );
+        return;
+      }
+      lastHash = location.hash;
+      setRoute(readRoute());
+      requestAnimationFrame(() => {
+        window.scrollTo({ top: 0, behavior: "instant" });
+        document.querySelector<HTMLElement>("#workspace h1")?.focus();
+      });
+    };
     window.addEventListener("hashchange", changed);
     const expired = () => setSession({ hosted: true, authenticated: false });
     window.addEventListener("second-look-session-expired", expired);
@@ -53,6 +76,7 @@ export function ProductApp() {
       navigate({});
   }
   async function signOut(keepInvite = false) {
+    if (!confirmDiscardChanges()) return;
     try {
       await request("/api/session/logout", {});
       setSession({ hosted: true, authenticated: false });
@@ -101,7 +125,7 @@ export function ProductApp() {
       <header className="sl-app-header">
         <Brand />
         <nav aria-label="Workspace">
-          <a href="#">{personal ? "Your cases" : "Team example"}</a>
+          <a href="#">{personal ? "Your sale reviews" : "Team example"}</a>
           {personal && <span>{session.user?.displayName}</span>}
           {session.hosted && (
             <button className="sl-text-button" onClick={() => void signOut()}>
@@ -164,7 +188,10 @@ function CasePage({
     [notice, setNotice] = useState(""),
     [providers, setProviders] = useState<ProviderStatus[]>([]),
     [researchVersion, setResearchVersion] = useState(0),
-    [hasUpdate, setHasUpdate] = useState(false);
+    [hasUpdate, setHasUpdate] = useState(false),
+    [draftEpoch, setDraftEpoch] = useState(0);
+  const latestData = useRef(data);
+  latestData.current = data;
   const view =
     steps.some(([id]) => id === stage) &&
     (role === "lp" || stage === "deal" || stage === "conversation")
@@ -197,7 +224,7 @@ function CasePage({
           const c = list.cases.find((x: { id: string }) => x.id === caseId);
           if (!c)
             throw Error(
-              "This case is not available to your account. Ask the owner for an invitation.",
+              "This sale review is not available to your account. Ask the investor for an invitation.",
             );
           nextRole = c.role;
         }
@@ -217,13 +244,28 @@ function CasePage({
   }, [base]);
   useEffect(() => {
     if (!data) return;
+    let active = true;
     const timer = window.setInterval(() => {
       if (document.hidden) return;
       request(base, undefined, role)
-        .then((next) => setHasUpdate(next.revision !== data.revision))
+        .then((next) => {
+          if (!active || next.revision <= (latestData.current?.revision ?? 0))
+            return;
+          if (hasUnsavedChanges()) setHasUpdate(true);
+          else {
+            setData((current) =>
+              current && current.revision >= next.revision ? current : next,
+            );
+            setHasUpdate(false);
+            setNotice("The latest update is now shown.");
+          }
+        })
         .catch(() => {});
     }, 5000);
-    return () => clearInterval(timer);
+    return () => {
+      active = false;
+      clearInterval(timer);
+    };
   }, [base, role, data?.revision]);
   useEffect(() => {
     document.title = data ? `${data.title} · Second Look` : "Second Look";
@@ -236,15 +278,21 @@ function CasePage({
       await operation();
       await refresh();
       if (message) setNotice(message);
+      return true;
     } catch (e) {
       setError((e as Error).message);
+      return false;
     } finally {
       setBusy(false);
     }
   }
+  async function loadLatest(message = "Latest update loaded.") {
+    if (!confirmDiscardChanges()) return;
+    if (await run(async () => {}, message)) setDraftEpoch((x) => x + 1);
+  }
   async function command(command: unknown, message: string) {
-    if (!data) return;
-    await run(
+    if (!data) return false;
+    return run(
       () =>
         request(
           base + "/commands",
@@ -255,6 +303,7 @@ function CasePage({
     );
   }
   async function switchRole(next: Role) {
+    if (!confirmDiscardChanges()) return;
     setBusy(true);
     setError("");
     try {
@@ -306,7 +355,7 @@ function CasePage({
     <main tabIndex={-1} id="workspace" className="sl-workspace">
       <div className="sl-case-top">
         <div>
-          <a href="#">{personal ? "Your cases" : "Example case"}</a>
+          <a href="#">{personal ? "Your sale reviews" : "Example review"}</a>
           <span aria-hidden="true"> / </span>
           <span>{data.title}</span>
         </div>
@@ -343,7 +392,7 @@ function CasePage({
       )}
       <div className="sl-case-heading">
         <div>
-          <h1>{stageTitle}</h1>
+          <h1 tabIndex={-1}>{stageTitle}</h1>
           <p>
             {view === "deal"
               ? "A sale price tells you one number. The terms tell you what you actually keep."
@@ -363,7 +412,7 @@ function CasePage({
               ? "Changed since review"
               : data.answer
                 ? "Manager answered"
-                : "Awaiting manager answer"}
+                : "Manager’s answer needed"}
         </span>
       </div>
       <nav className="sl-step-nav" aria-label="Review workflow">
@@ -385,10 +434,7 @@ function CasePage({
       {error && (
         <div className="sl-error" role="alert">
           {error}{" "}
-          <button
-            className="sl-text-button"
-            onClick={() => void run(() => refresh())}
-          >
+          <button className="sl-text-button" onClick={() => void loadLatest()}>
             Refresh this case
           </button>
         </div>
@@ -401,10 +447,7 @@ function CasePage({
       {hasUpdate && (
         <div className="sl-success" role="status">
           There’s an update to this case. Your edits have not been replaced.{" "}
-          <button
-            className="sl-text-button"
-            onClick={() => void run(() => refresh(), "Latest case loaded.")}
-          >
+          <button className="sl-text-button" onClick={() => void loadLatest()}>
             Load the latest version
           </button>
         </div>
@@ -544,7 +587,7 @@ function CasePage({
           )}
           {role === "buyer" && (
             <BuyerForm
-              key={data.revision}
+              key={`${draftEpoch}:${JSON.stringify(data.offer)}`}
               data={data}
               busy={busy}
               onSave={(c) =>
@@ -657,17 +700,23 @@ function CasePage({
                 </div>
               ) : (
                 <div className="sl-waiting">
-                  <h3>The manager hasn’t answered yet.</h3>
+                  <h3>
+                    {role === "gp"
+                      ? "Add your answer below."
+                      : "The manager’s answer will appear here."}
+                  </h3>
                   <p>
-                    {personal
-                      ? "Invite the fund manager below so they can respond in this case."
-                      : "To try the complete example, switch to Fund manager in Presenter controls above, then enter an answer."}
+                    {role === "gp"
+                      ? "Confirm the amount and explain which document supports it."
+                      : personal
+                        ? "Use the private invitation beside this question to give the fund manager access."
+                        : "To try the complete example, switch to Fund manager in Presenter controls above, then enter an answer."}
                   </p>
                 </div>
               )}
               {role === "gp" && (
                 <AnswerForm
-                  key={data.revision}
+                  key={`${draftEpoch}:${JSON.stringify(data.answer)}`}
                   data={data}
                   busy={busy}
                   example={!personal}
@@ -682,12 +731,13 @@ function CasePage({
               {role === "lp" && (
                 <>
                   <details className="sl-option">
-                    <summary>Refine the question</summary>
-                    <form
+                    <summary>Edit the question</summary>
+                    <QuestionForm
+                      key={`${draftEpoch}:${data.question}`}
                       onSubmit={(e) => {
                         e.preventDefault();
                         const f = new FormData(e.currentTarget);
-                        void command(
+                        return command(
                           {
                             kind: "set_question",
                             text: f.get("question"),
@@ -701,7 +751,6 @@ function CasePage({
                         Your question
                         <textarea
                           name="question"
-                          key={data.revision}
                           defaultValue={data.question}
                           maxLength={5000}
                           required
@@ -715,7 +764,7 @@ function CasePage({
                       <button className="sl-primary" disabled={busy}>
                         Save question
                       </button>
-                    </form>
+                    </QuestionForm>
                   </details>
                   {data.answer && (
                     <button
@@ -729,7 +778,7 @@ function CasePage({
               )}
               {role === "buyer" && (
                 <BuyerForm
-                  key={data.revision}
+                  key={`${draftEpoch}:${JSON.stringify(data.offer)}`}
                   data={data}
                   busy={busy}
                   onSave={(c) =>
@@ -742,23 +791,44 @@ function CasePage({
               )}
             </section>
             <aside className="sl-next-step">
-              <h2>
-                {role === "lp"
-                  ? "Keep the handoff moving."
-                  : "Your response stays with the deal."}
-              </h2>
-              <p>
-                Questions and answers are saved against the case. If the terms
-                change later, the previous review stays in history.
-              </p>
-              <p className="sl-help">
-                Saving a question does not send an email. Share the case
-                invitation with the person who needs to respond.
-              </p>
+              {personal && role === "lp" ? (
+                <Collaborators
+                  caseBase={base}
+                  answered={!!data.answer}
+                  needsBuyer={
+                    !!data.answer && data.offer.priceAdjustmentCents === null
+                  }
+                />
+              ) : (
+                <>
+                  <h2>
+                    {role === "gp"
+                      ? "What happens after you answer?"
+                      : role === "buyer"
+                        ? "What happens when terms change?"
+                        : "Try the other side of the conversation"}
+                  </h2>
+                  <p>
+                    {role === "gp"
+                      ? "Your answer appears in the investor’s review. They can check the amount against the offer and save their review. You don’t need to send a separate document."
+                      : role === "buyer"
+                        ? "The investor sees the revised terms and must review them again. Their earlier review stays in the history."
+                        : "Use Presenter controls above to switch to Fund manager, answer the question, then return as Investor."}
+                  </p>
+                </>
+              )}
             </aside>
           </div>
-          {personal && role === "lp" && <Collaborators caseBase={base} />}
         </>
+      )}
+      {view === "conversation" && role !== "lp" && (
+        <ReviewRequirements
+          key={draftEpoch}
+          base={base}
+          role={role}
+          revision={data.revision}
+          onChanged={refresh}
+        />
       )}
       {view === "decision" && role === "lp" && (
         <>
@@ -790,9 +860,9 @@ function CasePage({
                 <span>
                   {review?.diligenceBlockers?.length
                     ? "Still open"
-                    : "No tracked blockers"}
+                    : "No open items recorded"}
                 </span>{" "}
-                Tracked questions and closing conditions
+                Other questions and requirements
               </p>
             </div>
             {review?.diligenceBlockers?.map((b) => (
@@ -824,13 +894,31 @@ function CasePage({
               </button>
               <RecordDownload base={base} revision={data.revision} />
             </div>
+            {!ready &&
+              (!data.answer || data.offer.priceAdjustmentCents === null) && (
+                <button
+                  className="sl-secondary"
+                  onClick={() => go("conversation")}
+                >
+                  {!data.answer
+                    ? "Get the manager’s answer"
+                    : "Ask the buyer to confirm the terms"}
+                </button>
+              )}
             {!ready && (
               <p className="sl-help">
-                Resolve the missing answer, adjustment or tracked conditions
-                before recording your review.
+                Complete the missing information before recording your review.
+                Any additional questions and requirements are listed below.
               </p>
             )}
           </section>
+          <ReviewRequirements
+            key={draftEpoch}
+            base={base}
+            role={role}
+            revision={data.revision}
+            onChanged={refresh}
+          />
           <section className="sl-history">
             <h2>The decision history</h2>
             {!review?.events.length && !review?.reviews.length ? (
@@ -871,10 +959,7 @@ function CasePage({
           className="sl-text-button"
           disabled={busy}
           onClick={() =>
-            void run(
-              () => refresh(),
-              "You’re looking at the latest saved case.",
-            )
+            void loadLatest("You’re looking at the latest saved review.")
           }
         >
           Refresh saved case
@@ -955,6 +1040,25 @@ function CashTerms({ data }: { data: CaseView }) {
     </div>
   );
 }
+function QuestionForm({
+  onSubmit,
+  children,
+}: {
+  onSubmit: (e: React.FormEvent<HTMLFormElement>) => Promise<boolean>;
+  children: React.ReactNode;
+}) {
+  const draft = useDraftGuard();
+  return (
+    <form
+      onChange={draft.markDirty}
+      onSubmit={async (e) => {
+        if (await onSubmit(e)) draft.markClean();
+      }}
+    >
+      {children}
+    </form>
+  );
+}
 function AnswerForm({
   data,
   busy,
@@ -964,8 +1068,9 @@ function AnswerForm({
   data: CaseView;
   busy: boolean;
   example: boolean;
-  onSave: (c: unknown) => Promise<void>;
+  onSave: (c: unknown) => Promise<boolean>;
 }) {
+  const draft = useDraftGuard();
   const [amount, setAmount] = useState(
       data.answer ? String(data.answer.distributionCents / 100) : "",
     ),
@@ -974,15 +1079,17 @@ function AnswerForm({
   return (
     <form
       className="sl-sheet"
-      onSubmit={(e) => {
+      onChange={draft.markDirty}
+      onSubmit={async (e) => {
         e.preventDefault();
         setError("");
         try {
-          void onSave({
+          const saved = await onSave({
             kind: "answer",
             distributionCents: cents(amount),
             text,
           });
+          if (saved) draft.markClean();
         } catch (e) {
           setError((e as Error).message);
         }
@@ -990,7 +1097,7 @@ function AnswerForm({
     >
       <h2>{data.answer ? "Update your answer" : "Answer the investor"}</h2>
       <label>
-        Distribution attributable to this interest (USD)
+        How much will this fund interest receive? (USD)
         <input
           inputMode="decimal"
           value={amount}
@@ -1000,7 +1107,7 @@ function AnswerForm({
         />
       </label>
       <label>
-        Explain the contractual basis and source
+        Which document confirms this amount and who keeps it?
         <textarea
           value={text}
           onChange={(e) => setText(e.target.value)}
@@ -1015,6 +1122,7 @@ function AnswerForm({
           className="sl-text-button"
           type="button"
           onClick={() => {
+            draft.markDirty();
             setAmount("100000");
             setText(
               "Fictional manager response: the example distribution notice allocates $100,000 to this LP interest. This is an illustrative contractual assumption, not a forecast from game performance. The signed sale terms determine whether the seller or buyer receives it.",
@@ -1030,8 +1138,8 @@ function AnswerForm({
         </p>
       )}
       <p className="sl-help">
-        Saving makes previous reviews historical. The investor must review your
-        new answer.
+        Saving shares your answer with the investor. If you change an earlier
+        answer, the investor will need to review it again.
       </p>
       <button className="sl-primary" disabled={busy}>
         {busy ? "Saving answer…" : "Save my answer"}
@@ -1046,18 +1154,20 @@ function BuyerForm({
 }: {
   data: CaseView;
   busy: boolean;
-  onSave: (c: unknown) => Promise<void>;
+  onSave: (c: unknown) => Promise<boolean>;
 }) {
+  const draft = useDraftGuard();
   const [error, setError] = useState("");
   return (
     <form
       className="sl-sheet"
-      onSubmit={(e) => {
+      onChange={draft.markDirty}
+      onSubmit={async (e) => {
         e.preventDefault();
         setError("");
         const f = new FormData(e.currentTarget);
         try {
-          void onSave({
+          const saved = await onSave({
             kind: "revise_offer",
             purchasePriceCents: cents(f.get("payment")),
             priceAdjustmentCents: f.get("adjustment")
@@ -1066,15 +1176,16 @@ function BuyerForm({
             distributionRecipient: f.get("recipient"),
             sourceNote: f.get("source"),
           });
+          if (saved) draft.markClean();
         } catch (e) {
           setError((e as Error).message);
         }
       }}
     >
-      <h2>Update the actual sale terms</h2>
+      <h2>Confirm or update the sale offer</h2>
       <div className="sl-form-grid">
         <label>
-          Purchase payment (USD)
+          Buyer’s payment to the investor (USD)
           <input
             name="payment"
             inputMode="decimal"
@@ -1128,79 +1239,6 @@ function BuyerForm({
         {busy ? "Saving terms…" : "Save revised sale terms"}
       </button>
     </form>
-  );
-}
-function Collaborators({ caseBase }: { caseBase: string }) {
-  const [invite, setInvite] = useState(""),
-    [busy, setBusy] = useState(false),
-    [error, setError] = useState("");
-  return (
-    <details className="sl-option">
-      <summary>
-        Invite a manager or buyer
-        <span>Give each person their own access to this case.</span>
-      </summary>
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          setBusy(true);
-          setError("");
-          const f = new FormData(e.currentTarget);
-          request(caseBase + "/invitations", {
-            role: f.get("role"),
-            ...(f.get("handle") ? { recipientHandle: f.get("handle") } : {}),
-          })
-            .then((r) => setInvite(r.acceptanceUrl))
-            .catch((e) => setError(e.message))
-            .finally(() => setBusy(false));
-        }}
-      >
-        <label>
-          Their role
-          <select name="role">
-            <option value="gp">Fund manager — answers questions</option>
-            <option value="buyer">Buyer — updates sale terms</option>
-          </select>
-        </label>
-        <label>
-          Account handle (optional)
-          <input
-            name="handle"
-            placeholder="Restrict the invitation to a specific account"
-          />
-        </label>
-        <p className="sl-help">
-          The invitation expires in 24 hours and can be used once. This creates
-          a link; it does not send an email.
-        </p>
-        <button className="sl-primary" disabled={busy}>
-          {busy ? "Creating invitation…" : "Create invitation link"}
-        </button>
-      </form>
-      {invite && (
-        <div className="sl-invite-result">
-          <label>
-            Share privately with the intended participant
-            <input readOnly value={invite} onFocus={(e) => e.target.select()} />
-          </label>
-          <button
-            className="sl-secondary"
-            onClick={() => {
-              navigator.clipboard
-                .writeText(invite)
-                .catch(() => setError("Select and copy the invitation above."));
-            }}
-          >
-            Copy invitation
-          </button>
-        </div>
-      )}
-      {error && (
-        <p className="sl-error" role="alert">
-          {error}
-        </p>
-      )}
-    </details>
   );
 }
 

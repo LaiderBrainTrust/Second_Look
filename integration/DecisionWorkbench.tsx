@@ -1,3 +1,5 @@
+import { useDraftGuard, confirmDiscardChanges } from "../src/useDraftGuard";
+import { cents as parseDollars } from "../src/product-api";
 import { FundingPanel } from "./FundingPanel";
 import "./decision.css";
 import { useEffect, useState } from "react";
@@ -24,15 +26,7 @@ const blank = {
 };
 function cents(value: string, nullable = false) {
   if (!value.trim() && nullable) return null;
-  if (!/^-?\d{1,10}(\.\d{1,2})?$/.test(value.trim()))
-    throw new Error(
-      "Enter amounts in dollars, without commas, with at most two decimal places. Leave unknown fees or adjustments blank.",
-    );
-  const [d, c = ""] = value.trim().replace("-", "").split(".");
-  return (
-    (Number(d) * 100 + Number(c.padEnd(2, "0"))) *
-    (value.trim().startsWith("-") ? -1 : 1)
-  );
+  return parseDollars(value, true);
 }
 /** Self-contained investor workflow; styling can be replaced by Ryan. */
 export function DecisionWorkbench({
@@ -44,6 +38,7 @@ export function DecisionWorkbench({
   onChanged?: () => void;
   showFunding?: boolean;
 }) {
+  const draft = useDraftGuard();
   const [analysis, setAnalysis] = useState<DecisionAnalysis | null>(null);
   const [diligence, setDiligence] = useState<DiligenceView | null>(null);
   const [error, setError] = useState("");
@@ -54,6 +49,8 @@ export function DecisionWorkbench({
   const [editing, setEditing] = useState<ComparisonOffer | null>(null);
   const [formOpen, setFormOpen] = useState(false);
   function editOffer(offer: ComparisonOffer) {
+    if (!confirmDiscardChanges()) return;
+    draft.markClean();
     setEditing(offer);
     setFormOpen(true);
     setForm({
@@ -74,16 +71,6 @@ export function DecisionWorkbench({
       distributionDate: offer.distributionDate ?? "",
     });
   }
-  const dirty = Object.values(form).some(Boolean);
-  useEffect(() => {
-    if (!dirty) return;
-    const warn = (event: BeforeUnloadEvent) => {
-      event.preventDefault();
-      event.returnValue = "";
-    };
-    window.addEventListener("beforeunload", warn);
-    return () => window.removeEventListener("beforeunload", warn);
-  }, [dirty]);
   const validBase = /^\/api\/case$|^\/api\/cases\/[a-f0-9-]{36}$/.test(
     caseBase,
   );
@@ -221,6 +208,7 @@ export function DecisionWorkbench({
         withdrawn: editing?.withdrawn ?? false,
       });
       if (saved) {
+        draft.markClean();
         setForm(blank);
         setEditing(null);
         setFormOpen(false);
@@ -270,7 +258,7 @@ export function DecisionWorkbench({
             <summary>
               {editing ? `Edit ${editing.buyer}` : "Add a competing offer"}
             </summary>
-            <form onSubmit={addOffer}>
+            <form onSubmit={addOffer} onChange={draft.markDirty}>
               <label>
                 Buyer or quote label
                 <input
@@ -384,6 +372,8 @@ export function DecisionWorkbench({
                 <button
                   type="button"
                   onClick={() => {
+                    if (!confirmDiscardChanges()) return;
+                    draft.markClean();
                     setEditing(null);
                     setForm(blank);
                     setFormOpen(false);
