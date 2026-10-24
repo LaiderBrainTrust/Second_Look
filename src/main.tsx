@@ -18,6 +18,7 @@ import { DecisionWorkbench } from '../integration/DecisionWorkbench';
 import { Header, type Page } from './Header';
 import { Hero, type NextStep } from './Hero';
 import { Services } from './Services';
+import { Footer } from './Footer';
 import { startReveal } from './reveal';
 
 type Tab = 'holdings' | 'question' | 'review' | 'offers' | 'people' | 'history';
@@ -168,9 +169,7 @@ function App() {
         </>}
     </main>
 
-    <footer className="footer">
-      <span>Second Look, Deal Flow 2026</span>
-    </footer>
+    <Footer onPage={setPage}/>
 
     {!account && <Presenter open={presenterOpen} onClose={() => setPresenterOpen(false)} role={role} onRole={next => void selectRole(next).then(() => setPresenterOpen(false))} busy={busy}
       hosted={Boolean(session.hosted)} rehearsal={rehearsal} onRefresh={() => void refresh()} onSignOut={() => void signOut()} providers={providers}

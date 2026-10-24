@@ -17,8 +17,12 @@ export function Services() {
       </div>
       <div className="lh-band" aria-hidden="true">
         <svg width="100%" height="100%">
-          <defs><pattern id="svc-stripes" width="28" height="28" patternUnits="userSpaceOnUse" patternTransform="rotate(-38)"><rect width="28" height="28" fill="#d4f5a0"/><rect width="9" height="28" fill="#bfe58a"/></pattern></defs>
+          <defs><pattern id="svc-stripes" width="28" height="28" patternUnits="userSpaceOnUse" ><rect width="28" height="28" fill="#d4f5a0"/><rect width="9" height="28" fill="#bfe58a"/></pattern></defs>
           <rect width="100%" height="100%" fill="url(#svc-stripes)"/>
+        </svg>
+        <svg className="svc-orbit" viewBox="0 0 200 200" fill="none" stroke="#0a0a0a" strokeLinecap="round">
+          {Array.from({ length: 36 }, (_, i) => { const a = (i / 36) * Math.PI * 2; const r2 = i % 2 ? 70 : 92; return <line key={i} x1={100 + Math.cos(a) * 24} y1={100 + Math.sin(a) * 24} x2={100 + Math.cos(a) * r2} y2={100 + Math.sin(a) * r2} strokeWidth={i % 3 ? 1.2 : 2.4}/>; })}
+          <circle cx="100" cy="100" r="6" fill="#0a0a0a"/>
         </svg>
       </div>
     </div>
