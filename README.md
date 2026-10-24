@@ -10,7 +10,11 @@ Deal Flow @ Betaworks, October 24, 2026. **Track 4: Funds. Submission closes 4 P
 
 **Read [PLAN.md](docs/PLAN.md) first.** It covers the product, strategy, gaming example, sponsor use, X1 boundary, commercial hypothesis and path to submission. Claim work in [TEAM_BOARD.md](docs/TEAM_BOARD.md); use [BUILD.md](docs/BUILD.md) for implementation and [GAMING_BUILD.md](docs/GAMING_BUILD.md) for the presentation.
 
-Current status: the gaming workflow is built, and live Steam/Akta → Roundtable/Nicrron → PRISM checks succeeded. **27 tests and the build pass.** Remaining event work includes teammate setup verification, Ninoo eligibility clarification, a judge-accessible demo arrangement, presenter rehearsal and submission. This is not a publicly deployed product; X1 is not connected.
+Current status: all four sponsor integrations are implemented and live calls have succeeded. **29 tests and the build pass.** [Ryan's launch and demo guide](docs/RYAN_DEMO.md) covers the hosted team login and the local fallback. The hosted mode is a protected synthetic demo, not a service for real client data. X1 is not connected.
+
+### Present today
+
+Use the hosted URL and team access code in [RYAN_DEMO.md](docs/RYAN_DEMO.md). For an independent local rehearsal, run `npm ci` then **`npm run demo`**. This opens the same app with a saved, real sponsor review and a fresh separate database; no API keys are needed for the saved-evidence path. Explicitly say the research was captured earlier. Each launch preserves previous rehearsal databases.
 
 ## Start here — teammates and coding agents
 
@@ -86,7 +90,7 @@ Use an ignored `.env.local` for local development, or environment injection in C
 
 Select **`main` → Code → Codespaces → Create codespace**. The checked-in devcontainer installs dependencies and runs setup. Run `npm run doctor`, then `npm run dev`, and open forwarded port **5173** with **Private** visibility. The Codespaces route still needs the credential provisioning above; it has not yet been verified in a teammate's Codespace.
 
-This is a working synthetic development app. Steam, Akta, Nicrron, Roundtable and PRISM adapters are integrated. Live PRISM verification passed; optional X1 reads are not connected. The role selector is development impersonation, **not authentication**. Do not expose the server publicly or use real client data. The entrypoint refuses production mode until real participant authentication is implemented.
+This is a working synthetic development app. Steam, Akta, Nicrron, Roundtable and PRISM adapters are integrated. Live PRISM verification passed; optional X1 reads are not connected. The local role selector is development impersonation, **not authentication**. Do not expose `npm run dev` publicly or use real client data. Hosted mode requires a team login and server-owned case/role session; see [hosting](docs/RYAN_DEMO.md#hosting-and-operations).
 
 ## Try the core interaction
 

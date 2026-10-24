@@ -1,0 +1,599 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-10-24T16:37:53.295Z",
+  "disclosure": "Saved real Steam/Akta observations and a completed Nicrron review via Roundtable, with PRISM receipt. Fund, holdings and offer are fictional. Opening this capture makes no fresh provider call.",
+  "snapshot": {
+    "id": "e5804d69-213f-4916-b3dd-f726572e2da7",
+    "caseRevision": 8,
+    "createdAt": "2026-10-24T16:20:26.336Z",
+    "reportCutoff": "2026-09-30",
+    "status": "ready",
+    "holdings": [
+      {
+        "holding": {
+          "id": "pounce-light",
+          "studio": "Pounce Light",
+          "companyId": "006b6c5",
+          "game": "Tiny Glade",
+          "appId": 2198150,
+          "fundNavExposurePercent": 45
+        },
+        "profile": {
+          "name": "Pounce Light",
+          "description": "Pounce Light AB is an independent Swedish game development studio registered in Sweden (identification number 559399-6761), founded in 2022 and headquartered in the Stockholm/Segeltorp area. The company develops and publishes a single PC video game - Tiny Glade - sold exclusively through Valve's Steam storefront for Windows, Linux, and macOS (Apple Silicon only). The product targets casual gamers and creative enthusiasts seeking low-pressure creative expression, with no objectives, timers, or failure states; players \"doodle\" whimsical castles, cottages, and ruins as a relaxation activity.\n\nTechnically, Tiny Glade is built on a Vulkan-based rendering pipeline with extensive driver workarounds for AMD and NVIDIA GPUs, a proprietary auto-save system that retains local backups at approximately 5, 10, 60, and 120-minute intervals plus pre-crash snapshots, and Steam Cloud synchronization. The studio operates a daily-themes content service served from Hetzner-hosted infrastructure in Germany, a custom in-game crash reporter that ships telemetry (OS, hardware, GPU state including NVIDIA Nsight Aftermath, minidumps, gameplay event log) to Sentry, and custom cursor rendering added in version 1.14.3 to handle OS-level cursor visibility issues. Cloudflare provides website hosting, and MailerLite powers a double-opt-in monthly newsletter.\n\nCommercially, Pounce Light runs a product-led, one-time-license model: revenue is generated solely from Steam purchases of Tiny Glade, with no subscriptions, DLC, or in-game purchases disclosed. Customer acquisition is driven by the Steam store listing, word-of-mouth, the monthly newsletter, and a Google Drive-hosted press kit; community support happens through Steam forums. The studio has 1-10 employees, no disclosed institutional funding, no parent company, no subsidiaries, and no second product line; Anastasia Opara is listed as co-founder.",
+          "website": "https://pouncelight.games/",
+          "ownership": "Founder Individual Operated Bootstrapped",
+          "headcount": "1-10",
+          "foundedYear": 2022,
+          "retrievedAt": "2026-10-24T16:20:27.833Z"
+        },
+        "steam": {
+          "appId": 2198150,
+          "game": "Tiny Glade",
+          "developers": [
+            "Pounce Light"
+          ],
+          "publishers": [
+            "Pounce Light"
+          ],
+          "sourceUrl": "https://store.steampowered.com/app/2198150/",
+          "imageUrl": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2198150/b3a0326cc6d63ca88973fdee61d09052433abf94/header_alt_assets_0.jpg?t=1790175461",
+          "retrievedAt": "2026-10-24T16:20:26.343Z",
+          "current": {
+            "count": 100,
+            "positive": 97,
+            "positivePercent": 97,
+            "from": "2026-10-01T00:00:00.000Z",
+            "to": "2026-10-24T16:20:26.343Z",
+            "excerpts": [
+              {
+                "positive": false,
+                "text": "this game takes a lot of getting used to and things dont",
+                "date": "2026-10-22"
+              },
+              {
+                "positive": false,
+                "text": "On one hand, it's beautiful. The source code is special and unique",
+                "date": "2026-10-19"
+              },
+              {
+                "positive": false,
+                "text": "It's not a bad game. Pretty easy to get the hang of",
+                "date": "2026-10-18"
+              },
+              {
+                "positive": true,
+                "text": "Cute, cozy, and inspirational! Easy to get lost in. Plus you can",
+                "date": "2026-10-23"
+              },
+              {
+                "positive": true,
+                "text": "excellent world builder",
+                "date": "2026-10-23"
+              }
+            ]
+          },
+          "baseline": {
+            "count": 100,
+            "positive": 99,
+            "positivePercent": 99,
+            "from": "2026-08-31T23:59:59.000Z",
+            "to": "2026-09-30T23:59:59.000Z",
+            "excerpts": [
+              {
+                "positive": false,
+                "text": "Now completely unplayable following the updates - shame.",
+                "date": "2026-09-27"
+              },
+              {
+                "positive": true,
+                "text": "Tiny Glade, might not be the first town builder non-game but it's",
+                "date": "2026-09-30"
+              },
+              {
+                "positive": true,
+                "text": "A calming and cosy town builder - no objectives, very few restrictions",
+                "date": "2026-09-30"
+              }
+            ]
+          },
+          "deltaPoints": -2,
+          "playersNow": 456
+        },
+        "news": [],
+        "errors": [],
+        "priority": "Watch",
+        "reason": "No large deterioration in these sampled reviews. Revenue, ownership rights and distributions still require manager evidence.",
+        "rank": 1
+      },
+      {
+        "holding": {
+          "id": "aggro-crab",
+          "studio": "Aggro Crab",
+          "companyId": "003zeuz",
+          "game": "Another Crab’s Treasure",
+          "appId": 1887840,
+          "fundNavExposurePercent": 20
+        },
+        "profile": {
+          "name": "Aggro Crab",
+          "description": "Aggro Crab is a privately held, founder-owned independent video game studio founded in January 2019 in Seattle, WA, by Nick Kaman and Caelan Pollock, operating as Aggro Crab Games LLC under Washington jurisdiction. The studio develops and publishes original games across multiple genres, building on the Unity engine and shipping simultaneously to Steam, Xbox (including Game Pass), PlayStation, Nintendo Switch, and Epic Games Store. Its portfolio comprises five core titles: Going Under (2020, published by Team17, a satirical roguelike dungeon crawler about failed tech startups), Another Crab's Treasure (2023, a soulslike adventure with a trash-as-shell mechanic), Peak (2025, a co-op survival climbing game co-developed with Landfall Games that has sold over 10 million copies), Crashout Crew (2026, a physics-based 4-player co-op game), and Subway Midnight (2021, developed by Bubby Darkstar). Peak's 1M first-week and 10M+ lifetime sales are the commercial anchor, with ongoing player engagement tracked through Unity-based anonymized telemetry for balance and bug-detection purposes only — the studio does not collect personal data or run ad targeting.\n\nThe studio runs a lean operation with a team of approximately 15 and no disclosed external funding. Revenue is generated primarily through one-time game purchases on digital storefronts (e.g., Going Under at $19.99, Subway Midnight at $9.99) supplemented by Microsoft licensing fees from Xbox Game Pass day-one releases (Peak, Crashout Crew, Aphelion, Beastro). Go-to-market is product-led and community-led: titles gain traction through platform visibility, Discord community engagement, and organic social (TikTok, YouTube, Bluesky) rather than paid advertising or enterprise sales. Distribution is handled in-house for most titles, with Team17 retained as the legacy publisher for Going Under and Landfall Games as a co-development partner for Peak. The studio's positioning centers on humorous, accessible gameplay that subverts genre conventions — accessibility options, satirical tone, and a \"BE AGGRO BUT ALSO KIND\" brand ethos — and its games span difficulty scores from 2/10 (Another Crab's Treasure with assists) to demanding roguelike and soulslike experiences.",
+          "website": "https://aggrocrab.com/",
+          "ownership": "Founder Individual Operated Bootstrapped",
+          "headcount": "11-50",
+          "foundedYear": 2019,
+          "retrievedAt": "2026-10-24T16:20:27.676Z"
+        },
+        "steam": {
+          "appId": 1887840,
+          "game": "Another Crab's Treasure",
+          "developers": [
+            "Aggro Crab"
+          ],
+          "publishers": [
+            "Aggro Crab"
+          ],
+          "sourceUrl": "https://store.steampowered.com/app/1887840/",
+          "imageUrl": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1887840/header.jpg?t=1785949147",
+          "retrievedAt": "2026-10-24T16:20:26.350Z",
+          "current": {
+            "count": 62,
+            "positive": 52,
+            "positivePercent": 83.9,
+            "from": "2026-10-01T00:00:00.000Z",
+            "to": "2026-10-24T16:20:26.350Z",
+            "excerpts": [
+              {
+                "positive": false,
+                "text": "Would be nice if it didnt keep crashing",
+                "date": "2026-10-23"
+              },
+              {
+                "positive": false,
+                "text": "another tedious \"souls like\" combat system with i-frame dodge and spam attack",
+                "date": "2026-10-21"
+              },
+              {
+                "positive": false,
+                "text": "Meh, buy on sale. It's unique and innovative but lacks polish and",
+                "date": "2026-10-17"
+              },
+              {
+                "positive": true,
+                "text": "This game is a must have on sale, if you are into",
+                "date": "2026-10-24"
+              },
+              {
+                "positive": true,
+                "text": "I have this game 100% and i would like to share my",
+                "date": "2026-10-23"
+              }
+            ]
+          },
+          "baseline": {
+            "count": 100,
+            "positive": 85,
+            "positivePercent": 85,
+            "from": "2026-08-31T23:59:59.000Z",
+            "to": "2026-09-30T23:59:59.000Z",
+            "excerpts": [
+              {
+                "positive": false,
+                "text": "The combat is extremely bad and holds this game back. The movement",
+                "date": "2026-09-27"
+              },
+              {
+                "positive": false,
+                "text": ".",
+                "date": "2026-09-27"
+              },
+              {
+                "positive": false,
+                "text": "I'm not entirely sure how this gets a souls like tag...It's a",
+                "date": "2026-09-25"
+              },
+              {
+                "positive": true,
+                "text": "This game is a blast; I have literally no complaints whatsoever. Even",
+                "date": "2026-09-30"
+              },
+              {
+                "positive": true,
+                "text": "I recommend this but there is a lot of very frustrating mechanics/glitching",
+                "date": "2026-09-30"
+              }
+            ]
+          },
+          "deltaPoints": -1.1,
+          "playersNow": 219
+        },
+        "news": [],
+        "errors": [],
+        "priority": "Watch",
+        "reason": "No large deterioration in these sampled reviews. Revenue, ownership rights and distributions still require manager evidence.",
+        "rank": 2
+      },
+      {
+        "holding": {
+          "id": "localthunk",
+          "studio": "LocalThunk",
+          "companyId": "028vpms",
+          "game": "Balatro",
+          "appId": 2379780,
+          "fundNavExposurePercent": 35
+        },
+        "profile": {
+          "name": "LocalThunk Inc.",
+          "description": "LocalThunk Inc. is a privately held, solo indie game development studio based in Canada, founded in 2021 and operated by a single founder who previously worked in IT. The company develops and self-publishes the Balatro franchise, a poker-themed roguelike deck-building video game built on the Love2D framework with Lua scripting. Balatro's core design combines a CHIP X MULT scoring mechanic with 150 collectible Joker cards featuring synergistic effects, layered meta-progression (stake levels, vouchers, boss blinds, achievements, challenges), and a deliberately low-stakes, \"jazz solitaire\" aesthetic with no player character or health system. The game was designed without reference to existing deckbuilders to preserve an original feel.\n\nLocalThunk's business model is one-time digital game sales (~$9.99 on Steam, with platform-specific pricing on consoles and mobile) supplemented by branded merchandise sold through partner Fangamer. The studio does not operate subscriptions, microtransactions, or freemium mechanics. Day-one distribution across Steam, PlayStation, Xbox, Nintendo Switch and (later) mobile is enabled by publisher Playstack, which handles marketing, localization, porting coordination and press relations; port development is credited to Love2D expert Maarten De Meyer, and the soundtrack was composed by Luis Clemente (the only external development spend). The mobile port launched in late 2024 as a follow-on expansion of the addressable audience.\n\nGo-to-market is product-led and community-led: discovery was driven by organic streamer coverage (Dan Gheesling, Northernlion, Hafu), two consecutive Steam Next Fest appearances (October 2023 and February 2024), a nine-month public beta with active Discord engagement, and an invitational streamer tournament in January 2024. Critical reception at launch was strong (PC Gamer 91/100, Metacritic and OpenCritic 90+), and the developer continues to publish long-form blog content (localthunk.com) and work on a free 1.1 update. The company has no institutional funding, no parent entity, and no disclosed headcount beyond the founder.",
+          "website": "https://localthunk.com/",
+          "ownership": "Founder Individual Operated Bootstrapped",
+          "headcount": "1-10",
+          "foundedYear": 2021,
+          "retrievedAt": "2026-10-24T16:20:27.660Z"
+        },
+        "steam": {
+          "appId": 2379780,
+          "game": "Balatro",
+          "developers": [
+            "LocalThunk"
+          ],
+          "publishers": [
+            "Playstack"
+          ],
+          "sourceUrl": "https://store.steampowered.com/app/2379780/",
+          "imageUrl": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2379780/7a85430784e4d613cdb0547414d8cf16ffa45747/header.jpg?t=1790693638",
+          "retrievedAt": "2026-10-24T16:20:26.348Z",
+          "current": {
+            "count": 100,
+            "positive": 99,
+            "positivePercent": 99,
+            "from": "2026-10-01T00:00:00.000Z",
+            "to": "2026-10-24T16:20:26.348Z",
+            "excerpts": [
+              {
+                "positive": false,
+                "text": "Can’t believe people nominated this for a GOTY. There’s nothing more to",
+                "date": "2026-10-22"
+              },
+              {
+                "positive": true,
+                "text": "Best card game ever",
+                "date": "2026-10-24"
+              },
+              {
+                "positive": true,
+                "text": "this game is very good and awesome and i'm having addicted as",
+                "date": "2026-10-24"
+              }
+            ]
+          },
+          "baseline": {
+            "count": 100,
+            "positive": 98,
+            "positivePercent": 98,
+            "from": "2026-08-31T23:59:59.000Z",
+            "to": "2026-09-30T23:59:59.000Z",
+            "excerpts": [
+              {
+                "positive": false,
+                "text": "poopoo game",
+                "date": "2026-09-30"
+              },
+              {
+                "positive": false,
+                "text": "this game really is a tricky sob it seduces you into thinking",
+                "date": "2026-09-29"
+              },
+              {
+                "positive": true,
+                "text": "prob one of the best games to play if u want a",
+                "date": "2026-09-30"
+              },
+              {
+                "positive": true,
+                "text": "fun get it if you like the funny number to go up",
+                "date": "2026-09-30"
+              }
+            ]
+          },
+          "deltaPoints": 1,
+          "playersNow": 8465
+        },
+        "news": [],
+        "errors": [],
+        "priority": "Watch",
+        "reason": "No large deterioration in these sampled reviews. Revenue, ownership rights and distributions still require manager evidence.",
+        "rank": 3
+      }
+    ]
+  },
+  "run": {
+    "id": "96198f2a-fbe1-4fe7-9e38-75941325bd02",
+    "caseId": "sample-fund",
+    "caseRevision": 1,
+    "createdAt": "2026-10-24T16:37:40.195Z",
+    "company": {
+      "uuid": "006b6c5",
+      "name": "Pounce Light",
+      "website": "https://store.steampowered.com/app/2198150/"
+    },
+    "after": "2026-09-30",
+    "status": "done",
+    "findings": [
+      {
+        "companyId": "006b6c5",
+        "companyName": "Pounce Light",
+        "publishedAt": "2026-10-24T16:20:26.343Z",
+        "retrievedAt": "2026-10-24T16:20:26.343Z",
+        "claim": "Tiny Glade: sampled English Steam reviews after 2026-09-30: 97% positive (100 reviews), compared with 99% (100 reviews) in the preceding 30 days. This measures sampled review sentiment, not sales, profit or fund value.",
+        "source": {
+          "id": "steam:e5804d69-213f-4916-b3dd-f726572e2da7:2198150",
+          "label": "Tiny Glade — dated Steam observation",
+          "kind": "external",
+          "url": "https://store.steampowered.com/app/2198150/"
+        }
+      }
+    ],
+    "coverage": "Saved Steam samples and first-page Akta news; fictional fund ownership.",
+    "selectedFindingId": "steam:e5804d69-213f-4916-b3dd-f726572e2da7:2198150",
+    "writeRequestId": "cb5e8f9f-6dbe-4fda-b470-626ce30d98c4",
+    "dispatchRequestId": "3b9dd6c1-90ca-4f76-a32b-53e845f895b0",
+    "gamingContext": {
+      "holding": {
+        "id": "pounce-light",
+        "studio": "Pounce Light",
+        "companyId": "006b6c5",
+        "game": "Tiny Glade",
+        "appId": 2198150,
+        "fundNavExposurePercent": 45
+      },
+      "steam": {
+        "appId": 2198150,
+        "game": "Tiny Glade",
+        "developers": [
+          "Pounce Light"
+        ],
+        "publishers": [
+          "Pounce Light"
+        ],
+        "sourceUrl": "https://store.steampowered.com/app/2198150/",
+        "imageUrl": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2198150/b3a0326cc6d63ca88973fdee61d09052433abf94/header_alt_assets_0.jpg?t=1790175461",
+        "retrievedAt": "2026-10-24T16:20:26.343Z",
+        "current": {
+          "count": 100,
+          "positive": 97,
+          "positivePercent": 97,
+          "from": "2026-10-01T00:00:00.000Z",
+          "to": "2026-10-24T16:20:26.343Z",
+          "excerpts": [
+            {
+              "positive": false,
+              "text": "this game takes a lot of getting used to and things dont",
+              "date": "2026-10-22"
+            },
+            {
+              "positive": false,
+              "text": "On one hand, it's beautiful. The source code is special and unique",
+              "date": "2026-10-19"
+            },
+            {
+              "positive": false,
+              "text": "It's not a bad game. Pretty easy to get the hang of",
+              "date": "2026-10-18"
+            },
+            {
+              "positive": true,
+              "text": "Cute, cozy, and inspirational! Easy to get lost in. Plus you can",
+              "date": "2026-10-23"
+            },
+            {
+              "positive": true,
+              "text": "excellent world builder",
+              "date": "2026-10-23"
+            }
+          ]
+        },
+        "baseline": {
+          "count": 100,
+          "positive": 99,
+          "positivePercent": 99,
+          "from": "2026-08-31T23:59:59.000Z",
+          "to": "2026-09-30T23:59:59.000Z",
+          "excerpts": [
+            {
+              "positive": false,
+              "text": "Now completely unplayable following the updates - shame.",
+              "date": "2026-09-27"
+            },
+            {
+              "positive": true,
+              "text": "Tiny Glade, might not be the first town builder non-game but it's",
+              "date": "2026-09-30"
+            },
+            {
+              "positive": true,
+              "text": "A calming and cosy town builder - no objectives, very few restrictions",
+              "date": "2026-09-30"
+            }
+          ]
+        },
+        "deltaPoints": -2,
+        "playersNow": 456
+      },
+      "profile": {
+        "name": "Pounce Light",
+        "description": "Pounce Light AB is an independent Swedish game development studio registered in Sweden (identification number 559399-6761), founded in 2022 and headquartered in the Stockholm/Segeltorp area. The company develops and publishes a single PC video game - Tiny Glade - sold exclusively through Valve's Steam storefront for Windows, Linux, and macOS (Apple Silicon only). The product targets casual gamers and creative enthusiasts seeking low-pressure creative expression, with no objectives, timers, or failure states; players \"doodle\" whimsical castles, cottages, and ruins as a relaxation activity.\n\nTechnically, Tiny Glade is built on a Vulkan-based rendering pipeline with extensive driver workarounds for AMD and NVIDIA GPUs, a proprietary auto-save system that retains local backups at approximately 5, 10, 60, and 120-minute intervals plus pre-crash snapshots, and Steam Cloud synchronization. The studio operates a daily-themes content service served from Hetzner-hosted infrastructure in Germany, a custom in-game crash reporter that ships telemetry (OS, hardware, GPU state including NVIDIA Nsight Aftermath, minidumps, gameplay event log) to Sentry, and custom cursor rendering added in version 1.14.3 to handle OS-level cursor visibility issues. Cloudflare provides website hosting, and MailerLite powers a double-opt-in monthly newsletter.\n\nCommercially, Pounce Light runs a product-led, one-time-license model: revenue is generated solely from Steam purchases of Tiny Glade, with no subscriptions, DLC, or in-game purchases disclosed. Customer acquisition is driven by the Steam store listing, word-of-mouth, the monthly newsletter, and a Google Drive-hosted press kit; community support happens through Steam forums. The studio has 1-10 employees, no disclosed institutional funding, no parent company, no subsidiaries, and no second product line; Anastasia Opara is listed as co-founder.",
+        "website": "https://pouncelight.games/",
+        "ownership": "Founder Individual Operated Bootstrapped",
+        "headcount": "1-10",
+        "foundedYear": 2022,
+        "retrievedAt": "2026-10-24T16:20:27.833Z"
+      },
+      "news": [],
+      "priority": "Watch",
+      "reason": "No large deterioration in these sampled reviews. Revenue, ownership rights and distributions still require manager evidence.",
+      "snapshotId": "e5804d69-213f-4916-b3dd-f726572e2da7",
+      "ownershipDisclosure": "Fictional fund and ownership: none of these studios is represented as an actual fund investment. Exposure percentages are synthetic examples, not reported facts."
+    },
+    "input": {
+      "caseId": "sample-fund",
+      "caseRevision": 1,
+      "runId": "96198f2a-fbe1-4fe7-9e38-75941325bd02",
+      "after": "2026-09-30",
+      "gamingContext": {
+        "holding": {
+          "id": "pounce-light",
+          "studio": "Pounce Light",
+          "companyId": "006b6c5",
+          "game": "Tiny Glade",
+          "appId": 2198150,
+          "fundNavExposurePercent": 45
+        },
+        "steam": {
+          "appId": 2198150,
+          "game": "Tiny Glade",
+          "developers": [
+            "Pounce Light"
+          ],
+          "publishers": [
+            "Pounce Light"
+          ],
+          "sourceUrl": "https://store.steampowered.com/app/2198150/",
+          "imageUrl": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2198150/b3a0326cc6d63ca88973fdee61d09052433abf94/header_alt_assets_0.jpg?t=1790175461",
+          "retrievedAt": "2026-10-24T16:20:26.343Z",
+          "current": {
+            "count": 100,
+            "positive": 97,
+            "positivePercent": 97,
+            "from": "2026-10-01T00:00:00.000Z",
+            "to": "2026-10-24T16:20:26.343Z",
+            "excerpts": [
+              {
+                "positive": false,
+                "text": "this game takes a lot of getting used to and things dont",
+                "date": "2026-10-22"
+              },
+              {
+                "positive": false,
+                "text": "On one hand, it's beautiful. The source code is special and unique",
+                "date": "2026-10-19"
+              },
+              {
+                "positive": false,
+                "text": "It's not a bad game. Pretty easy to get the hang of",
+                "date": "2026-10-18"
+              },
+              {
+                "positive": true,
+                "text": "Cute, cozy, and inspirational! Easy to get lost in. Plus you can",
+                "date": "2026-10-23"
+              },
+              {
+                "positive": true,
+                "text": "excellent world builder",
+                "date": "2026-10-23"
+              }
+            ]
+          },
+          "baseline": {
+            "count": 100,
+            "positive": 99,
+            "positivePercent": 99,
+            "from": "2026-08-31T23:59:59.000Z",
+            "to": "2026-09-30T23:59:59.000Z",
+            "excerpts": [
+              {
+                "positive": false,
+                "text": "Now completely unplayable following the updates - shame.",
+                "date": "2026-09-27"
+              },
+              {
+                "positive": true,
+                "text": "Tiny Glade, might not be the first town builder non-game but it's",
+                "date": "2026-09-30"
+              },
+              {
+                "positive": true,
+                "text": "A calming and cosy town builder - no objectives, very few restrictions",
+                "date": "2026-09-30"
+              }
+            ]
+          },
+          "deltaPoints": -2,
+          "playersNow": 456
+        },
+        "profile": {
+          "name": "Pounce Light",
+          "description": "Pounce Light AB is an independent Swedish game development studio registered in Sweden (identification number 559399-6761), founded in 2022 and headquartered in the Stockholm/Segeltorp area. The company develops and publishes a single PC video game - Tiny Glade - sold exclusively through Valve's Steam storefront for Windows, Linux, and macOS (Apple Silicon only). The product targets casual gamers and creative enthusiasts seeking low-pressure creative expression, with no objectives, timers, or failure states; players \"doodle\" whimsical castles, cottages, and ruins as a relaxation activity.\n\nTechnically, Tiny Glade is built on a Vulkan-based rendering pipeline with extensive driver workarounds for AMD and NVIDIA GPUs, a proprietary auto-save system that retains local backups at approximately 5, 10, 60, and 120-minute intervals plus pre-crash snapshots, and Steam Cloud synchronization. The studio operates a daily-themes content service served from Hetzner-hosted infrastructure in Germany, a custom in-game crash reporter that ships telemetry (OS, hardware, GPU state including NVIDIA Nsight Aftermath, minidumps, gameplay event log) to Sentry, and custom cursor rendering added in version 1.14.3 to handle OS-level cursor visibility issues. Cloudflare provides website hosting, and MailerLite powers a double-opt-in monthly newsletter.\n\nCommercially, Pounce Light runs a product-led, one-time-license model: revenue is generated solely from Steam purchases of Tiny Glade, with no subscriptions, DLC, or in-game purchases disclosed. Customer acquisition is driven by the Steam store listing, word-of-mouth, the monthly newsletter, and a Google Drive-hosted press kit; community support happens through Steam forums. The studio has 1-10 employees, no disclosed institutional funding, no parent company, no subsidiaries, and no second product line; Anastasia Opara is listed as co-founder.",
+          "website": "https://pouncelight.games/",
+          "ownership": "Founder Individual Operated Bootstrapped",
+          "headcount": "1-10",
+          "foundedYear": 2022,
+          "retrievedAt": "2026-10-24T16:20:27.833Z"
+        },
+        "news": [],
+        "priority": "Watch",
+        "reason": "No large deterioration in these sampled reviews. Revenue, ownership rights and distributions still require manager evidence.",
+        "snapshotId": "e5804d69-213f-4916-b3dd-f726572e2da7",
+        "ownershipDisclosure": "Fictional fund and ownership: none of these studios is represented as an actual fund investment. Exposure percentages are synthetic examples, not reported facts."
+      },
+      "finding": {
+        "companyId": "006b6c5",
+        "companyName": "Pounce Light",
+        "publishedAt": "2026-10-24T16:20:26.343Z",
+        "retrievedAt": "2026-10-24T16:20:26.343Z",
+        "claim": "Tiny Glade: sampled English Steam reviews after 2026-09-30: 97% positive (100 reviews), compared with 99% (100 reviews) in the preceding 30 days. This measures sampled review sentiment, not sales, profit or fund value.",
+        "source": {
+          "id": "steam:e5804d69-213f-4916-b3dd-f726572e2da7:2198150",
+          "label": "Tiny Glade — dated Steam observation",
+          "kind": "external",
+          "url": "https://store.steampowered.com/app/2198150/"
+        }
+      },
+      "offer": {
+        "version": 1,
+        "purchasePriceCents": 70000000,
+        "currency": "USD",
+        "distributionRecipient": "seller",
+        "priceAdjustmentCents": 0,
+        "source": {
+          "id": "fictional-offer-v1",
+          "label": "Synthetic offer v1",
+          "kind": "synthetic"
+        }
+      }
+    },
+    "taskId": "2f02780df9354f0485d2556060f48be1",
+    "inputSource": {
+      "bank": "second-look-team",
+      "path": "second-look/sample-fund/96198f2a-fbe1-4fe7-9e38-75941325bd02/input.json",
+      "version": "008dead25a50"
+    },
+    "result": {
+      "caseId": "sample-fund",
+      "caseRevision": 1,
+      "explanation": "Reported: a Steam observation dated 2026-10-24 shows 97% positive from 100 sampled English reviews after 2026-09-30, versus 99% from 100 reviews in the prior 30 days. The source says this measures sentiment, not sales, profit or fund value. The news list is empty, and the 2026-09-30 cutoff is not the offer date. Inference: a small change in review sentiment does not show a change in revenue. The profile describes a single-product, founder-operated studio with no disclosed parent or investors, so the route from Steam sales to LP cash is unknown. The 45% NAV exposure is a fictional scenario weight, not a studio equity or revenue share.",
+      "findingId": "steam:e5804d69-213f-4916-b3dd-f726572e2da7:2198150",
+      "method": "nicrron",
+      "model": "anthropic/claude-haiku-5-5",
+      "modelRequestId": "gen-1cfdd560-a360-4bcc-8fbd-ea020d506ac4",
+      "question": "Under the current offer, which executed contract gives this LP interest a right to Tiny Glade proceeds from Pounce Light, and why does the offer name the seller as distribution recipient? Please provide the agreement and any distribution notice showing the LP's entitlement and payment route.",
+      "trace": {
+        "id": "8136f548-da38-4a8a-816d-61b5d5d32246",
+        "status": "recorded"
+      },
+      "sources": [
+        {
+          "bank": "second-look-team",
+          "path": "second-look/sample-fund/96198f2a-fbe1-4fe7-9e38-75941325bd02/input.json",
+          "version": "008dead25a50"
+        },
+        {
+          "bank": "second-look-team",
+          "path": "second-look/reviews/2f02780df9354f0485d2556060f48be1.json",
+          "version": "dc3f5ba03d9a"
+        }
+      ]
+    }
+  }
+}

@@ -12,7 +12,7 @@ The guide says all three are required:
 
 This is stricter than the pasted Devpost requirement to use all four sponsors. We cannot claim that adding a Nicrron API call alone meets the PDF's rules. Ask the sponsor/organizer whether these rules apply to the whole event or a separate sponsor competition, and whether importing today's existing repo and continuing development in Ninoo qualifies.
 
-The guide expressly supports importing a GitHub project or ZIP (page 2). Preserve the current app: import `stratten/vc_hackathon` branch `codex/sponsor-setup` if that route is approved. Do not import `.env.local`, `.local`, runtime credentials, or personal records. An import is not yet evidence the Express/SQLite/backend worker stack runs on Ninoo. Verify server execution, secret storage, durable storage, and background worker support. No import, listing or publication has been performed.
+The guide expressly supports importing a GitHub project or ZIP (page 2). Preserve the current app: import `LaiderBrainTrust/vc_hackathon` branch `main` if that route is approved. Do not import `.env.local`, `.local`, runtime credentials, or personal records. An import is not yet evidence the Express/SQLite/backend worker stack runs on Ninoo. Verify server execution, secret storage, durable storage, and background worker support. No import, listing or publication has been performed.
 
 ## API integration contract
 
@@ -27,7 +27,7 @@ Official quickstart verified: https://nicrron.ai/docs/quickstart
 - Record safe request/model metadata and wire the actual call into PRISM once its current trace contract and credentials are available.
 - Fail visibly on missing credentials/provider errors; do not silently label a deterministic fallback as a successful model call.
 
-Current status: the API key and model variables already exist in `.env.example`. Nicrron model calls are implemented in the Roundtable reviewer; PRISM traces remain unimplemented. See TEAM_START.md for current credential provisioning. Akta and Roundtable are integrated and verified independently.
+Current status: the API key and model variables already exist in `.env.example`. Nicrron model calls are implemented in the Roundtable reviewer; PRISM traces are implemented and real trace receipts have been verified. See TEAM_START.md for current credential provisioning. Akta and Roundtable are integrated and verified independently.
 
 ## Account / credits in the supplied guide
 

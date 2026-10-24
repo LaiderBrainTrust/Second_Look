@@ -8,7 +8,7 @@ Read [PLAN.md](PLAN.md) first. This board records proposed work, not automatic d
 | P0 | PRISM setup | Mat/Codex — live verified | Actual model trace accepted; setup doctor reports live/app connected |
 | P0 | Team Roundtable credentials | Mat/Codex — configured, restricted grants verified | New bot keys in Actions/Codespaces; access to reporting/shared-notes banks denied. Workspace co-owners remain fully privileged |
 | P0 | Fresh teammate setup | Unclaimed — needs teammate's environment | Follow README on `main`; doctor; live task; screenshot/URL and exact commit. Codespaces secrets exist for all four sponsors |
-| P0 | Judge-accessible demo link | Unclaimed — decision and execution | Confirm permitted access arrangement or explicitly authorize authenticated hosting; judge can actually open submitted link |
+| P0 | Judge-accessible demo link | Mat/Codex — implementing authenticated event hosting | Team login, persistent database, exact release, external browser verification; Ryan still opens link on his laptop |
 | P0 | Ninoo Builder/Marketplace eligibility | Mat / sponsor conversation — unresolved | Written clarification of which rules apply and any required submission/listing completed |
 | P0 | Gaming narrative + spoken rehearsal | Ryan proposed; confirm acceptance | Explain one game accurately and complete a timed ≤3-minute run without unsupported financial claims |
 | P0 | Founder brief | Unclaimed | One page with actual customer evidence or explicit gaps, buyer, alternatives and commercial hypothesis |

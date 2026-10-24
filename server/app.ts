@@ -1,3 +1,4 @@
+import { installHostedAuth, type HostedOptions } from './hosted-auth.js';
 import express from 'express';
 import type { Role } from '../shared/contracts.js';
 import { DomainError, view, type Command } from './domain.js';
@@ -8,12 +9,14 @@ import { caseResearchRouter } from './case-research.js';
 import { gamingRouter } from './gaming.js';
 import { AktaError } from './adapters/akta.js';
 
-export function createApp(store: ReturnType<typeof createStore>) {
+export function createApp(store: ReturnType<typeof createStore>, options: { rehearsal?: boolean; hosted?: HostedOptions } = {}) {
   const app = express();
   const allowedOrigins = ['http://localhost:5173', 'http://127.0.0.1:5173', 'http://localhost:3001', 'http://127.0.0.1:3001'];
   if (process.env.CODESPACES === 'true' && /^[a-z0-9-]+$/.test(process.env.CODESPACE_NAME ?? '')) {
     allowedOrigins.push(`https://${process.env.CODESPACE_NAME}-5173.app.github.dev`);
   }
+  if (options.hosted) allowedOrigins.push(options.hosted.origin);
+  app.disable('x-powered-by');
   app.use((req, res, next) => {
     if (['POST', 'PUT', 'PATCH', 'DELETE'].includes(req.method)) {
       const origin = req.header('origin');
@@ -24,12 +27,14 @@ export function createApp(store: ReturnType<typeof createStore>) {
     next();
   });
   app.use(express.json({ limit: '20kb' }));
-  app.get('/api/health', (_req, res) => res.json({ ok: true, mode: 'local-synthetic-scaffold' }));
+  if (options.hosted) installHostedAuth(app, options.hosted);
+  else app.get('/api/session', (_req, res) => res.json({ hosted: false, authenticated: true }));
+  app.get('/api/health', (_req, res) => res.json({ ok: true, mode: options.rehearsal ? 'saved-research-rehearsal' : 'local-synthetic-scaffold' }));
   app.get('/api/providers', (_req, res) => res.json(providerStatuses()));
   app.use('/api/research', researchRouter());
   app.use('/api/case', (req, res, next) => {
-    // Development impersonation ONLY. Replace with real sessions before hosting.
-    const role = req.header('x-demo-role');
+    // Local role simulation; hosted roles come only from the authenticated, case-scoped presenter session.
+    const role = options.hosted ? res.locals.session?.role : req.header('x-demo-role');
     if (!role || !['lp', 'gp', 'buyer'].includes(role)) { res.status(401).json({ error: 'Choose a local demo role.' }); return; }
     res.locals.role = role as Role;
     next();
