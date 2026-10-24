@@ -81,7 +81,7 @@ All four sponsors are required by the supplied Devpost requirements. Functional 
 | Akta / Wokelo | Resolves studios, retrieves business/ownership descriptions, and checks dated news | Live profiles and news lookups verified for the three studios. Empty news results are displayed honestly. |
 | Roundtable | Versioned evidence files, task assignment to a separate reviewer identity, saved result and reconciliation | Live app-specific task/input/output flow verified; not merely the standalone Funds template. |
 | NicrronNinoo | Model call inside the reviewer to propose the manager question | Live Nicrron request and model result verified. Builder/Marketplace interpretation still requires sponsor/organizer confirmation. |
-| PRISM / Block Convey | Trace of that actual model call, including evidence payload, output, model and latency | Real trace accepted; PRISM reports `live_connected: true`, `app_connected: true`, one application trace, and no blocked setup step. |
+| PRISM / Block Convey | Trace of that actual model call, including evidence payload, output, model and latency | Real trace accepted; PRISM reports `live_connected: true`, `app_connected: true`, recorded application traces, and no blocked setup step. |
 
 Steam is an additional external source, not a replacement for a sponsor. The Akta award story should explain how outside company context changes the question asked, including the difference between game success, studio economics and fund rights. Do not claim an empty news search discovered a material event.
 
