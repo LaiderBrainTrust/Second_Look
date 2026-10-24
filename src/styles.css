@@ -702,3 +702,19 @@ main { padding-bottom: 0; }
 .sf-end { text-align: right; }
 @media (max-width: 960px) { .sf-row { grid-template-columns: 1fr 1fr; } .sf-end { text-align: left; } }
 .services .lh-band .svc-orbit { width: min(40vh, 320px); height: auto; animation: turn 60s linear infinite; }
+
+/* Logo square sits at 45 degrees */
+.pill-brand::before { transform: rotate(45deg); }
+.pill-brand:hover::before { transform: rotate(135deg); }
+.footer-mark { transform: rotate(45deg); }
+.sf-brand:hover .footer-mark { transform: rotate(105deg); }
+
+/* Services landing: text half, vertical stripe half */
+.services .landing-home { grid-template-columns: 1fr 1fr; grid-template-rows: none; min-height: 100vh; }
+.services .lh-top { grid-template-columns: 1fr; align-content: center; padding: 160px 48px 64px max(48px, calc(50vw - 640px)); gap: 0; }
+.services .landing-home h1 { margin: 0; }
+.services .landing-home h1::after { content: ''; display: block; width: 100%; max-width: 480px; height: 2px; margin: 32px 0; background: var(--ink); transform-origin: left; animation: strike .8s var(--ease) .3s backwards; }
+.services .lh-side { border-left: 0; }
+.services .lh-side p { padding: 0; max-width: 480px; }
+.services .lh-band { min-height: 100vh; }
+@media (max-width: 960px) { .services .landing-home { grid-template-columns: 1fr; } .services .lh-band { min-height: 40vh; } }
