@@ -195,3 +195,7 @@ No project license or ownership allocation is implied by this bootstrap. Agree t
 Run `npm run connect:agent` in your terminal to create a private, expiring connection to one case. See [MCP setup and permissions](docs/MCP.md), [decisive-question API](docs/DECISIVE_QUESTION.md), and the additive [Ryan comparison component](integration/DecisionWorkbench.tsx). The investor screen now opens with the comparison and quote-entry workflow. Ryan retains overall design ownership.
 
 The comparison also supports **a funding amount and deadline**, with explicit cash constraints and payment dates. See [optional X1 source integration](docs/X1_CONTEXT.md). To help an agent connect, point it at the running app's `/mcp.txt` (human page: `/mcp`; metadata: `/mcp.json`). These are public instructions for the local MCP bridge, not remote MCP endpoints.
+
+### Submission brief and current claims
+
+Use [the corrected founder brief](docs/FOUNDER_BRIEF.md) and [source/status checks](docs/SUBMISSION_CLAIMS.md). These replace older market-period, placeholder and local-only claims in the shared planning document. Customer evidence and full presentation rehearsal remain separate from engineering checks.
