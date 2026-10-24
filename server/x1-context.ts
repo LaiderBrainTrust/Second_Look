@@ -8,6 +8,26 @@ import type { CaseStore } from './store.js';
 const endpoint='https://mcp.x1wealth.com/mcp';
 const matchSchema=z.object({ref:z.string().min(1).max(500),label:z.string().max(500),snippet:z.string().max(16000).nullable(),page:z.number().int().positive().nullable(),sourceDate:z.string().max(100).nullable()});
 const resultSchema=z.object({matches:z.array(matchSchema).max(20)});
+const evidenceMarker='<<<X1_UNTRUSTED_DOCUMENT_EVIDENCE_JSON_V1>>>';
+const evidenceEnd='<<<END_X1_UNTRUSTED_DOCUMENT_EVIDENCE_JSON_V1>>>';
+const quotedEvidenceSchema=z.object({
+ contractId:z.literal('vault-evidence-trust-v1'),contractVersion:z.literal(1),
+ instructionSemantics:z.literal('quoted_data_only'),mutationAuthority:z.literal('none'),trustClass:z.literal('untrusted_document_content'),
+ document:z.object({documentId:z.string(),documentName:z.string().min(1).max(500),snippet:z.string().min(1).max(16000)}),
+});
+function displayPassage(match:z.infer<typeof matchSchema>) {
+ const snippet=match.snippet!;
+ if(!snippet.includes(evidenceMarker))return {label:match.label,snippet};
+ try {
+  const start=snippet.indexOf(evidenceMarker)+evidenceMarker.length;
+  const end=snippet.indexOf(evidenceEnd,start);
+  if(end<start)throw Error('Missing evidence boundary');
+  const quoted=quotedEvidenceSchema.parse(JSON.parse(snippet.slice(start,end)));
+  if(quoted.document.documentId!==match.ref)throw Error('Source mismatch');
+  // Decode only X1's typed data envelope. Quoted prose never becomes a command.
+  return {label:quoted.document.documentName,snippet:quoted.document.snippet};
+ }catch{throw new DomainError(502,'X1 returned an unsupported evidence envelope. No excerpt was imported.');}
+}
 export function parseX1Evidence(result:unknown,query:string,retrievedAt=new Date().toISOString()):X1Evidence[] {
  const envelope=z.object({isError:z.boolean().optional(),structuredContent:z.unknown().optional(),content:z.array(z.object({type:z.string(),text:z.string().optional()})).optional()}).parse(result);
  if(envelope.isError)throw new DomainError(502,'X1 could not complete this read. Check the dedicated account access.');
@@ -15,7 +35,7 @@ export function parseX1Evidence(result:unknown,query:string,retrievedAt=new Date
  if(!value){const text=envelope.content?.find(c=>c.type==='text')?.text;try{value=text?JSON.parse(text):undefined;}catch{throw new DomainError(502,'X1 did not return structured passage evidence. No excerpt was imported.');}}
  const parsed=resultSchema.safeParse(value);
  if(!parsed.success)throw new DomainError(502,'X1 returned an unsupported passage format. No excerpt was imported.');
- return parsed.data.matches.filter(m=>m.snippet?.trim()).slice(0,3).map(m=>({ref:m.ref,label:m.label,snippet:m.snippet!,page:m.page,sourceDate:m.sourceDate,retrievedAt,query,contentHash:createHash('sha256').update(JSON.stringify(m)).digest('hex'),origin:'x1_mcp'}));
+ return parsed.data.matches.filter(m=>m.snippet?.trim()).slice(0,3).map(m=>({ref:m.ref,...displayPassage(m),page:m.page,sourceDate:m.sourceDate,retrievedAt,query,contentHash:createHash('sha256').update(JSON.stringify(m)).digest('hex'),origin:'x1_mcp'}));
 }
 export async function readX1(query:string):Promise<X1Evidence[]> {
  const key=process.env.X1_API_KEY;
