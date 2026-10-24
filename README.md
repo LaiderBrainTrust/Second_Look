@@ -30,6 +30,8 @@ Read **[Ryan's product brief](docs/RYAN_PRODUCT_BRIEF.md)**. The current page is
 
 Use the hosted URL and team access code in [RYAN_DEMO.md](docs/RYAN_DEMO.md). For an independent local rehearsal, run `npm ci` then **`npm run demo`**. This opens the same app with a saved, real sponsor review and a fresh separate database; no API keys are needed for the saved-evidence path. Explicitly say the research was captured earlier. Each launch preserves previous rehearsal databases.
 
+For the additional two-offer scenario, run **`npm run demo:comparison`** instead. It creates an isolated fictional comparison with a $60,000 payout turning point. [Research-to-decision walkthrough and evidence limits](docs/RESEARCH_TO_DECISION.md). The shared hosted case and submitted script are unchanged.
+
 ## Start here — teammates and coding agents
 
 **Use `main`. [PR #1](https://github.com/LaiderBrainTrust/Second_Look/pull/1) has merged; the app, sponsor adapters and team setup are available there.**

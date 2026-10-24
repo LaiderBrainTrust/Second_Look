@@ -162,9 +162,11 @@ function Evidence({ item }: { item: HoldingEvidence }) {
 export function GamingPanel({
   revision,
   onPrepared,
+  onSelection,
 }: {
   revision: number;
   onPrepared: () => void;
+  onSelection: (selection: { holdingId: string; snapshotId: string } | null) => void;
 }) {
   const [snapshot, setSnapshot] = useState<GamingSnapshot | null>(null);
   const [savedSnapshot, setSavedSnapshot] = useState<GamingSnapshot | null>(
@@ -194,6 +196,9 @@ export function GamingPanel({
   const displaySnapshot = useSaved && savedSnapshot ? savedSnapshot : snapshot;
   const items = displaySnapshot?.holdings ?? [];
   const item = items.find((h) => h.holding.id === selected) ?? items[0];
+  useEffect(() => {
+    onSelection(item && displaySnapshot ? { holdingId: item.holding.id, snapshotId: displaySnapshot.id } : null);
+  }, [item?.holding.id, displaySnapshot?.id]);
   async function run(work: () => Promise<void>) {
     setBusy(true);
     setError("");

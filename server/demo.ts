@@ -38,3 +38,17 @@ export function loadSavedDemo(store: ReturnType<typeof createStore>, capture: Sa
   store.saveGaming(snapshot);
   store.saveResearch(run);
 }
+
+// Local-only rehearsal extension. Never runs against a hosted or existing case.
+export function loadComparisonExample(store: ReturnType<typeof createStore>) {
+  const state = store.read();
+  if (JSON.stringify(state) !== JSON.stringify(seedCase())) throw new Error('Comparison example requires a fresh fictional case.');
+  const offer = (id: string, buyer: string, payment: number, recipient: 'seller' | 'buyer') => ({
+    id, buyer, version: 1, purchasePriceCents: payment, priceAdjustmentCents: 0, sellerFeesCents: 0,
+    distributionRecipient: recipient, distributionBasisSourceId: null, recordDate: '2026-10-24', expiresAt: null,
+    sourceNote: 'Fictional comparison example. Fees and price adjustments explicitly assumed to be zero.',
+    conditions: 'Illustrative terms only.', withdrawn: false,
+  });
+  state.diligence = { offers: [offer('example-a', 'Fictional offer A', 70_000_000, 'seller'), offer('example-b', 'Fictional offer B', 76_000_000, 'buyer')], questions: [], conditions: [], history: [] };
+  store.db.prepare('UPDATE cases SET body=? WHERE id=?').run(JSON.stringify(state), state.id);
+}

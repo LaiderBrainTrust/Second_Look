@@ -30,9 +30,31 @@ export function analyzeDecision(state: CaseState, now = new Date()): DecisionAna
     status: excluded.length || rows.length < 2 ? 'incomplete' : comparison.comparisonReady ? 'confirmed' : 'conditional',
     excluded, eligibleOfferIds: rows.map(r => r.id), recordDate: eligible[0]?.recordDate ?? null,
     offers: active.map(o => ({ id: o.id, buyer: o.buyer, purchasePriceCents: o.purchasePriceCents, priceAdjustmentCents: o.priceAdjustmentCents, sellerFeesCents: o.sellerFeesCents, distributionRecipient: o.distributionRecipient, recordDate: o.recordDate, sourceNotePreview: o.sourceNote.slice(0, 300), sourceNoteTruncated: o.sourceNote.length > 300 })),
-    frontier: null, nextQuestion: null, confirmedHighestOfferIds: comparison.highestNetOfferIds, scenarios: [],
+    pairs: [], frontier: null, nextQuestion: null, confirmedHighestOfferIds: comparison.highestNetOfferIds, scenarios: [],
     assumptions: 'Conditional USD cash arithmetic for entered active offers: payment + adjustment - seller fees + retained distribution. Same record date required. Taxes, payment timing, financing, collectability and execution risk are not priced. A threshold is not a probability, fair value, recommendation or realized saving. Excluded offers may change the result.',
   };
+  // Pairwise presentation uses this same server-owned eligibility and cash model.
+  // It never changes the all-offer winning frontier or the primary sale.
+  for (let i = 0; i < active.length; i++) {
+    for (const b of active.slice(i + 1)) {
+      const a = active[i];
+      const ar = rows.find(row => row.id === a.id), br = rows.find(row => row.id === b.id);
+      const reasons = [a, b].flatMap(o => excluded.find(e => e.offerId === o.id)?.reasons.map(r => `${o.buyer}: ${r}`) ?? []);
+      const complete = Boolean(ar && br);
+      const confirmed = complete && comparison.comparisonReady;
+      const threshold = complete && ar!.retains !== br!.retains
+        ? (ar!.retains ? br!.base - ar!.base : ar!.base - br!.base) : null;
+      result.pairs.push({
+        offerIds: [a.id, b.id],
+        status: !complete ? 'incomplete' : confirmed ? 'confirmed' : 'conditional',
+        reasons: complete && !confirmed ? comparison.reasons : reasons,
+        cashCents: confirmed ? [a.netBeforeTaxCents!, b.netBeforeTaxCents!] : null,
+        differenceCents: confirmed ? a.netBeforeTaxCents! - b.netBeforeTaxCents! : null,
+        tieDistributionCents: threshold !== null && threshold >= 0 && threshold <= MAX_DISTRIBUTION ? threshold : null,
+        retainingOfferId: threshold !== null ? (ar!.retains ? a.id : b.id) : null,
+      });
+    }
+  }
   if (!keep.length || !assign.length) return result;
   const maxKeep = Math.max(...keep.map(o => o.base)), maxAssign = Math.max(...assign.map(o => o.base));
   const threshold = maxAssign - maxKeep;
