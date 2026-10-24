@@ -40,3 +40,15 @@ The example uses equivalent `/api/case/...` routes. Agent tools `secondlook_read
 ## Integration status at implementation
 
 The connected free X1 test account was inspected. It permits cited own-document searches but has no API-key entitlement; the specific fund/notice query returned no searchable documents. Mat chose to supply a dedicated synthetic account. Do not promote that probe into proof that this app's dedicated connection is live. Record a successful selected read/import under that account separately.
+
+## Dedicated synthetic fixture (October 24)
+
+A separate `second-look-demo@x1wealth.com` account now exists. Its only grants are member core access and API-key access; the issued connector is `mcp:read` only. Live tool discovery returned no direct write tools and no professional/staff workspace access. The ordinary first-party upload/finalize routes accepted the two PDFs in [`fixtures/x1`](../fixtures/x1). A live own-document passage search returned the capital-call text with page 1 and its X1 source reference. This is a real connected read of **authored fictional documents**, not real investor evidence.
+
+X1 wraps returned excerpts in a typed untrusted-evidence envelope. The adapter validates that envelope and matching document reference, then displays the document name and passage. It does not interpret quoted instructions, infer financial inputs, or invent a document date when X1 returns none.
+
+The local and fallback runtime are configured for `sample-fund`. Repository Actions and Codespaces secrets now include `X1_API_KEY` and `X1_CASE_ID`; new/restarted Codespaces can receive them. They do not populate local clones or Railway automatically. Railway activation requires the project owner to add the same two variables through the private host configuration. Never put the key in a client/Vite setting.
+
+Try searching **capital** or **liquidity** in the investor's “Use evidence from X1” section. Read the returned excerpt, then explicitly copy it into the private case. Copying advances the case revision and makes earlier reviews historical; it does not fill funding fields. The fixture's $750,000 need is due November 1; its $100,000 retained distribution arrives November 10. All documents prominently identify the scenario as fictional.
+
+The isolated app integration also passed against the live X1 account: browser search → readable cited preview → explicit copy → case revision 1 to 2. The copied excerpt persisted in the case projection, financial inputs remained unset, and the manager role was denied the private funding/evidence route. This does not yet establish Railway runtime configuration; follow [Stratten's setup steps](STRATTEN_X1_SETUP.md) for that last host-specific step.
