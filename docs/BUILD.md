@@ -58,3 +58,18 @@ Before public deployment: real sessions, case membership checks, CSRF/origin pro
 ## Today’s finish line
 
 One real external finding, one explicit question/answer, one changed offer that makes an earlier review inapplicable, persistence, real sponsor use, and truthful labeling. Submit before 4 PM Eastern; freeze features by roughly 2:45 PM.
+
+
+## Integrated case research (current app)
+
+- `GET /api/case/research`: investor-only saved research runs.
+- `POST /api/case/research`: `{ expectedRevision, companyId, after }`. Resolves the actual Akta company ID and saves dated findings against the current case revision.
+- `POST /api/case/research/:id/review`: `{ expectedRevision, findingId }`. Saves a pinned input file and dispatches to the app reviewer. Durable request IDs and input snapshots are retained before the remote writes.
+- `POST /api/case/research/:id/check`: `{}`. Reconciles the same task ID and verifies the returned output file and source versions. UI polls pending work every five seconds.
+- `POST /api/case/research/:id/share`: `{ expectedRevision }`. A current completed review can replace the shared question. This advances the case revision and clears its answer; prior approvals remain historical.
+
+`server/adapters/roundtable.ts` runs an app-specific SDK worker as part of API startup. It reads only the pinned task input path under `second-look/` and writes a task-specific output. It is separate from the earlier sponsor template. Its current reasoning is deterministic; the method is explicitly returned as `rule-based`. Model reasoning via Nicrron and its PRISM trace are still unimplemented.
+
+The SQLite research table preserves selected findings, task IDs, remote write request IDs, snapshots and completed results across restart. Interrupted Akta fetches become retryable blocked runs. An uncertain Roundtable dispatch retains its original request IDs: reconcile it rather than creating another task. Historical tasks may finish, but cannot apply to a newer case.
+
+These routes inherit the local simulated investor role. They do not establish real participant authentication. JSON and local-origin checks prevent simple cross-origin submissions, but are not a replacement for production authentication.

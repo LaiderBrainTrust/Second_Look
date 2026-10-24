@@ -13,7 +13,7 @@ npm run dev
 
 Open `http://localhost:5173`. Requires Node **22.13 or newer** (uses built-in `node:sqlite`). API listens on `127.0.0.1:3001`. SQLite data lives in `.local/second-look.sqlite` and survives restarts. No provider credentials are required to run the local scaffold.
 
-This is a **working local synthetic scaffold**, not the finished hackathon entry. Akta research endpoints are implemented; the other app adapters remain unimplemented. The role selector is development impersonation, **not authentication**. The entrypoint refuses production mode until a teammate replaces that boundary. Do not expose this server to the internet or use real client data.
+This is a **working local synthetic scaffold**, not the finished hackathon entry. Akta research and Roundtable review are integrated into the case flow; the other app adapters remain unimplemented. The role selector is development impersonation, **not authentication**. The entrypoint refuses production mode until a teammate replaces that boundary. Do not expose this server to the internet or use real client data.
 
 ## Try the core interaction
 
@@ -30,12 +30,35 @@ These are illustrative contract scenarios with explicit zero purchase-price adju
 | Working locally | Still required for the final entry |
 | --- | --- |
 | React/TypeScript UI and Express API | Actual X1 reads from a synthetic demo account |
-| Persistent offer versions, question/answer and historical review | Connect an actual Akta finding to the case question and UI |
+| Persistent offer versions, question/answer and historical review | Confirm materiality and connect the remaining sponsors |
 | Akta company search, discovery, enrichment and dated news API | Materiality review of external findings; a company mention is not a valuation |
-| Integer-cent calculations and unknown-total handling | Actual Nicrron model request, Roundtable task and PRISM trace |
+| Integer-cent calculations and unknown-total handling | Actual Nicrron model request and PRISM trace |
 | Atomic stale-revision rejection | Authenticated participants and case-scoped sharing |
 | Role-specific response projection | Deployment with persistent storage and real auth |
 | Tests for changed terms, stale requests and restart continuity | Source extraction/correction, final rehearsal, video and founder brief |
+
+## Use the live research flow
+
+With Akta and Roundtable credentials configured, `npm run dev` starts the UI, API and app-specific Roundtable reviewer together. In Investor view:
+
+1. Search for a company and explicitly choose the right match.
+2. Choose the report cutoff and select **Find changes since report**.
+3. Choose a dated article and select **Request Roundtable review**.
+4. The saved task completes in the background. Reloading the page preserves it.
+5. Read the proposed question and source versions, then **Share question with fund manager**.
+6. Switch to Fund manager: the shared question and article link are visible. A new answer is needed before the investor can approve again.
+
+A changed case makes earlier research historical. The current reviewer performs deterministic source/date checks and proposes a question; it does not call a model, assess fair value or verify the publisher's claim. Nicrron model integration remains outstanding.
+
+## Team access and credentials
+
+**Cloning the repo does not download secrets.** `AKTA_API_KEY` in GitHub Actions is available only to authorized workflows, not retrievable as a local environment file. This setup has no publicly deployed shared app yet.
+
+For local development, copy `.env.example` to `.env.local` and configure Akta plus `ROUNDTABLE_APP_KEY`, `ROUNDTABLE_WORKER_KEY`, `ROUNDTABLE_WORKER_ID`, and `ROUNDTABLE_PROJECT`. The app and reviewer need separate bot identities with access to the same project. Obtain these from your team's approved credential channel or provision your own Roundtable workspace. Never commit credentials. The live setup on Mat's machine uses a private runtime env file and will not exist on a teammate's clone.
+
+Roundtable credentials used on Mat's machine remain server-local; they are **not** in GitHub secrets. These provider grants can access the workspace beyond this app's folder, so they are not a safe substitute for a narrowly scoped team credential. Use a dedicated demo workspace before distributing keys. The personal reporting key is never needed by the app.
+
+A future deployed app can hold the provider keys on its server so teammates use the UI without receiving them. Participant authentication and persistent deployment storage are still required; the current server deliberately remains loopback-only.
 
 ## Team documents
 

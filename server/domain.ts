@@ -27,7 +27,7 @@ export function view(state: CaseState, role: Role): CaseView {
   const status = !state.answer ? 'awaiting_answer' : currentApproval ? 'approved' : state.reviews.length ? 'terms_changed' : 'needs_review';
   return {
     id: state.id, title: state.title, revision: state.revision, offer: state.offer,
-    question: state.question, answer: state.answer, nextOwner: state.answer ? 'lp' : 'gp',
+    question: state.question, questionSource: state.questionSource, answer: state.answer, nextOwner: state.answer ? 'lp' : 'gp',
     ...(role === 'lp' ? { privateReview: {
       ownerEntity: state.ownerEntity, report: state.report, grossReceiptsCents: grossReceipts(state),
       responseText: responseText(state), status, reviews: state.reviews, events: state.events,
