@@ -1,0 +1,56 @@
+# Build contracts and handoff
+
+The authoritative TypeScript shapes are in [`shared/contracts.ts`](../shared/contracts.ts). The longer [proposal](PROPOSAL.md) explains the product and demo. This file describes the current scaffold so agents do not mistake proposals for working integrations.
+
+## Current HTTP API
+
+| Route | Response / input |
+| --- | --- |
+| `GET /api/health` | Local synthetic mode and health |
+| `GET /api/providers` | Five explicitly unimplemented provider statuses |
+| `GET /api/case` | `CaseView`; LP-private fields omitted for other demo roles |
+| `POST /api/case/commands` | `{ expectedRevision, command }`; returns updated `CaseView` |
+
+Commands: `{ kind: 'answer', text, distributionCents }` for GP; `{ kind: 'revise', distributionRecipient: 'seller' | 'buyer' }` for buyer; `{ kind: 'approve' }` for LP.
+
+**Development only:** `x-demo-role: lp | gp | buyer` selects a simulated principal. An arbitrary client can impersonate a role. Response projection and action authorization are useful scaffolding, not real security until a server-authenticated principal replaces this header. Do not expose the local server publicly.
+
+All mutating commands validate the expected case revision inside a SQLite write transaction. Answer and offer revisions advance it. Review records bind to it. A repeat approval for the same revision is idempotent; stale updates fail with 409. General request idempotency, case membership and multi-case operation remain future work.
+
+## Source of truth
+
+- X1 owns its underlying documents/access policy. The new app cannot grant X1 access.
+- The app owns its offer-specific case, shared answer, revision and response review.
+- Roundtable owns task delivery and artifacts, not human approvals.
+- No app review is an X1 confirmation receipt or transaction acceptance.
+
+## Adapter lane
+
+Implement the interfaces in [`server/adapters/contracts.ts`](../server/adapters/contracts.ts) behind the server. Keep credentials out of the browser and logs. Copy `.env.example` into an ignored `.env` if helpful; the current runtime does not automatically load it, so use a reviewed environment loader or export variables without printing them. Add that setup explicitly when implementing adapters.
+
+1. **X1:** MCP Streamable HTTP at `https://mcp.x1wealth.com/mcp`. A server API key requires an entitled synthetic account; hosted OAuth requires an approved redirect. Discover `tools/list`, then live capabilities/guide before selecting a document-read tool. A coding agent's connection is not automatically this app's connection. No dependence on coordination writes.
+2. **Akta:** resolve the underlying company; retrieve dated news after the report cutoff. Keep source metadata, identity and dates. Do not invent events or turn a news headline into a fund valuation.
+3. **NicrronNinoo:** route new model calls through `https://api.nicrron.ai/v1`, using an actually available model. Extraction produces proposals, not confirmed terms.
+4. **Roundtable:** genuine research/review task and artifact handoff. Use its supported task client/SDK. Do not assume a Codex or Claude Code session can join agent chats. The counterparty human still supplies/approves the answer.
+5. **PRISM:** capture the actual call and confirm arrival. The HTTP trace endpoint is `https://prism.blockconvey.com/api/traces`; verify current required fields from its docs.
+
+Only change a provider to `verified` after a real request succeeds. Record safe request/task/trace metadata without credentials. Failed or unconfigured providers remain visible. A fixture is not a provider integration.
+
+Documentation:
+
+- https://x1wealth.com/connect/other
+- https://github.com/x1wealth/x1-agent-skills
+- https://docs.akta.pro/llms.txt
+- https://nicrron.ai/docs/api
+- https://roundtable.bot/docs/talk
+- https://blockconvey.com/docs
+
+## Next complete slice
+
+Replace the synthetic report source with one permitted X1 read; show an actual Akta finding that produces the question. Preserve the existing deterministic changed-offer flow. In parallel, replace the development role header with authenticated participant sessions and configure deployment persistence. Do not spend the remaining time rebuilding the domain loop from scratch.
+
+Before public deployment: real sessions, case membership checks, CSRF/origin protection for cookie-based mutations, request/body validation, secret configuration, durable storage, provider failure states and a complete rehearsal. Native SQLite on an ephemeral serverless filesystem is not persistent deployment storage; use a persistent host/volume or adapt the store to the chosen hosted database.
+
+## Today’s finish line
+
+One real external finding, one explicit question/answer, one changed offer that makes an earlier review inapplicable, persistence, real sponsor use, and truthful labeling. Submit before 4 PM Eastern; freeze features by roughly 2:45 PM.
