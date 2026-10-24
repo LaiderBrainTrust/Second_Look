@@ -1,5 +1,7 @@
 # Run Second Look as a teammate
 
+For a copyable coding-agent prompt and fresh-clone instructions, start with [README.md](../README.md#start-here--teammates-and-coding-agents).
+
 ## Use the current branch
 
 ```sh
@@ -41,3 +43,13 @@ The role selector is a synthetic local demo, not participant authentication. Pri
 Investor → search company → select match → find changes since report → select a finding → request Roundtable review. The Roundtable worker calls Nicrron with the saved finding and synthetic offer; it returns proposed question text and an explanation. Reload and check the saved task. Explicitly share the question, then switch to Fund manager and answer. A changed case makes older reviews historical.
 
 The model cannot approve a response or change price/ownership fields; those remain deterministic app operations. Failed model calls fail visibly, with no silent rule-based replacement. PRISM is not yet connected, so do not claim that all four sponsor integrations are complete. See NICRRON_NINOO_SETUP.md for the unresolved Builder/Marketplace eligibility rule.
+
+## Setup acceptance — what your agent should report
+
+1. Confirm the exact checkout path, branch, commit and Node version. Preserve existing changes.
+2. Run `npm ci`, `npm run setup`, and `npm run doctor`. Missing keys mean live setup is incomplete; report names only and continue with the synthetic UI.
+3. Reuse an existing server for this checkout or start `npm run dev`. `curl http://127.0.0.1:3001/api/health` should return `ok: true`; open port 5173 and verify the synthetic role-switching flow from README.md. Health alone does not verify providers.
+4. If all live credentials are available, perform the research flow above once. Confirm the saved result says `nicrron`, retains source versions, and sharing requires a fresh fund-manager answer. A failed provider call is a failed live check, never substitute fabricated output.
+5. For code changes run `npm test` and `npm run build` sequentially. Report actual results and the URL the teammate can open. Leave the server running for their preview, identifying its ports; do not launch duplicate servers.
+
+This setup does not require X1 credentials, Ninoo CLI installation, or the standalone Roundtable Funds template. Ninoo Builder/Marketplace eligibility remains an organizer clarification, separate from getting this repository running.
