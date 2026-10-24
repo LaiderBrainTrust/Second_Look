@@ -4,6 +4,11 @@ Read [PLAN.md](PLAN.md) first. This board records proposed work, not automatic d
 
 | Priority | Task | Owner / state | Acceptance |
 | --- | --- | --- | --- |
+| P0 | Real-use accounts, cases and participant invitations | Mat/Codex backend implemented; Ryan owns UI | [REAL_CASE_API.md](REAL_CASE_API.md); isolated memberships, fixed roles, one-time invites, revocation, persisted sessions, actor attribution |
+| P0 | Railway + custom domain | Container/config prepared by Mat/Codex; account/DNS setup pending | [RAILWAY.md](RAILWAY.md); persistent volume, private runtime secrets, tested cutover and restore |
+| P0 | Background review recovery and safe release path | Mat/Codex — merged and deployed; 34 tests/build and live checks passed | [BACKEND_READINESS.md](BACKEND_READINESS.md); queued results survive closed browser/restart, unchanged case, preserved API |
+| P1 | Darren workflow tranche: competing offers, term/consent checklist, assigned questions | Mat/Codex — backend implemented and tested; Ryan retains UI | [WORKFLOW_API.md](WORKFLOW_API.md); missing terms withheld, assigned-role responses, stale edits rejected, history durable |
+| P1 | Downloadable decision record | Mat/Codex backend implemented; Ryan owns button integration | [DECISION_RECORD.md](DECISION_RECORD.md); HTML/JSON, investor-only, guarded revision, original approval history |
 | P0 | Final customer UI and product design | Ryan — assigned by Mat; implementation/acceptance pending | [RYAN_PRODUCT_BRIEF.md](RYAN_PRODUCT_BRIEF.md); cohesive real-API journey, useful in the first minute, exact deployed commit verified |
 | P0 | Core gaming → review → changed-offer workflow | Mat/Codex — implemented and locally verified | 29 tests/build; live source/task/trace receipts; browser financial sequence. These verify the reference implementation, not the future redesign |
 | P0 | PRISM setup | Mat/Codex — live verified | Actual model trace accepted; setup doctor reports live/app connected |
@@ -27,3 +32,11 @@ Read [PLAN.md](PLAN.md) first. This board records proposed work, not automatic d
 - Good independent lanes: add `docs/FOUNDER_BRIEF.md` with genuine evidence; prepare a video outside source; verify setup and report results; resolve sponsor interpretation.
 
 A useful teammate handoff says: owner, branch/commit, files changed, commands/checks run, what still fails, and the next action. Do not paste API keys into the board or code review.
+
+## New backend and agent handoff
+
+Mat/Codex: deterministic winning-offer threshold, private decisive-question generation, and case-scoped MCP are implemented. With Mat's explicit authorization, Codex wired `integration/DecisionWorkbench.tsx` into the current investor screen, with quote entry, revision and withdrawal. Ryan retains final design and account-selection UI. Main navigation now starts at the comparison. See `DECISIVE_QUESTION.md` and `MCP.md`. Claude browser-only remote OAuth is not included.
+
+## Funding context and public MCP instructions
+
+Mat/Codex owns `shared/funding.ts`, `server/funding.ts`, `server/x1-context.ts`, `server/mcp-help.ts` and the additive `integration/FundingPanel.tsx`. Funding need/deadline comparison is integrated into the existing comparison; Ryan retains final design. Dedicated X1 account credentials/live import verification remain pending Mat's access handoff. Public `/mcp` is a setup guide, not a remote MCP endpoint. See `X1_CONTEXT.md`.

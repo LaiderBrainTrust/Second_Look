@@ -12,9 +12,10 @@ import { Question } from './Question';
 import { Review, Respond } from './Review';
 import { History } from './History';
 import { Presenter } from './Presenter';
+import { DecisionWorkbench } from '../integration/DecisionWorkbench';
 
-type Tab = 'holdings' | 'question' | 'review' | 'history';
-const tabs: [Tab, string][] = [['holdings', 'Holdings'], ['question', 'Question'], ['review', 'Review'], ['history', 'Record']];
+type Tab = 'holdings' | 'question' | 'review' | 'offers' | 'history';
+const tabs: [Tab, string][] = [['holdings', 'Holdings'], ['question', 'Question'], ['review', 'Review'], ['offers', 'Compare offers'], ['history', 'Record']];
 
 function App() {
   const [session, setSession] = useState<{ hosted: boolean; authenticated: boolean; role?: Role } | null>(null);
@@ -98,6 +99,7 @@ function App() {
                 {tab === 'holdings' && <Holdings revision={data.revision} onPrepared={() => { setResearchVersion(v => v + 1); refreshProviders(); setTab('question'); }}/>}
                 {tab === 'question' && <Question data={data} refreshVersion={researchVersion} onProviderChange={refreshProviders} onShared={next => { setData(next); setTab('review'); }}/>}
                 {tab === 'review' && <Review data={data} busy={busy} onApprove={() => void act({ kind: 'approve' })}/>}
+                {tab === 'offers' && <DecisionWorkbench caseBase="/api/case" onChanged={() => void refresh()}/>}
                 {tab === 'history' && <History data={data}/>}
               </>}
               {!investor && role !== 'lp' && <Respond data={data} role={role} busy={busy} answer={answer} setAnswer={setAnswer}

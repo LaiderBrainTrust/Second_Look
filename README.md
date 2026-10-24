@@ -10,7 +10,15 @@ Deal Flow @ Betaworks, October 24, 2026. **Track 4: Funds. Submission closes 4 P
 
 **Read [PLAN.md](docs/PLAN.md) first.** It covers the product, strategy, gaming example, sponsor use, X1 boundary, commercial hypothesis and path to submission. Claim work in [TEAM_BOARD.md](docs/TEAM_BOARD.md); use [BUILD.md](docs/BUILD.md) for implementation and [GAMING_BUILD.md](docs/GAMING_BUILD.md) for the presentation.
 
-Current status: all four sponsor integrations are implemented and live calls have succeeded. **29 tests and the build pass.** [Ryan's launch and demo guide](docs/RYAN_DEMO.md) covers the hosted team login and the local fallback. The hosted mode is a protected synthetic demo, not a service for real client data. X1 is not connected.
+Current status: all four sponsor integrations are implemented and live calls have succeeded. **53 tests and the build pass.** [Ryan's launch and demo guide](docs/RYAN_DEMO.md) covers the hosted team login and the local fallback. The hosted mode is a protected synthetic demo, not a service for real client data. X1 is not connected.
+
+### User-created cases and separate participants
+
+The new [account and case APIs](docs/REAL_CASE_API.md) support user-entered cases, separate investor/manager/buyer accounts, one-time invitations, revocation and durable sessions. Ryan owns the matching UI. The existing example remains separate and compatible. [Railway deployment instructions](docs/RAILWAY.md) cover the supplied Docker image, persistent volume and domain cutover; the Railway deployment itself is not yet verified.
+
+### New backend capabilities for Ryan
+
+[Darren’s workflow tranche](docs/WORKFLOW_API.md) adds competing-offer comparison, assigned questions and a closing-condition checklist. Existing screens remain compatible. The API guide contains request examples, role permissions and integration behavior; these additions still need Ryan’s UI. [Roadmap and delivery status](docs/ROADMAP.md).
 
 ### Final product design: Ryan owns the UI
 
@@ -22,12 +30,12 @@ Use the hosted URL and team access code in [RYAN_DEMO.md](docs/RYAN_DEMO.md). Fo
 
 ## Start here — teammates and coding agents
 
-**Use `main`. [PR #1](https://github.com/LaiderBrainTrust/vc_hackathon/pull/1) has merged; the app, sponsor adapters and team setup are available there.**
+**Use `main`. [PR #1](https://github.com/LaiderBrainTrust/Second_Look/pull/1) has merged; the app, sponsor adapters and team setup are available there.**
 
 Paste this into Claude Code, Codex, or your coding agent:
 
 ```text
-Set up and run https://github.com/LaiderBrainTrust/vc_hackathon on branch
+Set up and run https://github.com/LaiderBrainTrust/Second_Look on branch
 main. Read README.md, AGENTS.md, docs/PLAN.md, and docs/TEAM_START.md first.
 Preserve any existing local changes; use a fresh directory if this checkout
 belongs to another task. Do not rebuild the app or replace its configuration.
@@ -50,7 +58,7 @@ actually passed. Stop after setup unless I assign you an implementation lane.
 From a **new directory**, with access to the private GitHub repository:
 
 ```sh
-git clone --branch main https://github.com/LaiderBrainTrust/vc_hackathon.git
+git clone --branch main https://github.com/LaiderBrainTrust/Second_Look.git vc_hackathon
 cd vc_hackathon
 node --version                 # must be 22.13 or newer
 npm ci
@@ -179,3 +187,9 @@ npm run build
 New app code was written on build day. X1 is proposed existing infrastructure. Confirm the organizer's interpretation of existing-service use; use all four required sponsors for prize eligibility. Observed Akta/Nicrron/Roundtable/PRISM checks are documented in [sponsor setup](docs/SPONSOR_SETUP.md); they do not establish full sponsor eligibility, customer validation, fair value or financial gain.
 
 No project license or ownership allocation is implied by this bootstrap. Agree those with the team before publishing code under a license. Never commit `.env`, `.local`, credentials, or private financial records.
+
+## Offer decisions and Claude / Codex
+
+Run `npm run connect:agent` in your terminal to create a private, expiring connection to one case. See [MCP setup and permissions](docs/MCP.md), [decisive-question API](docs/DECISIVE_QUESTION.md), and the additive [Ryan comparison component](integration/DecisionWorkbench.tsx). The investor screen now opens with the comparison and quote-entry workflow. Ryan retains overall design ownership.
+
+The comparison also supports **a funding amount and deadline**, with explicit cash constraints and payment dates. See [optional X1 source integration](docs/X1_CONTEXT.md). To help an agent connect, point it at the running app's `/mcp.txt` (human page: `/mcp`; metadata: `/mcp.json`). These are public instructions for the local MCP bridge, not remote MCP endpoints.

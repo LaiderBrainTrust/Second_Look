@@ -2,6 +2,10 @@
 
 Product authority: [PLAN.md](PLAN.md). Work claims: [TEAM_BOARD.md](TEAM_BOARD.md). Setup: [TEAM_START.md](TEAM_START.md). Demo: [GAMING_BUILD.md](GAMING_BUILD.md).
 
+## New account/case API
+
+[REAL_CASE_API.md](REAL_CASE_API.md) specifies individual accounts and user-created cases under `/api/cases/:id`. The original `/api/case` remains the example. Both use the same domain calculations and revision checks. [RAILWAY.md](RAILWAY.md) covers container hosting.
+
 ## Stack and authority
 
 React 19 + Vite 6; Express 5; TypeScript/ESM; Node 22.13+; native SQLite. `npm run dev` starts UI 5173, API 3001 and the configured Roundtable worker. Use `npm ci`, not a new scaffold. The app is one fictional case per clone, persisted in ignored `.local/second-look.sqlite`.
@@ -11,7 +15,7 @@ React 19 + Vite 6; Express 5; TypeScript/ESM; Node 22.13+; native SQLite. `npm r
 - Nicrron generates question/explanation prose. It does not own IDs, prices, ownership, distributions or approvals.
 - PRISM stores a trace of that actual model call. A trace is not proof of factual correctness.
 - Steam/Akta are external evidence providers; source identity, retrieval dates, sample coverage and uncertainty remain visible.
-- X1 is not connected. If added, X1 would retain authority over its own source records and access policy; the app cannot grant itself access.
+- The optional X1 adapter reads selected document excerpts for one dedicated synthetic case; live acceptance awaits that account access. X1 retains authority over its source records and access policy. See [X1_CONTEXT.md](X1_CONTEXT.md).
 
 ## File map
 
@@ -43,6 +47,9 @@ Ryan owns UI composition; see [RYAN_PRODUCT_BRIEF.md](RYAN_PRODUCT_BRIEF.md). No
 | `GET /api/providers` | Calls observed by this running API process |
 | `GET /api/case` | Role-specific CaseView; investor-private fields omitted for other roles |
 | `POST /api/case/commands` | `{ expectedRevision, command }`; atomic domain change |
+| `GET /api/case/decision-record?revision=N&format=html` | Investor-only downloadable HTML or JSON; optional revision guards against changed terms. See [DECISION_RECORD.md](DECISION_RECORD.md) |
+| `GET /api/case/diligence` | Assigned questions for participant; LP additionally gets competing offers, conditions, blockers and history. See [WORKFLOW_API.md](WORKFLOW_API.md) |
+| `POST /api/case/diligence/commands` | `{ expectedRevision, command }`; saves offers, assigned questions, responses, resolutions and closing conditions with immutable item history |
 | `GET /api/case/gaming` | Investor-only latest snapshot, catalog and fictional-ownership disclosure |
 | `POST /api/case/gaming/refresh` | `{ expectedRevision }`; persist `fetching`, return 202, fetch external evidence, save `ready` or `blocked` |
 | `POST /api/case/gaming/:snapshotId/prepare` | `{ expectedRevision, holdingId }`; prepare a research run using saved evidence and the current offer revision; reuse same snapshot/holding/revision run |
@@ -81,6 +88,8 @@ General Akta endpoints: `POST /api/research/search {query}`, `/discover {query, 
 5. Retrieve the task and read the exact output version. Verify case/revision/finding, question, explanation, model IDs and trace status/ID. Compare trace fields by meaning, not JSON property order.
 6. Only the investor's explicit share command can replace the manager question. Old-case research remains historical; saved evidence can support a new review of current terms.
 
+The API process now checks queued Roundtable results in the background, including after restart and without an open browser. At most three due tasks are checked each 10-second cycle; transient failures back off to two minutes. Browser checks share the in-flight operation. See [BACKEND_READINESS.md](BACKEND_READINESS.md) for the release and UI handoff. Recovery never dispatches, shares or approves.
+
 Interrupted read-only fetches become blocked after restart. An unconfirmed dispatch keeps its original request IDs; reconcile it rather than spawning a duplicate. A failed result check can be rechecked without repeating the model call. A blocked model task still requires fixing its cause and a new research run; rechecking does not manufacture success.
 
 PRISM failure never erases a valid question. The result says `recorded`, `failed` or `not_configured`; only an actual returned trace ID qualifies as recorded. Secrets are headers/server settings, never trace message content.
@@ -94,7 +103,7 @@ npm run doctor
 npm run dev
 ```
 
-For changes, run `npm test` then `npm run build`. Current suite: 29 tests, including trace field-order reconciliation and rejection of actual mismatches. Do not repeat provider calls just to replace a saved source with a prettier result.
+For changes, run `npm test` then `npm run build`. Run the full current suite, including trace reconciliation, funding deadlines, MCP permissions and X1 excerpt-import guards. Do not repeat provider calls just to replace a saved source with a prettier result.
 
 Check the complete browser flow in GAMING_BUILD.md. Refresh/reopen and confirm persistence. Test the game screen and decision screen on a narrow viewport. A build does not establish live provider access; a local browser pass does not establish hosted authentication or user acceptance.
 

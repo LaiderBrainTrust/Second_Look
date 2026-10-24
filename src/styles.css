@@ -162,6 +162,26 @@ main { max-width: 1280px; margin: 0 auto; padding: 32px; }
 .inline-form > div { flex: 1; min-width: 240px; }
 .inline-form button { flex-shrink: 0; }
 
+/* Compare offers: integration/DecisionWorkbench keeps its markup, this restyles it to the product tokens. */
+.workspace .decision-workbench { border-top: 0; padding: 0 0 32px; }
+.workspace .decision-workbench h2 { margin-bottom: 16px; }
+.workspace .decision-workbench h3 { margin: 32px 0 8px; }
+.workspace .decision-workbench h4 { margin: 16px 0 8px; }
+.workspace .decision-workbench summary { font-weight: 400; color: var(--accent); padding: 8px 0; }
+.workspace .decision-workbench form { gap: 8px 24px; margin-bottom: 16px; }
+.workspace .decision-workbench label { color: var(--muted); font-size: 13px; }
+.workspace .decision-workbench input, .workspace .decision-workbench select { margin-top: 8px; padding: 8px 16px; }
+.workspace .decision-workbench form > button { justify-self: start; margin-top: 8px; }
+.workspace .decision-table { margin: 16px 0 24px; border-top: 1px solid var(--ink); }
+.workspace .decision-table th { font-weight: 500; }
+.workspace .decision-table caption { font-size: 13px; }
+.workspace .decision-table button { color: var(--accent); border-color: var(--line); min-height: 32px; font-size: 13px; padding: 0 8px; border-radius: var(--radius); }
+.workspace .decision-table button:hover:enabled { background: #fff; border-color: var(--ink); }
+.workspace .decision-workbench > div > button { margin: 0 8px 8px 0; }
+.workspace .funding-panel { margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--line); }
+.workspace .funding-panel article { border-left: 4px solid var(--line); padding-left: 16px; margin: 16px 0; }
+.workspace .funding-panel li { margin: 8px 0; line-height: 24px; }
+
 /* Record */
 .events li { padding: 8px 0; border-top: 1px solid var(--line); }
 .approval { border: 1px solid var(--line); border-radius: var(--radius); padding: 24px; margin: 16px 0; }

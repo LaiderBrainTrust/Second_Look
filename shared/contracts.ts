@@ -1,10 +1,12 @@
+import type { DiligenceState } from './diligence.js';
 export type Role = 'lp' | 'gp' | 'buyer';
+export interface Actor { userId: string; displayName: string; role: Role; agentKeyId?: string }
 export type Provider = 'x1' | 'nicrron' | 'akta' | 'roundtable' | 'prism';
 
 export interface SourceRef {
   id: string;
   label: string;
-  kind: 'synthetic' | 'x1' | 'external';
+  kind: 'synthetic' | 'x1' | 'external' | 'user';
   locator?: string;
   url?: string;
   revision?: string;
@@ -24,12 +26,14 @@ export interface Answer {
   source: SourceRef;
 }
 export interface Review {
+  actor?: Actor;
   revision: number;
   responseText: string;
   approvedAt: string;
   question?: string;
   answer?: Answer;
   researchContext?: ResearchContext;
+  diligence?: DiligenceState;
 }
 export interface ResearchContext {
   runId: string;
@@ -45,6 +49,8 @@ export interface TermChange {
   revisedGrossReceiptsCents: number | null;
 }
 export interface CaseState {
+  mode?: 'user' | 'example';
+  allowExternalResearch?: boolean;
   id: string;
   title: string;
   ownerEntity: string;
@@ -57,9 +63,11 @@ export interface CaseState {
   answer: Answer | null;
   lastTermChange?: TermChange;
   reviews: Review[];
-  events: { revision: number; text: string; at: string }[];
+  diligence?: DiligenceState;
+  events: { revision: number; text: string; at: string; actor?: Actor }[];
 }
 export interface CaseView {
+  mode?: 'user' | 'example';
   id: string;
   title: string;
   revision: number;
@@ -79,6 +87,8 @@ export interface CaseView {
     status: 'awaiting_answer' | 'needs_review' | 'approved' | 'terms_changed';
     reviews: Review[];
     events: CaseState['events'];
+    diligenceBlockers?: string[];
+    allowExternalResearch?: boolean;
   };
 }
 export interface ProviderStatus {

@@ -6,7 +6,7 @@
 
 This is the canonical product and strategy plan. Read it before changing scope. Implementation contracts are in [BUILD.md](BUILD.md), setup in [TEAM_START.md](TEAM_START.md), assignments in [TEAM_BOARD.md](TEAM_BOARD.md), and the live presentation in [GAMING_BUILD.md](GAMING_BUILD.md). Older proposals in `archive/` are historical, not instructions for today's build.
 
-Repository: [LaiderBrainTrust/vc_hackathon](https://github.com/LaiderBrainTrust/vc_hackathon). Team branch: `main`. [PR #1](https://github.com/LaiderBrainTrust/vc_hackathon/pull/1) is merged. Further work uses small reviewed branches.
+Repository: [LaiderBrainTrust/vc_hackathon](https://github.com/LaiderBrainTrust/Second_Look). Team branch: `main`. [PR #1](https://github.com/LaiderBrainTrust/Second_Look/pull/1) is merged. Further work uses small reviewed branches.
 
 ## Product experience directive — October 24
 
@@ -15,6 +15,20 @@ Repository: [LaiderBrainTrust/vc_hackathon](https://github.com/LaiderBrainTrust/
 Lead with the investment and a meaningful next action. Let the user investigate a recognizable game, ask the manager, and see the consequence of changed terms. Keep diagnostics, raw sponsor receipts and presenter controls in secondary surfaces. Keep synthetic-data labels and dated evidence honest. The final journey must run on the real APIs and persist changes; it must not be a presentation-only mockup.
 
 The intended result today is a compelling, functioning product slice. The existing hosted team login is not independent real-world counterparty authentication; full production readiness remains a separate claim.
+
+## Active real-use release — October 24
+
+Mat has prioritized making the app usable for user-entered cases, beyond the prepared example. The backend now provides individual accounts, isolated cases, one-time case/role invitations, actor-attributed actions and persistent sessions. The original example remains a separate presenter path. See [REAL_CASE_API.md](REAL_CASE_API.md) for Ryan's integration contract and [RAILWAY.md](RAILWAY.md) for the deployable runtime.
+
+This supersedes earlier single-case/presenter-only implementation limits below, but not the truth boundary: UI integration, multi-device acceptance and the Railway/domain cutover remain open. Entered source references are not parsed or verified documents; account display names are not verified legal identities. Before confidential customer use, provider tenancy, recovery, retention and security review still need completion.
+
+## Decision comparison and assistant access — October 24
+
+The investor screen now begins with comparing offers: which leaves more cash, and what missing fact could reverse that result? The new comparison computes the distribution break-even amount from entered payment, adjustment, fees and distribution rights. It can save the decisive manager question, preserve the answer, and require explicit confirmation of each quote against that answer. Gaming remains supporting research, not an invented distribution forecast.
+
+Mat authorized Codex to wire quote entry, editing, withdrawal and comparison into the existing screen while Ryan retains final design ownership. The shared example is wired; account selection remains a separate UI integration. See [DECISIVE_QUESTION.md](DECISIVE_QUESTION.md).
+
+Claude Code and Codex can access a single authorized case through the local MCP bridge. Seven tools read the case or save permitted work, with expiring keys, revision checks and attribution. No tool approves deals or grants access. See [MCP.md](MCP.md). MCP itself is interoperability, not a uniqueness claim.
 
 ## 1. The product in ordinary language
 
@@ -136,7 +150,7 @@ Mat has assigned the final UI and product design to Ryan. Mat/Codex owns backend
 | By 3:30 PM | Submit early: project description, Track 4, source repository, usable demo link, founder brief, ≤3-minute video and sponsor list |
 | 3:30–4:00 PM | Verify submitted links/access and correct submission issues |
 
-The working engine is implemented. The next build priority is Ryan's cohesive customer experience, followed by integration and rehearsal. Do not expand the product's functional scope to use remaining time.
+The working engine is implemented. Ryan owns the cohesive customer experience, followed by integration and rehearsal. **Mat authorized a bounded expansion on October 24 while Ryan works:** competing-offer comparison, a term/consent checklist, and several assigned questions from Darren's roadmap. These are additive backend APIs; the existing main journey remains usable without creating workflow items. See [WORKFLOW_API.md](WORKFLOW_API.md) and [ROADMAP.md](ROADMAP.md). No unrelated platform or authentication rewrite is included. Preserve the feature freeze, rehearsal and submission gates above.
 
 **Live link is available:** https://x1cloud.tail6fbca0.ts.net/ is public through HTTPS Funnel, with a separate team login. It does not require judges to join Mat's tailnet. Keep the working backend. Ryan's UI must be merged, built, deployed and checked at this URL before calling that design live. See [RYAN_DEMO.md](RYAN_DEMO.md) for access and operations. Use 4:00 PM Eastern as the hard deadline despite conflicting later text on Devpost; target submission at 3:30 PM.
 
@@ -168,3 +182,7 @@ Submission checklist: name/description; Track 4; sponsor award selection; founde
 ## 13. What we deliberately defer
 
 Global game discovery, a new general-purpose dashboard, SPV creation, secondary marketplace execution, automatic valuation, fabricated alpha scores, Minutes integration, autonomous outreach, production financial records, a replacement for the team's existing tooling, and an X1 platform expansion. Revisit after the event only if customer evidence earns the work.
+
+## Optional X1 context: the investor's actual funding question
+
+The next integrated slice compares available cash and the timing of each offer against an explicit funding need. X1 can supply selected source evidence using a dedicated account bound to one Second Look case; users still enter/check financial assumptions. This does not turn document mentions into ownership, a bank balance into unrestricted cash, or projected proceeds into settlement. See [X1_CONTEXT.md](X1_CONTEXT.md). Live X1 access remains separately qualified; the app works with entered facts while disconnected. Public `/mcp` provides agent setup instructions without exposing secrets or pretending to be a remote transport.

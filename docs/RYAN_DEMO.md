@@ -48,6 +48,8 @@ Capture refresh for maintainers: with the configured `npm run dev` worker runnin
 
 ## Hosting and operations
 
+For subsequent reviewed UI/backend releases, use the existing-host preflight and deployment procedure in [BACKEND_READINESS.md](BACKEND_READINESS.md). It preserves the case database and writes a release receipt. A restart requires presenters to sign in again.
+
 - Run the built UI and Express API together with `NODE_ENV=production`, `DEMO_ORIGIN` (exact HTTPS origin), a random `DEMO_ACCESS_CODE` of at least 24 characters, and absolute persistent `DEMO_DATABASE`. Optional `PORT`, default 3187. Execute `node --import tsx server/index.ts` from the release directory after `npm ci && npm run build`.
 - Only `dist/` is served. Provider credentials stay server-side. `/api` data requires a session; state changes require the exact Origin. Session cookies are Secure, HttpOnly and SameSite=Strict, expire after eight hours, and invalidate on logout/server restart.
 - The hosted database must live outside the release directory. A first empty database imports the labeled capture. Existing records are never reset on startup. To stage another run, stop only this service, select a new database filename, restart, and retain the previous file as history.
