@@ -1990,3 +1990,82 @@ button.sl-text-button:hover:enabled {
   .sl-home-amount { text-align: left; }
   .sl-home-amount strong { font-size: 34px; }
 }
+
+/* Adapted from Ryan's 8391562 design: a pill header, selected-game rail,
+   explicit before/after figures and persistent context. Existing routes stay intact. */
+.sl-app-header, .sl-entry-header {
+  width: calc(100% - 40px);
+  max-width: 1360px;
+  margin: 16px auto 0;
+  padding: 18px 28px;
+  border: 1px solid var(--line);
+  border-radius: 48px;
+  background: var(--surface);
+}
+.sl-brand svg { color: var(--accent); }
+.sl-root .sl-change-alert {
+  border: 1px solid var(--line);
+  border-top: 4px solid var(--accent);
+  border-radius: 12px;
+  background: var(--surface);
+  padding: 28px 32px;
+}
+.sl-root .sl-change-alert .sl-change-delta { color: var(--accent); }
+.sl-payoff-comparison {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  margin: 24px 0 16px;
+}
+.sl-payoff-comparison > div { border-top: 1px solid var(--line); padding-top: 18px; }
+.sl-payoff-comparison dt { font-size: 14px; color: var(--muted); }
+.sl-payoff-comparison dd { margin: 8px 0 0; font-size: clamp(28px, 4vw, 48px); line-height: 1.15; font-variant-numeric: tabular-nums; letter-spacing: -0.04em; color: var(--ink); }
+.sl-deal-summary {
+  position: sticky;
+  top: 12px;
+  z-index: 5;
+  margin: 0 0 32px;
+  padding: 18px 24px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-top: 3px solid var(--accent);
+  border-radius: 10px;
+  box-shadow: 0 12px 24px -16px var(--shadow);
+}
+.sl-root .sl-deal-summary > p { margin: 0 0 12px; font-size: 12px; font-weight: 600; color: var(--muted); }
+.sl-deal-summary dl { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; margin: 0 0 10px; }
+.sl-deal-summary dt { font-size: 13px; color: var(--muted); }
+.sl-deal-summary dd { margin: 5px 0 0; font-size: 20px; font-weight: 500; font-variant-numeric: tabular-nums; }
+.sl-summary-total dd { color: var(--accent); }
+.sl-deal-summary small { color: var(--muted); font-size: 11px; }
+.sl-deal-summary ~ section :focus-visible,
+.sl-deal-summary ~ div :focus-visible { scroll-margin-top: 180px; }
+.sl-root .game-tab { position: relative; transition: border-color 180ms ease-out, background-color 180ms ease-out; }
+.sl-root .game-tab::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: var(--accent); transform: scaleX(0); transform-origin: left; transition: transform 180ms ease-out; z-index: 1; }
+.sl-root .game-tab.selected::before { transform: scaleX(1); }
+.sl-root .game-tab.selected { border-color: var(--accent); background: var(--elevated); box-shadow: 0 0 0 1px var(--accent); }
+.sl-game-selected { color: var(--accent); font-size: 12px; font-weight: 600; }
+@media (hover: hover) and (pointer: fine) {
+  .sl-root .game-tab:hover:enabled::before { transform: scaleX(1); }
+  .sl-root .game-tab:hover:enabled strong { color: var(--accent); }
+}
+@media (max-width: 760px), (max-height: 650px) {
+  .sl-deal-summary { position: static; }
+}
+@media (max-width: 600px) {
+  .sl-app-header, .sl-entry-header { width: calc(100% - 24px); padding: 14px 18px; border-radius: 22px; gap: 12px; }
+  .sl-app-header nav { gap: 12px; flex-wrap: wrap; justify-content: flex-end; }
+  .sl-root .sl-change-alert { padding: 24px 20px; }
+  .sl-payoff-comparison { grid-template-columns: 1fr; gap: 20px; }
+  .sl-deal-summary { padding: 18px; }
+  .sl-deal-summary dl { grid-template-columns: 1fr; gap: 14px; }
+  .sl-deal-summary dl > div { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; }
+  .sl-deal-summary dt { max-width: 48%; }
+  .sl-deal-summary dd { font-size: 16px; text-align: right; margin-top: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sl-root .game-tab, .sl-root .game-tab::before { transition: none; }
+}
+@media print {
+  .sl-deal-summary { position: static; box-shadow: none; }
+}

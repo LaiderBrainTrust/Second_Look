@@ -21,6 +21,7 @@ import {
   useDraftGuard,
 } from "./useDraftGuard";
 import { X1Sources } from "./X1Sources";
+import { DealSummary } from "./DealSummary";
 const names: Record<Role, string> = {
   lp: "Investor",
   gp: "Fund contact",
@@ -397,7 +398,7 @@ function CasePage({
             {view === "deal"
               ? "A sale price tells you one number. The terms tell you what you actually keep."
               : view === "evidence"
-                ? "Use current evidence to ask a better question—not to guess what the fund owes you."
+                ? "Use current evidence to ask a better question about your investment."
                 : view === "conversation"
                   ? "Keep the question, supporting answer and next step together."
                   : "This review applies to the current sale below. A change to the terms requires a fresh review."}
@@ -431,6 +432,9 @@ function CasePage({
             </a>
           ))}
       </nav>
+      {role === "lp" && (view === "evidence" || view === "conversation") && (
+        <DealSummary data={data} />
+      )}
       {error && (
         <div className="sl-error" role="alert">
           {error}{" "}
@@ -471,17 +475,17 @@ function CasePage({
                       ? "more for you"
                       : "change in cash"}
                 </p>
-                <p className="sl-change-amount">
-                  Gross cash changed from{" "}
-                  <b>
-                    {currency(review.lastTermChange.previousGrossReceiptsCents)}
-                  </b>{" "}
-                  to{" "}
-                  <b>
-                    {currency(review.lastTermChange.revisedGrossReceiptsCents)}
-                  </b>
-                  .
-                </p>
+                <dl className="sl-payoff-comparison" aria-label="How your proceeds changed">
+                  <div>
+                    <dt>Before the change</dt>
+                    <dd>{currency(review.lastTermChange.previousGrossReceiptsCents)}</dd>
+                  </div>
+                  <div>
+                    <dt>With the revised terms</dt>
+                    <dd>{currency(review.lastTermChange.revisedGrossReceiptsCents)}</dd>
+                  </div>
+                </dl>
+                <p className="sl-help">Cash before taxes, fees and timing. Your earlier review stays in the record.</p>
               </div>
             )}
         </div>
