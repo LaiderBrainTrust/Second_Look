@@ -42,7 +42,7 @@ Company search, discovery, enrichment and news each returned HTTP 200 on the bui
 
 Installed the user-requested `@roundtable/cli` **0.2.19** from its GitHub release. Browser authorization succeeded for **x1cloud-vc-hackathon**. This headless machine has no desktop secret service, so the CLI uses its supported private-file credential storage. `roundtable setup` installed its user service; `roundtable service start` started it. `roundtable status --json` reported `service_connection: online`.
 
-Setup uses default metadata monitoring: **no project conversation-content roots and no remote-control grant**. No Roundtable credential is copied into the app or GitHub. Installation and a connected machine do not implement the app's task/review adapter and do not by themselves establish sponsor eligibility. The next integration owner should decide whether the event expects development-tool use or an in-product Roundtable workflow, and demonstrate the actual use.
+Setup uses default metadata monitoring: **no project conversation-content roots and no remote-control grant**. No Roundtable credential is copied into the app or GitHub. Installation and a connected machine do not implement the app's task/review adapter and do not by themselves establish sponsor eligibility. The event instructions supplied by Mat point to a shared research workflow with tasks and versioned files; use that as the product integration target below.
 
 Teammates connect their own machines with:
 
@@ -53,6 +53,31 @@ roundtable login
 roundtable setup
 ```
 
+### Product workflow: separate workspace credentials required
+
+The SDK guide distinguishes machine login from a **team key**, which is the key of an AI assistant connection. In the Roundtable workspace, use **Agents → Connect agent → AI assistant → Custom** and name the connection for the team. Its setup key can provision the individual bot keys. Event access uses code `VCHACK` on the signup waitlist screen. The machine login above cannot substitute for this team key.
+
+The upstream Funds template has been inspected. It creates two identities, `fund-reader` and `quarter-brief`; dispatches a task per fictional fund; reads reports/notices; and saves a version-cited quarter brief. Its deterministic parser expects the supplied semi-structured documents. It does not already read arbitrary PDFs, fetch Akta news, or call a model. `askModel()` is the explicit model integration point.
+
+Once the workspace key is available, initialize in a separate directory to preserve the app:
+
+```sh
+roundtable init .local/roundtable-funds --template funds
+# Paste the workspace team key only at the hidden prompt.
+cd .local/roundtable-funds
+npm install
+npm run dev
+# In a second terminal, in that same directory:
+npm run brief
+```
+
+The CLI writes separate bot credentials to that directory's ignored `.env`. Do not use `--force` against the app root. The SDK is distributed as a release tarball, not a registry package:
+`https://github.com/roundtable-bot/roundtable-cli/releases/download/sdk-v0.1.1/roundtable-sdk-0.1.1.tgz`.
+
+For Second Look, adapt this handoff rather than adding a separate product: save the selected Akta findings with case ID and revision; dispatch review work to the fund-reader; save its answer to a task-specific path; return the exact input/output file versions. Use Nicrron for any model call and PRISM for its trace. Results are research proposals and cannot approve the LP response. A result for an older case revision remains historical. The product is only integrated after a live dispatch, result, and versioned file have been verified. This step is currently pending the workspace team key; no bot was provisioned and no task was dispatched by this setup.
+
+SDK retries handle backoff. Do not run a tight polling loop, overwrite a shared `latest.md` without a version check, or assume a timed-out task was cancelled: the SDK guide says it remains available to a worker. Prefer unique task paths and resume the existing task ID.
+
 ## Remaining sponsor/product work
 
 - Hook the real Akta research response into the case question and UI.
@@ -60,4 +85,4 @@ roundtable setup
 - Demonstrate the intended Roundtable use; the app adapter remains unimplemented.
 - Connect X1 separately if retained in the team's final scope.
 
-Provider references: [Akta documentation](https://docs.akta.pro/llms.txt), [Roundtable CLI](https://github.com/roundtable-bot/roundtable-cli).
+Provider references: [Akta documentation](https://docs.akta.pro/llms.txt), [Roundtable CLI](https://github.com/roundtable-bot/roundtable-cli), [SDK guide](https://roundtable.bot/docs/bots), [Funds template](https://github.com/roundtable-bot/roundtable-cli/tree/main/templates/funds).
