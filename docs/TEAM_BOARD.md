@@ -40,3 +40,7 @@ Mat/Codex: deterministic winning-offer threshold, private decisive-question gene
 ## Funding context and public MCP instructions
 
 Mat/Codex owns `shared/funding.ts`, `server/funding.ts`, `server/x1-context.ts`, `server/mcp-help.ts` and the additive `integration/FundingPanel.tsx`. Funding need/deadline comparison is integrated into the existing comparison; Ryan retains final design. Dedicated X1 account credentials/live import verification remain pending Mat's access handoff. Public `/mcp` is a setup guide, not a remote MCP endpoint. See `X1_CONTEXT.md`.
+
+## Individual X1 linking follow-up
+
+Mat/Codex owns `server/x1-connections.ts`, the account-bound adapter, tests and additive funding-panel connect/disconnect controls. Ryan retains `src/` and must expose individual sign-in/case selection, then mount `DecisionWorkbench` with that selected account case. The main screen currently remains presenter-only. Do not promise one-click OAuth: the current connection accepts the investor's own eligible read-only X1 key. See `X1_CONTEXT.md` for encryption setup and the Clerk/OAuth direction.

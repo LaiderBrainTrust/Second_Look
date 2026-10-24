@@ -15,7 +15,7 @@ React 19 + Vite 6; Express 5; TypeScript/ESM; Node 22.13+; native SQLite. `npm r
 - Nicrron generates question/explanation prose. It does not own IDs, prices, ownership, distributions or approvals.
 - PRISM stores a trace of that actual model call. A trace is not proof of factual correctness.
 - Steam/Akta are external evidence providers; source identity, retrieval dates, sample coverage and uncertainty remain visible.
-- The optional X1 adapter reads selected document excerpts for one dedicated synthetic case; live acceptance awaits that account access. X1 retains authority over its source records and access policy. See [X1_CONTEXT.md](X1_CONTEXT.md).
+- The optional X1 adapter reads selected document excerpts using the synthetic presentation connection or an individually connected read-only key bound to the case owner. The individual funding-panel controls require Ryan's account/case-picker UI. X1 retains authority over source records and access policy. See [X1_CONTEXT.md](X1_CONTEXT.md).
 
 ## File map
 
