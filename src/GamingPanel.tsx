@@ -30,39 +30,43 @@ function Evidence({ item }: { item: HoldingEvidence }) {
 }
 export function GamingPanel({ revision, onPrepared }: { revision: number; onPrepared: () => void }) {
   const [snapshot, setSnapshot] = useState<GamingSnapshot | null>(null);
+  const [savedSnapshot, setSavedSnapshot] = useState<GamingSnapshot | null>(null);
+  const [useSaved, setUseSaved] = useState(false);
   const [selected, setSelected] = useState('');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
-  const load = async () => { const result = await api('/api/case/gaming'); setSnapshot(result.snapshot); };
+  const load = async () => { const result = await api('/api/case/gaming'); setSnapshot(result.snapshot); setSavedSnapshot(result.savedSnapshot); };
   useEffect(() => { void load().catch(e => setError(e.message)); }, []);
   useEffect(() => {
     if (snapshot?.status !== 'fetching') return;
     const timer = setTimeout(() => { void load().catch(e => setError(e.message)); }, 3000);
     return () => clearTimeout(timer);
   }, [snapshot]);
-  const items = snapshot?.holdings ?? [];
+  const displaySnapshot = useSaved && savedSnapshot ? savedSnapshot : snapshot;
+  const items = displaySnapshot?.holdings ?? [];
   const item = items.find(h => h.holding.id === selected) ?? items[0];
   async function run(work: () => Promise<void>) {
     setBusy(true); setError(''); setMessage('');
     try { await work(); } catch (e) { setError(e instanceof Error ? e.message : 'Could not complete the request.'); } finally { setBusy(false); }
   }
   return <section className="gaming" aria-labelledby="gaming-heading">
-    <div className="gaming-heading"><div><p className="eyebrow">01 · Look through the fund</p><h2 id="gaming-heading">The report is old.<br/>The players aren’t waiting.</h2><p>Three games. A fictional fund. What should you ask before selling your stake?</p></div><button disabled={busy || snapshot?.status === 'fetching'} onClick={() => void run(async () => { setSnapshot(await api('/api/case/gaming/refresh', { expectedRevision: revision })); })}>{snapshot?.status === 'fetching' ? 'Checking Steam + Akta…' : snapshot ? 'Refresh external evidence' : 'Check the three holdings'}</button></div>
+    <div className="gaming-heading"><div><p className="eyebrow">01 · Look through the fund</p><h2 id="gaming-heading">The report is old.<br/>The players aren’t waiting.</h2><p>Three games. A fictional fund. What should you ask before selling your stake?</p></div><button disabled={busy || snapshot?.status === 'fetching'} onClick={() => void run(async () => { setUseSaved(false); setSnapshot(await api('/api/case/gaming/refresh', { expectedRevision: revision })); })}>{snapshot?.status === 'fetching' ? 'Checking Steam + Akta…' : snapshot ? 'Refresh external evidence' : 'Check the three holdings'}</button></div>
     <p className="scenario-label">{GAMING_DISCLOSURE}</p>
     {error && <p role="alert" className="error">{error}</p>}
     {snapshot?.error && <p role="alert" className="error">{snapshot.error}</p>}
     {snapshot?.status === 'fetching' && <p role="status" className="waiting">Checking the three games and their studios. The snapshot is saved; you can leave and come back.</p>}
+    {savedSnapshot && snapshot?.id !== savedSnapshot.id && <div className="waiting" role="status"><p>{useSaved ? `Showing saved evidence from ${date(savedSnapshot.createdAt)}. This is not a fresh provider response.` : 'A previous successful evidence check is still available.'}</p><button className="secondary" onClick={() => setUseSaved(!useSaved)}>{useSaved ? 'Show latest check' : 'Use previous saved evidence'}</button></div>}
     <div className="game-tabs" aria-label="Choose a game">
       {(items.length ? items.map(h => h.holding) : GAMING_HOLDINGS).map(holding => { const evidence = items.find(h => h.holding.id === holding.id); return <button className={`game-tab ${item?.holding.id === holding.id ? 'selected' : ''}`} key={holding.id} aria-pressed={item?.holding.id === holding.id} disabled={!evidence} onClick={() => setSelected(holding.id)}>{evidence?.steam?.imageUrl && <img src={evidence.steam.imageUrl} alt="" width="460" height="215" loading="lazy"/>}<span><small>{evidence ? `Investigation priority ${evidence.rank}` : holding.studio}</small><strong>{holding.game}</strong><small>{holding.fundNavExposurePercent}% of fictional fund NAV</small></span></button>; })}
     </div>
     {item && <article className="game-evidence"><div className="game-evidence-heading"><div><p className="eyebrow">{item.holding.studio}</p><h3>{item.holding.game}</h3></div><span className="tag">Real observations · fictional exposure</span></div><Evidence item={item}/><div className="research-bridge"><div><strong>A popular game is not a distribution.</strong><p>Ask the manager how these observations connect to commercial performance, the fund’s rights, and the cash attached to your stake.</p></div><button disabled={busy || (!item.steam && !item.news.length)} onClick={() => void run(async () => {
-      const prepared: ResearchRun = await api(`/api/case/gaming/${snapshot!.id}/prepare`, { expectedRevision: revision, holdingId: item.holding.id });
+      const prepared: ResearchRun = await api(`/api/case/gaming/${displaySnapshot!.id}/prepare`, { expectedRevision: revision, holdingId: item.holding.id });
       if (prepared.status === 'ready' || prepared.status === 'dispatching') await api(`/api/case/research/${prepared.id}/review`, { expectedRevision: revision, findingId: prepared.selectedFindingId });
-      setMessage('Saved evidence sent to the Roundtable reviewer. The proposed question will appear below.'); onPrepared();
+      setMessage(prepared.status === 'done' ? 'Opening the completed saved review. No new model call was made.' : 'Saved evidence sent to the Roundtable reviewer. The proposed question will appear below.'); onPrepared();
       window.scrollTo({ top: 0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' });
     })}>{busy ? 'Preparing review…' : 'Turn evidence into a manager question'}</button></div></article>}
     {message && <p role="status" className="waiting">{message}</p>}
-    {snapshot && <p className="muted">Evidence snapshot {date(snapshot.createdAt)} · report cutoff {snapshot.reportCutoff}. Ranking prioritizes investigation, not expected returns. A ≥10 percentage-point sample decline comes first, then missing Steam evidence; remaining games sort by sample change, then fictional exposure.</p>}
+    {displaySnapshot && <p className="muted">Evidence snapshot {date(displaySnapshot.createdAt)} · report cutoff {displaySnapshot.reportCutoff}. Ranking prioritizes investigation, not expected returns. A ≥10 percentage-point sample decline comes first, then missing Steam evidence; remaining games sort by sample change, then fictional exposure.</p>}
   </section>;
 }

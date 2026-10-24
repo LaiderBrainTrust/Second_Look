@@ -70,6 +70,7 @@ export function ResearchPanel({ data, refreshVersion, onShared, onProviderChange
       const stale = run.caseRevision !== data.revision;
       return <article className="research-run" key={run.id}>
         <div className="research-title"><h3>{run.company.name}</h3><span>Case revision {run.caseRevision} · {run.acceptedRevision ? 'Question shared' : run.status}</span></div>
+        <p className="muted">Saved research started {new Date(run.createdAt).toLocaleString()}. {run.status === 'done' ? 'Completed result retained from that check; opening it does not make a new model call.' : ''}</p>
         {stale && !run.acceptedRevision && <p className="changed"><strong>Historical research.</strong> The case changed after this check started. Its result cannot be shared as a review of the current terms.</p>}
         {run.error && <p className="error">{run.error}</p>}
         {run.status === 'fetching' && <p>Fetching dated news from Akta…</p>}

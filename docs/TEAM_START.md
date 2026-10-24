@@ -1,3 +1,5 @@
+> **Presenting today?** Use the hosted team-login path in [RYAN_DEMO.md](RYAN_DEMO.md). `npm run demo` is the independent local fallback with dated saved evidence; this page covers development setup.
+
 # Run Second Look as a teammate
 
 For a copyable coding-agent prompt and fresh-clone instructions, start with [README.md](../README.md#start-here--teammates-and-coding-agents).
@@ -38,7 +40,7 @@ On branch `main`, use GitHub's Code → Codespaces → Create codespace on this 
 
 GitHub injects configured repository Codespaces secrets into newly started environments. Restart an existing Codespace after secret changes. All required sponsor settings have been saved. Verify injection with `npm run doctor`; do not print secret values. The devcontainer configuration has been source-checked but has not yet been launched in a teammate's Codespace.
 
-The role selector is a synthetic local demo, not participant authentication. Private Codespaces forwarding is suitable for an owner's development preview, not a multi-user hosted product. A shared team instance with one persistent case database still needs deployment and real access control.
+The role selector is a synthetic local demo, not participant authentication. Private Codespaces forwarding is suitable for an owner's development preview, not a multi-user hosted product. The authenticated event host now has one persistent case database and a case-scoped presenter session. It still uses fictional participant roles; see RYAN_DEMO.md for access and the verified deployment receipt.
 
 ## Try the live flow
 

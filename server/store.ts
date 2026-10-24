@@ -69,6 +69,13 @@ export function createStore(path: string) {
       const row = db.prepare('SELECT body FROM gaming_snapshots ORDER BY created_at DESC LIMIT 1').get() as { body: string } | undefined;
       return row ? gamingFromStorage(row.body) : null;
     },
+    latestUsableGaming: (): GamingSnapshot | null => {
+      for (const row of db.prepare('SELECT body FROM gaming_snapshots ORDER BY created_at DESC').all() as { body: string }[]) {
+        const snapshot = gamingFromStorage(row.body);
+        if (snapshot.status === 'ready' && snapshot.holdings.some(item => item.steam || item.news.length)) return snapshot;
+      }
+      return null;
+    },
     listResearch: (): ResearchRun[] => (db.prepare('SELECT body FROM research_runs ORDER BY created_at DESC LIMIT 30').all() as { body: string }[]).map(row => researchFromStorage(row.body)),
     publishResearch(id: string, expected: number) {
       db.exec('BEGIN IMMEDIATE');

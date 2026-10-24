@@ -15,7 +15,9 @@
     "test": "vitest run --maxWorkers=1 --no-file-parallelism",
     "smoke:akta": "tsx scripts/akta-smoke.ts",
     "setup": "tsx scripts/setup.ts",
-    "doctor": "tsx scripts/setup.ts --check"
+    "doctor": "tsx scripts/setup.ts --check",
+    "demo": "concurrently -k -n api,web \"tsx server/index.ts --demo\" \"npm:dev:web\"",
+    "capture:demo": "tsx scripts/capture-demo.ts"
   },
   "dependencies": {
     "@roundtable/sdk": "https://github.com/roundtable-bot/roundtable-cli/releases/download/sdk-v0.1.1/roundtable-sdk-0.1.1.tgz",

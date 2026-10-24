@@ -43,7 +43,7 @@ export function gamingRouter(store: ReturnType<typeof createStore>) {
     if (res.locals.role !== 'lp') { res.status(403).json({ error: 'Gaming research is private to the investor until a question is shared.' }); return; }
     next();
   });
-  router.get('/', (_req, res) => res.json({ snapshot: store.latestGaming(), holdings: GAMING_HOLDINGS, disclosure: GAMING_DISCLOSURE }));
+  router.get('/', (_req, res) => res.json({ snapshot: store.latestGaming(), savedSnapshot: store.latestUsableGaming(), holdings: GAMING_HOLDINGS, disclosure: GAMING_DISCLOSURE }));
   router.post('/refresh', async (req, res, next) => {
     try {
       const state = store.current(req.body.expectedRevision);

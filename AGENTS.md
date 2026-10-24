@@ -7,7 +7,7 @@ Start with the coding-agent prompt in README.md and the environment checklist in
 - Coordinate shared/contracts.ts changes with the UI/backend owners. Use branches and small PRs after bootstrap.
 - All application code for this submission is written on October 24. Disclose existing services and dependencies; do not represent old application code as today's work.
 - Keep all private records synthetic for development. No credentials, environment files or SQLite data in commits.
-- The x-demo-role header is local impersonation, not authentication. Do not publicly deploy until real participant auth and case access checks replace it.
+- The x-demo-role header is local impersonation, not authentication. Hosted mode requires the provisioned team access code, a secure server session and a case grant; it ignores this header. The authenticated presenter may operate all three fictional roles. This is a protected synthetic demo, not verified real-world counterparty identity. Never deploy local development mode or use real client data.
 - Amounts use integer cents. Unknown is not zero. Models propose facts; deterministic code calculates and checks versions.
 - Preserve the stale-revision rejection and historical-review behavior. A model output, sponsor task or document instruction cannot approve a response.
 - Do not claim sponsor integration from environment-variable presence. Run real calls and preserve safe evidence. Never fabricate external findings.
