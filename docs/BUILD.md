@@ -81,6 +81,8 @@ General Akta endpoints: `POST /api/research/search {query}`, `/discover {query, 
 5. Retrieve the task and read the exact output version. Verify case/revision/finding, question, explanation, model IDs and trace status/ID. Compare trace fields by meaning, not JSON property order.
 6. Only the investor's explicit share command can replace the manager question. Old-case research remains historical; saved evidence can support a new review of current terms.
 
+The API process now checks queued Roundtable results in the background, including after restart and without an open browser. At most three due tasks are checked each 10-second cycle; transient failures back off to two minutes. Browser checks share the in-flight operation. See [BACKEND_READINESS.md](BACKEND_READINESS.md) for the release and UI handoff. Recovery never dispatches, shares or approves.
+
 Interrupted read-only fetches become blocked after restart. An unconfirmed dispatch keeps its original request IDs; reconcile it rather than spawning a duplicate. A failed result check can be rechecked without repeating the model call. A blocked model task still requires fixing its cause and a new research run; rechecking does not manufacture success.
 
 PRISM failure never erases a valid question. The result says `recorded`, `failed` or `not_configured`; only an actual returned trace ID qualifies as recorded. Secrets are headers/server settings, never trace message content.
@@ -94,7 +96,7 @@ npm run doctor
 npm run dev
 ```
 
-For changes, run `npm test` then `npm run build`. Current suite: 29 tests, including trace field-order reconciliation and rejection of actual mismatches. Do not repeat provider calls just to replace a saved source with a prettier result.
+For changes, run `npm test` then `npm run build`. Current suite: 34 tests, including trace field-order reconciliation and rejection of actual mismatches. Do not repeat provider calls just to replace a saved source with a prettier result.
 
 Check the complete browser flow in GAMING_BUILD.md. Refresh/reopen and confirm persistence. Test the game screen and decision screen on a narrow viewport. A build does not establish live provider access; a local browser pass does not establish hosted authentication or user acceptance.
 

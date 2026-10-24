@@ -1,3 +1,4 @@
+import type { createReviewRecovery } from './review-recovery.js';
 import { installHostedAuth, type HostedOptions } from './hosted-auth.js';
 import express from 'express';
 import type { Role } from '../shared/contracts.js';
@@ -9,7 +10,7 @@ import { caseResearchRouter } from './case-research.js';
 import { gamingRouter } from './gaming.js';
 import { AktaError } from './adapters/akta.js';
 
-export function createApp(store: ReturnType<typeof createStore>, options: { rehearsal?: boolean; hosted?: HostedOptions } = {}) {
+export function createApp(store: ReturnType<typeof createStore>, options: { releaseSha?: string; rehearsal?: boolean; hosted?: HostedOptions; recovery?: ReturnType<typeof createReviewRecovery> } = {}) {
   const app = express();
   const allowedOrigins = ['http://localhost:5173', 'http://127.0.0.1:5173', 'http://localhost:3001', 'http://127.0.0.1:3001'];
   if (process.env.CODESPACES === 'true' && /^[a-z0-9-]+$/.test(process.env.CODESPACE_NAME ?? '')) {
@@ -29,7 +30,7 @@ export function createApp(store: ReturnType<typeof createStore>, options: { rehe
   app.use(express.json({ limit: '20kb' }));
   if (options.hosted) installHostedAuth(app, options.hosted);
   else app.get('/api/session', (_req, res) => res.json({ hosted: false, authenticated: true }));
-  app.get('/api/health', (_req, res) => res.json({ ok: true, mode: options.rehearsal ? 'saved-research-rehearsal' : 'local-synthetic-scaffold' }));
+  app.get('/api/health', (_req, res) => res.json({ ok: true, mode: options.rehearsal ? 'saved-research-rehearsal' : 'local-synthetic-scaffold', ...(/^[a-f0-9]{40}$/.test(options.releaseSha ?? '') ? { releaseSha: options.releaseSha } : {}) }));
   app.get('/api/providers', (_req, res) => res.json(providerStatuses()));
   app.use('/api/research', researchRouter());
   app.use('/api/case', (req, res, next) => {
@@ -41,7 +42,7 @@ export function createApp(store: ReturnType<typeof createStore>, options: { rehe
   });
   app.get('/api/case', (_req, res) => res.json(view(store.read(), res.locals.role)));
   app.use('/api/case/gaming', gamingRouter(store));
-  app.use('/api/case/research', caseResearchRouter(store));
+  app.use('/api/case/research', caseResearchRouter(store, options.recovery));
   app.post('/api/case/commands', (req, res, next) => {
     try {
       const { expectedRevision, command } = req.body ?? {};
@@ -50,6 +51,7 @@ export function createApp(store: ReturnType<typeof createStore>, options: { rehe
       res.json(view(result, res.locals.role));
     } catch (error) { next(error); }
   });
+  app.use('/api', (_req, res) => { res.status(404).json({ error: 'API endpoint not found.' }); });
   app.use((error: unknown, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
     const known = error instanceof DomainError || error instanceof AktaError;
     res.status(known ? error.status : 500).json({ error: known ? error.message : 'The request could not be completed. Saved work is preserved; check provider access and retry.' });
