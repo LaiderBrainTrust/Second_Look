@@ -5,7 +5,11 @@ export function startReveal() {
   if (typeof IntersectionObserver === 'undefined' || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   const seen = new WeakSet<Element>();
   const io = new IntersectionObserver(entries => {
-    for (const entry of entries) if (entry.isIntersecting) { entry.target.classList.add('in'); io.unobserve(entry.target); }
+    for (const entry of entries) {
+      if (entry.isIntersecting) entry.target.classList.add('in');
+      // Reset once it drops below the viewport, so it rises again on the next scroll down.
+      else if (entry.boundingClientRect.top > 0) entry.target.classList.remove('in');
+    }
   }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
   const scan = () => document.querySelectorAll(SELECTOR).forEach(el => {
     if (seen.has(el)) return;
