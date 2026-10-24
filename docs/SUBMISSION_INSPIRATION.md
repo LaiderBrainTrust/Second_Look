@@ -1,15 +1,13 @@
 # Inspiration
 
-A price is easy to understand. What you actually keep can be much harder.
+We started by researching how investors decide whether to sell their share of a private fund. What caught our attention was that the higher offer isn't always the better deal. A buyer might offer more money but keep the fund's next payout. You need to know what that payout might be, who gets it, and whether anything has changed since the fund's last report.
 
-When an investor sells an interest in a private fund, the headline offer is only part of the story. An upcoming fund payout, a price adjustment, or the timing of payment can change what that offer means. The answers may be scattered across fund reports, sale terms, and conversations with different people.
+We thought that was a useful problem to work on: help someone compare the offers, get the missing answers from the fund, and notice if the terms change after they've reviewed them.
 
-Our work building an AI-native family office led us to this question: what if AI could help people resolve those loose ends together, instead of just producing another assessment?
+One of our teammates knows gaming really well, so we started with a fund that invests in game studios. Player reviews and company news gave us something concrete to investigate beyond an old fund report. That became Second Look.
 
-We built Second Look to bring the offer, supporting information, and unanswered questions into one shared review. Investors can compare terms, get the right person's answer, and see when a change means an earlier conclusion needs another look.
+## Submission accuracy
 
-The inspiration was simple: a financial decision shouldn't depend on someone remembering which email still needs an answer.
+This wording describes the team's research and chosen problem without inventing interview findings. The supplied pitch deck says "no customer interviews yet" on page 7; Mat's newer description mentions LP conversations. Reconcile that line with the team's actual conversations before submission. Add a specific interview insight only if someone on the team can substantiate it.
 
----
-
-Submission note: This describes the team's motivation, not a claimed customer interview, realized investment return, or verified loss. The hackathon example uses fictional fund holdings and sale terms; outside research and provider integrations are identified separately.
+The offers and fund in the presentation are fictional. Public gaming evidence can prompt a question; it does not establish a fund's valuation or payout. A changed term invalidates the earlier review inside Second Look; the app does not cancel a legal agreement or execute a sale.
