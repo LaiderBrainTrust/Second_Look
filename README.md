@@ -14,6 +14,8 @@ Current status: all four sponsor integrations are implemented and live calls hav
 
 ### User-created cases and separate participants
 
+**X1 account linking:** individual case owners can connect a read-only X1 key through the reusable funding panel. The server needs `X1_CONNECTION_ENCRYPTION_KEY`; see [connection setup and limitations](docs/X1_CONTEXT.md#individual-connections--october-24-follow-up). Ryan still owns individual sign-in/case-selection UI; the current landing screen opens the presenter example. This is not OAuth/SSO.
+
 The new [account and case APIs](docs/REAL_CASE_API.md) support user-entered cases, separate investor/manager/buyer accounts, one-time invitations, revocation and durable sessions. Ryan owns the matching UI. The existing example remains separate and compatible. [Railway deployment instructions](docs/RAILWAY.md) cover the supplied Docker image, persistent volume and domain cutover; the Railway deployment itself is not yet verified.
 
 ### New backend capabilities for Ryan

@@ -19,3 +19,9 @@ The private file is outside version control at `.local/x1-railway.env` on Mat's 
 After deployment, sign into the example as the investor, open its comparison/funding section, expand **Use evidence from X1**, and search **capital**. Expect the synthetic capital-call PDF with page 1. Previewing does not change the case; copying the excerpt does advance its revision and makes earlier reviews historical.
 
 Railway reference: [variables and staged deployment](https://docs.railway.com/variables).
+
+## Optional individual account linking
+
+The new case-owner connection form needs a third **server-only** variable: `X1_CONNECTION_ENCRYPTION_KEY`. Use the separately supplied private `x1-connections-railway.env` value (or generate a fresh stable 32-byte hex value in Railway). Keep it with the service's protected secrets, separate from SQLite backups; do not give it to client code or ordinary developer clones. Deploy the staged variable once. This protects user-supplied keys at rest; it is not anyone's X1 credential. Without it, the synthetic example still works and individual linking stays disabled.
+
+This enables the backend and reusable funding panel. Ryan's individual sign-in and case-picker screens still need integration; enabling the variable alone does not complete customer onboarding. Preserve the encryption key across deploys, and require users to reconnect if it is lost or changed.
