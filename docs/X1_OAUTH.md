@@ -20,8 +20,20 @@ X1_OAUTH_CLIENT_ID=vhSXZsGRsOyleSfP
 
 This is a **public client identifier**, safe to publish. It identifies Second Look,
 not an investor. Authorization uses S256 PKCE; no OAuth client secret is required.
-Keep the existing private `X1_CONNECTION_ENCRYPTION_KEY` (64 hex characters) stable
-on the Railway API service and persistent SQLite volume. Do not replace it during
+For initial Railway setup, generate a private encryption key on your own machine:
+
+```sh
+openssl rand -hex 32
+```
+
+Save the resulting 64-character value as `X1_CONNECTION_ENCRYPTION_KEY` on the
+Railway API service, alongside the public client ID above, then redeploy. You do
+not need the build host's key: Railway has a separate database and can use its own.
+Never commit the generated value or put it in the browser. If Railway already has
+a valid key and saved individual connections, **keep that existing key** instead.
+
+Keep `X1_CONNECTION_ENCRYPTION_KEY` stable on the Railway service with its persistent
+SQLite volume. Do not replace it during
 deploys: existing connections depend on it. The runtime origin must be exactly
 `https://secondlook.ac`. The old `X1_API_KEY` is only for the explicitly synthetic
 presentation case and is not used for individually connected accounts.
