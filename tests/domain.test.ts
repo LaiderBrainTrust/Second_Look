@@ -10,6 +10,21 @@ describe('financial scenario and review continuity', () => {
     expect(grossReceipts(revised)).toBe(70_000_000);
     revised.offer.priceAdjustmentCents = null; expect(grossReceipts(revised)).toBeNull();
   });
+  it('withholds totals and approval until an unknown payout recipient is confirmed', () => {
+    const original = seedCase(); original.offer.distributionRecipient = null;
+    const answered = applyCommand(original, 'gp', 1, answer);
+    expect(grossReceipts(answered)).toBeNull();
+    expect(() => applyCommand(answered, 'lp', 2, { kind: 'approve' })).toThrow('who keeps it');
+    const confirmed = applyCommand(answered, 'buyer', 2, { kind: 'revise', distributionRecipient: 'seller' });
+    expect(grossReceipts(confirmed)).toBe(80_000_000);
+    const approved = applyCommand(confirmed, 'lp', 3, { kind: 'approve' });
+    const uncertain = applyCommand(approved, 'buyer', 3, { kind: 'revise', distributionRecipient: null });
+    expect(grossReceipts(uncertain)).toBeNull();
+    expect(view(uncertain, 'lp').privateReview?.status).toBe('terms_changed');
+    expect(uncertain.reviews).toHaveLength(1);
+    expect(uncertain.events.at(-1)?.text).toContain('not confirmed');
+    expect(() => applyCommand(uncertain, 'lp', 4, { kind: 'approve' })).toThrow('who keeps it');
+  });
   it('preserves historical review without carrying it to a changed offer', () => {
     const confirmed = applyCommand(seedCase(), 'gp', 1, answer);
     const approved = applyCommand(confirmed, 'lp', 2, { kind: 'approve' });

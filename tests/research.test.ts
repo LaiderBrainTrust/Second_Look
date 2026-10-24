@@ -51,6 +51,12 @@ describe('research-to-case handoff', () => {
     expect(() => reviewInput({ ...input, after: '2026-10-23' })).toThrow();
     expect(() => reviewInput({ ...input, finding: { ...input.finding, source: { ...input.finding.source, url: 'javascript:alert(1)' } } })).toThrow();
   });
+  it('can research an offer with unknown payout ownership without assigning it to either party', () => {
+    const result = reviewInput({ ...input, offer: { ...input.offer, distributionRecipient: null } });
+    expect(result.question).toContain('checked separately against the sale agreement');
+    expect(result.question).not.toContain('goes to the null');
+    expect(() => reviewInput({ ...input, offer: { ...input.offer, distributionRecipient: undefined as never } })).toThrow();
+  });
   it('shares only a current completed result and makes the prior answer and approval historical', () => {
     const store = createStore(':memory:');
     try {

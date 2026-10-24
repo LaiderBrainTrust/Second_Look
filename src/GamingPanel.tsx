@@ -3,17 +3,8 @@ import type { GamingSnapshot, HoldingEvidence } from "../shared/gaming";
 import { GAMING_HOLDINGS, GAMING_DISCLOSURE } from "../shared/gaming";
 import type { ResearchRun } from "../shared/research";
 
-async function api(path: string, body?: unknown) {
-  const response = await fetch(path, {
-    method: body === undefined ? "GET" : "POST",
-    headers: { "Content-Type": "application/json", "x-demo-role": "lp" },
-    ...(body === undefined ? {} : { body: JSON.stringify(body) }),
-  });
-  const value = await response.json();
-  if (!response.ok)
-    throw new Error(value.error || "Could not complete this check.");
-  return value;
-}
+import { request as api } from "./product-api";
+
 const percent = (value: number | null) =>
   value === null ? "Not enough data" : `${value}%`;
 const date = (value: string) =>
@@ -61,9 +52,11 @@ function Evidence({ item }: { item: HoldingEvidence }) {
               <strong>
                 {steam.deltaPoints === null
                   ? "Unknown"
-                  : `${steam.deltaPoints > 0 ? "+" : ""}${steam.deltaPoints} pp`}
+                  : `${steam.deltaPoints > 0 ? "+" : ""}${steam.deltaPoints}`}
               </strong>
               <small>
+                {steam.deltaPoints === null ? "" : "percentage points"}
+                {steam.deltaPoints !== null && <br />}
                 {steam.playersNow === null
                   ? "Player count unavailable"
                   : `${steam.playersNow.toLocaleString()} players online at observation`}
@@ -105,7 +98,7 @@ function Evidence({ item }: { item: HoldingEvidence }) {
       )}
       {item.profile && (
         <div className="studio-profile">
-          <h4>Who earns the revenue?</h4>
+          <h4>The company behind the game</h4>
           <p>
             <strong>{item.profile.name}</strong>
             {item.profile.foundedYear
@@ -130,8 +123,8 @@ function Evidence({ item }: { item: HoldingEvidence }) {
             )}
             <p className="muted">
               Retrieved {date(item.profile.retrievedAt)}. Provider-generated
-              summary; verify commercial claims with the manager and primary
-              documents.
+              summary; verify commercial claims with your fund contact and
+              primary documents.
             </p>
           </details>
         </div>
@@ -225,8 +218,9 @@ export function GamingPanel({
             The players aren’t waiting.
           </h2>
           <p>
-            Three games. A fictional fund. What should you ask before selling
-            your stake?
+            Before selling a gaming-fund investment, check what has changed
+            since the last fund report. Player reactions and company news can
+            reveal questions worth asking your fund contact.
           </p>
         </div>
         <button
@@ -245,11 +239,16 @@ export function GamingPanel({
           {snapshot?.status === "fetching"
             ? "Checking Steam + Akta…"
             : snapshot
-              ? "Refresh external evidence"
-              : "Check the three holdings"}
+              ? "Check for newer game and company news"
+              : "Check these three games"}
         </button>
       </div>
       <p className="scenario-label">{GAMING_DISCLOSURE}</p>
+      <p>
+        <strong>How to use this example:</strong> check the three games, choose
+        one to inspect, then draft a question about it. The draft appears below
+        for you to review before adding it to the conversation with your fund.
+      </p>
       {error && (
         <p role="alert" className="error">
           {error}
@@ -314,7 +313,8 @@ export function GamingPanel({
                   </small>
                   <strong>{holding.game}</strong>
                   <small>
-                    {holding.fundNavExposurePercent}% of fictional fund NAV
+                    {holding.fundNavExposurePercent}% of the example fund’s
+                    reported value
                   </small>
                 </span>
               </button>
@@ -334,11 +334,11 @@ export function GamingPanel({
           <Evidence item={item} />
           <div className="research-bridge">
             <div>
-              <strong>A popular game is not a distribution.</strong>
+              <strong>What does this mean for your investment?</strong>
               <p>
-                Ask the manager how these observations connect to commercial
-                performance, the fund’s rights, and the cash attached to your
-                stake.
+                These signals do not tell us how much cash you will receive.
+                Draft a question asking your fund contact what changed at this
+                company and whether it affects payments to investors.
               </p>
             </div>
             <button
@@ -359,16 +359,14 @@ export function GamingPanel({
                     });
                   setMessage(
                     prepared.status === "done"
-                      ? "Opening the completed saved review. No new model call was made."
-                      : "Saved evidence sent to the Roundtable reviewer. The proposed question will appear below.",
+                      ? "Your saved question is ready below. Review it, then select ‘Use this question’ to add it to the conversation."
+                      : "Your question is being drafted. It will appear below for your review; nothing has been sent to your fund contact.",
                   );
                   onPrepared();
                 })
               }
             >
-              {busy
-                ? "Preparing review…"
-                : "Turn evidence into a manager question"}
+              {busy ? "Preparing review…" : "Draft a question about this game"}
             </button>
           </div>
         </article>
@@ -379,13 +377,16 @@ export function GamingPanel({
         </p>
       )}
       {displaySnapshot && (
-        <p className="muted">
-          Evidence snapshot {date(displaySnapshot.createdAt)} · report cutoff{" "}
-          {displaySnapshot.reportCutoff}. Ranking prioritizes investigation, not
-          expected returns. A ≥10 percentage-point sample decline comes first,
-          then missing Steam evidence; remaining games sort by sample change,
-          then fictional exposure.
-        </p>
+        <details>
+          <summary>When this was checked and how games are ranked</summary>
+          <p className="muted">
+            Evidence snapshot {date(displaySnapshot.createdAt)} · report cutoff{" "}
+            {displaySnapshot.reportCutoff}. Ranking prioritizes investigation,
+            not expected returns. A ≥10 percentage-point sample decline comes
+            first, then missing Steam evidence; remaining games sort by sample
+            change, then fictional exposure.
+          </p>
+        </details>
       )}
     </section>
   );

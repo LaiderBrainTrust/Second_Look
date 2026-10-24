@@ -68,7 +68,7 @@ export function ReviewRequirements({
               ? "Reviewed"
               : q.answer
                 ? "Answer ready to review"
-                : `Waiting for ${q.owner === "lp" ? "the investor" : q.owner === "gp" ? "the fund manager" : "the buyer"}`}
+                : `Waiting for ${q.owner === "lp" ? "the investor" : q.owner === "gp" ? "your fund contact" : "the buyer"}`}
           </p>
           {q.answer && <blockquote>{q.answer.text}</blockquote>}
           {q.resolution && <p>{q.resolution}</p>}

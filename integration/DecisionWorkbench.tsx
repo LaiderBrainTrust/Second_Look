@@ -2,6 +2,7 @@ import { useDraftGuard, confirmDiscardChanges } from "../src/useDraftGuard";
 import { cents as parseDollars } from "../src/product-api";
 import { FundingPanel } from "./FundingPanel";
 import "./decision.css";
+import "./comparison-guidance.css";
 import { useEffect, useState } from "react";
 import type { DecisionAnalysis } from "../shared/decision";
 import type { DiligenceView } from "../shared/diligence";
@@ -48,8 +49,35 @@ export function DecisionWorkbench({
   const [form, setForm] = useState(blank);
   const [editing, setEditing] = useState<ComparisonOffer | null>(null);
   const [formOpen, setFormOpen] = useState(false);
+  const [formRevision, setFormRevision] = useState<number | null>(null);
+  function startOffer(fromCurrent = false) {
+    if (!analysis || !confirmDiscardChanges()) return;
+    setFormRevision(analysis.revision);
+    draft.markClean();
+    setEditing(null);
+    setForm(
+      fromCurrent && caseView
+        ? {
+            ...blank,
+            buyer: "Current offer",
+            payment: String(caseView.offer.purchasePriceCents / 100),
+            adjustment:
+              caseView.offer.priceAdjustmentCents === null
+                ? ""
+                : String(caseView.offer.priceAdjustmentCents / 100),
+            recipient: caseView.offer.distributionRecipient ?? "",
+            source: caseView.offer.source.label,
+          }
+        : blank,
+    );
+    setFormOpen(true);
+    requestAnimationFrame(() =>
+      document.querySelector<HTMLInputElement>("#comparison-buyer")?.focus(),
+    );
+  }
   function editOffer(offer: ComparisonOffer) {
-    if (!confirmDiscardChanges()) return;
+    if (!analysis || !confirmDiscardChanges()) return;
+    setFormRevision(analysis.revision);
     draft.markClean();
     setEditing(offer);
     setFormOpen(true);
@@ -70,6 +98,9 @@ export function DecisionWorkbench({
       paymentDate: offer.paymentDate ?? "",
       distributionDate: offer.distributionDate ?? "",
     });
+    requestAnimationFrame(() =>
+      document.querySelector<HTMLInputElement>("#comparison-buyer")?.focus(),
+    );
   }
   const validBase = /^\/api\/case$|^\/api\/cases\/[a-f0-9-]{36}$/.test(
     caseBase,
@@ -80,7 +111,9 @@ export function DecisionWorkbench({
     setCaseView(null);
     setForm(blank);
     setEditing(null);
-  }, [caseBase]);
+    setFormOpen(false);
+    draft.markClean();
+  }, [caseBase, draft.markClean]);
   useEffect(() => {
     if (!validBase) return;
     let active: AbortController | undefined;
@@ -136,6 +169,13 @@ export function DecisionWorkbench({
   }, [caseBase, refresh, validBase]);
   async function requestAnswer() {
     if (!analysis || busy) return;
+    if (
+      caseView?.answer &&
+      !window.confirm(
+        "Replace the current fund question and clear its answer? The old answer stays in the review history.",
+      )
+    )
+      return;
     setBusy(true);
     setError("");
     try {
@@ -159,7 +199,10 @@ export function DecisionWorkbench({
       setBusy(false);
     }
   }
-  async function saveOffer(offer: Omit<ComparisonOffer, "version">) {
+  async function saveOffer(
+    offer: Omit<ComparisonOffer, "version">,
+    expectedRevision = analysis?.revision,
+  ) {
     if (!analysis || busy) return false;
     setBusy(true);
     setError("");
@@ -168,7 +211,7 @@ export function DecisionWorkbench({
         method: "POST",
         headers: { "Content-Type": "application/json", "x-demo-role": "lp" },
         body: JSON.stringify({
-          expectedRevision: analysis.revision,
+          expectedRevision,
           command: { kind: "save_offer", offer },
         }),
       });
@@ -186,27 +229,31 @@ export function DecisionWorkbench({
   }
   async function addOffer(event: React.FormEvent) {
     event.preventDefault();
+    if (!analysis || formRevision !== analysis.revision) return;
     try {
-      const saved = await saveOffer({
-        id: editing?.id ?? crypto.randomUUID(),
-        buyer: form.buyer,
-        purchasePriceCents: cents(form.payment)!,
-        priceAdjustmentCents: cents(form.adjustment, true),
-        sellerFeesCents: cents(form.fees, true),
-        distributionRecipient: form.recipient
-          ? (form.recipient as "seller" | "buyer")
-          : null,
-        distributionBasisSourceId: null,
-        recordDate: form.date || null,
-        paymentDate: form.paymentDate || null,
-        distributionDate: form.distributionDate || null,
-        expiresAt: editing?.expiresAt ?? null,
-        sourceNote: form.source,
-        conditions:
-          editing?.conditions ??
-          "Closing conditions not assessed in this comparison.",
-        withdrawn: editing?.withdrawn ?? false,
-      });
+      const saved = await saveOffer(
+        {
+          id: editing?.id ?? crypto.randomUUID(),
+          buyer: form.buyer,
+          purchasePriceCents: cents(form.payment)!,
+          priceAdjustmentCents: cents(form.adjustment, true),
+          sellerFeesCents: cents(form.fees, true),
+          distributionRecipient: form.recipient
+            ? (form.recipient as "seller" | "buyer")
+            : null,
+          distributionBasisSourceId: null,
+          recordDate: form.date || null,
+          paymentDate: form.paymentDate || null,
+          distributionDate: form.distributionDate || null,
+          expiresAt: editing?.expiresAt ?? null,
+          sourceNote: form.source,
+          conditions:
+            editing?.conditions ??
+            "Closing conditions not assessed in this comparison.",
+          withdrawn: editing?.withdrawn ?? false,
+        },
+        formRevision,
+      );
       if (saved) {
         draft.markClean();
         setForm(blank);
@@ -218,13 +265,22 @@ export function DecisionWorkbench({
     }
   }
   if (!validBase)
-    return <p role="alert">Choose a case before opening the comparison.</p>;
+    return <p role="alert">Open a sale review before comparing offers.</p>;
   const offers = diligence?.privateDiligence?.comparison.offers ?? [];
+  const conversationHref = `#${new URLSearchParams({
+    ...(caseBase === "/api/case" ? {} : { case: caseBase.split("/").at(-1)! }),
+    view: "conversation",
+  })}`;
   const names = (ids: string[]) =>
     ids.map((id) => offers.find((o) => o.id === id)?.buyer ?? id).join(", ");
   return (
     <section className="decision-workbench" aria-labelledby="decision-question">
       <h2 id="decision-question">Which offer leaves you with more?</h2>
+      <p>
+        Have more than one offer for your fund interest? Compare what you would
+        keep after fees and any fund payout. A higher sale price may leave you
+        with less if the buyer keeps that payout.
+      </p>
       {error && (
         <p role="alert">
           {error}{" "}
@@ -237,153 +293,206 @@ export function DecisionWorkbench({
         <p role="status">Loading the current terms…</p>
       ) : (
         <>
-          <p>
-            Case version {analysis.revision} ·{" "}
-            {analysis.status === "confirmed"
-              ? "Current inputs confirmed"
-              : analysis.status === "conditional"
-                ? "Conditional comparison"
-                : "Missing comparison inputs"}
+          <p className="comparison-status" role="status">
+            {offers.filter((offer) => !offer.withdrawn).length < 2
+              ? "Add two offers to see the comparison."
+              : analysis.status === "confirmed"
+                ? "Ready to compare using the terms you checked."
+                : analysis.status === "conditional"
+                  ? "The result still depends on the fund payout."
+                  : "Some offer details need checking before we can compare."}
           </p>
           {offers.length === 0 && (
             <p>
-              Add competing offers to this case to compare their payments, fees
-              and distribution rights.
+              Start with the offer already in this review, then add the other
+              buyer’s offer. You can leave details you don’t know blank and
+              return to them later. This comparison is private to you.
             </p>
           )}
-          <details
-            open={formOpen || offers.length < 2}
-            onToggle={(e) => setFormOpen(e.currentTarget.open)}
-          >
-            <summary>
-              {editing ? `Edit ${editing.buyer}` : "Add a competing offer"}
-            </summary>
-            <form onSubmit={addOffer} onChange={draft.markDirty}>
-              <label>
-                Buyer or quote label
-                <input
-                  name="buyer"
-                  value={form.buyer}
-                  required
-                  maxLength={120}
-                  onChange={(e) => setForm({ ...form, buyer: e.target.value })}
-                />
-              </label>
-              <label>
-                Purchase payment (USD)
-                <input
-                  name="payment"
-                  inputMode="decimal"
-                  value={form.payment}
-                  required
-                  onChange={(e) =>
-                    setForm({ ...form, payment: e.target.value })
-                  }
-                />
-              </label>
-              <label>
-                Seller fees (USD; blank means unknown)
-                <input
-                  name="fees"
-                  inputMode="decimal"
-                  value={form.fees}
-                  onChange={(e) => setForm({ ...form, fees: e.target.value })}
-                />
-              </label>
-              <label>
-                Price adjustment (USD; blank means unknown)
-                <input
-                  name="adjustment"
-                  inputMode="decimal"
-                  value={form.adjustment}
-                  onChange={(e) =>
-                    setForm({ ...form, adjustment: e.target.value })
-                  }
-                />
-              </label>
-              <label>
-                Distribution goes to
-                <select
-                  name="recipient"
-                  value={form.recipient}
-                  onChange={(e) =>
-                    setForm({ ...form, recipient: e.target.value })
-                  }
-                >
-                  <option value="">Unknown</option>
-                  <option value="seller">Seller</option>
-                  <option value="buyer">Buyer</option>
-                </select>
-              </label>
-              <label>
-                Comparison record date
-                <input
-                  name="date"
-                  type="date"
-                  value={form.date}
-                  onChange={(e) => setForm({ ...form, date: e.target.value })}
-                />
-              </label>
-              <label>
-                Purchase payment date (optional)
-                <input
-                  name="paymentDate"
-                  type="date"
-                  value={form.paymentDate}
-                  onChange={(e) =>
-                    setForm({ ...form, paymentDate: e.target.value })
-                  }
-                />
-              </label>
-              <label>
-                Retained distribution payment date (optional)
-                <input
-                  name="distributionDate"
-                  type="date"
-                  value={form.distributionDate}
-                  onChange={(e) =>
-                    setForm({ ...form, distributionDate: e.target.value })
-                  }
-                />
-              </label>
-              <label>
-                Source reference
-                <input
-                  name="source"
-                  value={form.source}
-                  required
-                  maxLength={2000}
-                  onChange={(e) => setForm({ ...form, source: e.target.value })}
-                />
-              </label>
-              <p>
-                This saves a private comparison quote. It does not replace the
-                current deal or accept an offer. Fees and adjustments must be
-                explicitly entered, including zero when known.
-              </p>
-              <button disabled={busy}>
-                {busy
-                  ? "Saving offer…"
-                  : editing
-                    ? "Save revised offer"
-                    : "Save comparison offer"}
-              </button>
-              {editing && (
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (!confirmDiscardChanges()) return;
-                    draft.markClean();
-                    setEditing(null);
-                    setForm(blank);
-                    setFormOpen(false);
-                  }}
-                >
-                  Cancel edit
+          {!formOpen && (
+            <div className="comparison-start-actions">
+              {offers.length === 0 && caseView && (
+                <button type="button" onClick={() => startOffer(true)}>
+                  Start with my current offer
                 </button>
               )}
-            </form>
-          </details>
+              <button type="button" onClick={() => startOffer()}>
+                {offers.length === 0
+                  ? "Enter an offer from scratch"
+                  : "Add another offer"}
+              </button>
+            </div>
+          )}
+          {formOpen && (
+            <div className="comparison-offer-editor">
+              <h3>
+                {editing ? `Edit ${editing.buyer}` : "Add an offer to compare"}
+              </h3>
+              <p>
+                Use the buyer’s written offer or email. Enter 0 for fees or
+                adjustments only if you know there are none.
+              </p>
+              <form onSubmit={addOffer} onChange={draft.markDirty}>
+                {formRevision !== analysis.revision && (
+                  <p role="alert">
+                    The review changed while you were editing. Your draft is
+                    still here. Cancel and reopen this offer to load its latest
+                    terms before saving.
+                  </p>
+                )}
+                <label>
+                  Name this offer
+                  <input
+                    id="comparison-buyer"
+                    name="buyer"
+                    placeholder="e.g. Harbor Capital — October offer…"
+                    value={form.buyer}
+                    required
+                    maxLength={120}
+                    onChange={(e) =>
+                      setForm({ ...form, buyer: e.target.value })
+                    }
+                  />
+                </label>
+                <label>
+                  Buyer’s payment to you (USD)
+                  <input
+                    name="payment"
+                    placeholder="e.g. 700,000…"
+                    inputMode="decimal"
+                    value={form.payment}
+                    required
+                    onChange={(e) =>
+                      setForm({ ...form, payment: e.target.value })
+                    }
+                  />
+                </label>
+                <label>
+                  Fees you would pay (USD)
+                  <input
+                    name="fees"
+                    placeholder="0 if none; blank if unknown…"
+                    inputMode="decimal"
+                    value={form.fees}
+                    onChange={(e) => setForm({ ...form, fees: e.target.value })}
+                  />
+                </label>
+                <label>
+                  Amount added to or deducted from the price (USD)
+                  <input
+                    name="adjustment"
+                    placeholder="e.g. -5,000; 0 if none…"
+                    inputMode="decimal"
+                    value={form.adjustment}
+                    onChange={(e) =>
+                      setForm({ ...form, adjustment: e.target.value })
+                    }
+                  />
+                </label>
+                <label>
+                  Who keeps the fund payout?
+                  <select
+                    name="recipient"
+                    value={form.recipient}
+                    onChange={(e) =>
+                      setForm({ ...form, recipient: e.target.value })
+                    }
+                  >
+                    <option value="">I don’t know yet</option>
+                    <option value="seller">You, the seller</option>
+                    <option value="buyer">The buyer</option>
+                  </select>
+                </label>
+                <label>
+                  Date the offer’s distribution rights are based on
+                  <input
+                    name="date"
+                    aria-describedby="comparison-date-help"
+                    type="date"
+                    value={form.date}
+                    onChange={(e) => setForm({ ...form, date: e.target.value })}
+                  />
+                  <span
+                    id="comparison-date-help"
+                    className="comparison-field-help"
+                  >
+                    Use the as-of date in the terms. Both offers must use the
+                    same date to compare fairly. Leave blank if you need to ask
+                    the buyer.
+                  </span>
+                </label>
+                <label>
+                  When would the buyer pay you? (optional)
+                  <input
+                    name="paymentDate"
+                    type="date"
+                    value={form.paymentDate}
+                    onChange={(e) =>
+                      setForm({ ...form, paymentDate: e.target.value })
+                    }
+                  />
+                </label>
+                <label>
+                  When would the fund payout arrive? (optional)
+                  <input
+                    name="distributionDate"
+                    type="date"
+                    value={form.distributionDate}
+                    onChange={(e) =>
+                      setForm({ ...form, distributionDate: e.target.value })
+                    }
+                  />
+                </label>
+                <label>
+                  Where did these terms come from?
+                  <input
+                    name="source"
+                    placeholder="e.g. Harbor Capital email, Oct 24, paragraph 3…"
+                    aria-describedby="comparison-source-help"
+                    value={form.source}
+                    required
+                    maxLength={2000}
+                    onChange={(e) =>
+                      setForm({ ...form, source: e.target.value })
+                    }
+                  />
+                  <span
+                    id="comparison-source-help"
+                    className="comparison-field-help"
+                  >
+                    Add a document name, email reference or link so you can
+                    check it later. This field saves your note; it does not read
+                    the document.
+                  </span>
+                </label>
+                <p>
+                  Saving adds this offer to your private comparison. It does not
+                  accept the offer or change the deal on the main screen.
+                </p>
+                <button disabled={busy || formRevision !== analysis.revision}>
+                  {busy
+                    ? "Saving offer…"
+                    : editing
+                      ? "Save revised offer"
+                      : "Save comparison offer"}
+                </button>
+                {formOpen && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (!confirmDiscardChanges()) return;
+                      draft.markClean();
+                      setEditing(null);
+                      setForm(blank);
+                      setFormOpen(false);
+                    }}
+                  >
+                    Cancel
+                  </button>
+                )}
+              </form>
+            </div>
+          )}
           {offers.length > 0 && (
             <div
               className="decision-table"
@@ -397,10 +506,10 @@ export function DecisionWorkbench({
                   <tr>
                     <th scope="col">Buyer</th>
                     <th scope="col">Payment</th>
-                    <th scope="col">Seller fees</th>
-                    <th scope="col">Distribution goes to</th>
+                    <th scope="col">Your fees</th>
+                    <th scope="col">Who keeps the fund payout?</th>
                     <th scope="col">Cash before tax</th>
-                    <th scope="col">Change quote</th>
+                    <th scope="col">Manage offer</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -420,10 +529,16 @@ export function DecisionWorkbench({
                           ? "Unknown"
                           : usd(o.sellerFeesCents)}
                       </td>
-                      <td>{o.distributionRecipient ?? "Unknown"}</td>
+                      <td>
+                        {o.distributionRecipient === "seller"
+                          ? "You"
+                          : o.distributionRecipient === "buyer"
+                            ? "The buyer"
+                            : "Not confirmed"}
+                      </td>
                       <td>
                         {o.netBeforeTaxCents === null
-                          ? "Unresolved"
+                          ? "Details needed below"
                           : usd(o.netBeforeTaxCents)}
                       </td>
                       <td>
@@ -436,7 +551,9 @@ export function DecisionWorkbench({
                             void saveOffer({ ...o, withdrawn: !o.withdrawn })
                           }
                         >
-                          {o.withdrawn ? "Restore" : "Withdraw"} {o.buyer}
+                          {o.withdrawn
+                            ? "Include again"
+                            : "Exclude from comparison"}
                         </button>
                       </td>
                     </tr>
@@ -452,22 +569,59 @@ export function DecisionWorkbench({
                   ? `The comparison changes at ${usd(analysis.frontier.tieDistributionCents)}`
                   : "Distribution uncertainty does not reverse these offers"}
               </h3>
-              <p>{analysis.frontier.explanation}</p>
               <p>
-                Retain distribution:{" "}
-                {names(analysis.frontier.retainingOfferIds)}. Assign
-                distribution: {names(analysis.frontier.assigningOfferIds)}.
+                {analysis.frontier.withinSupportedRange
+                  ? `If the fund payout is below ${usd(analysis.frontier.tieDistributionCents)}, ${names(analysis.frontier.assigningOfferIds)} leaves you with more. Above that amount, ${names(analysis.frontier.retainingOfferIds)} leaves you with more. They tie at that amount, using the entered terms.`
+                  : analysis.frontier.tieDistributionCents < 0
+                    ? `${names(analysis.frontier.retainingOfferIds)} leaves more cash even if the fund pays nothing, using the entered terms.`
+                    : "The payout needed to change the result is beyond the supported calculation range."}
+              </p>
+              <p>
+                You keep the fund payout with{" "}
+                {names(analysis.frontier.retainingOfferIds)}. The buyer keeps it
+                with {names(analysis.frontier.assigningOfferIds)}.
               </p>
             </div>
           )}
           {analysis.excluded.length > 0 && (
-            <ul>
-              {analysis.excluded.map((x) => (
-                <li key={x.offerId}>
-                  {names([x.offerId])}: {x.reasons.join("; ")}
-                </li>
-              ))}
-            </ul>
+            <div>
+              <h3>Details to check before comparing</h3>
+              <ul>
+                {analysis.excluded.map((x) => {
+                  const offer = offers.find((item) => item.id === x.offerId);
+                  const instructions: Record<string, string> = {
+                    "Price adjustment":
+                      "Enter the price adjustment, or 0 if none.",
+                    "Seller fees":
+                      "Enter the fees you would pay, or 0 if none.",
+                    "Distribution recipient":
+                      "Check whether you or the buyer keeps the fund payout.",
+                    "Record date":
+                      "Check the date used for distribution rights in the offer.",
+                    "Record dates differ; align them before a cash comparison":
+                      "The offers use different dates. Ask the buyers for terms based on the same date before comparing.",
+                    "Offer expired": "This offer has expired and is excluded.",
+                  };
+                  return (
+                    <li key={x.offerId}>
+                      <strong>{names([x.offerId])}:</strong>{" "}
+                      {x.reasons
+                        .map((reason) => instructions[reason] ?? reason)
+                        .join(" ")}{" "}
+                      {offer && (
+                        <button
+                          type="button"
+                          disabled={busy}
+                          onClick={() => editOffer(offer)}
+                        >
+                          Edit {offer.buyer}
+                        </button>
+                      )}
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
           )}
           {analysis.nextQuestion &&
             !(
@@ -478,55 +632,83 @@ export function DecisionWorkbench({
                 <h3>The answer to get next</h3>
                 <p>{analysis.nextQuestion.text}</p>
                 <p>
-                  Saving replaces the shared manager question and clears its old
-                  answer. Previous reviews remain historical. Competing bids and
-                  this threshold stay private. No external message is sent.
+                  This puts the question in your conversation with your fund
+                  contact. It replaces the current question and clears its
+                  answer; the old answer remains in history. Your other offers
+                  and the comparison stay private. You still need to share the
+                  invitation link with your contact.
                 </p>
-                <button disabled={busy} onClick={requestAnswer}>
-                  {busy
-                    ? "Saving manager question…"
-                    : "Save this question for the manager"}
-                </button>
+                {caseView?.question === analysis.nextQuestion.text ? (
+                  <p>
+                    Question saved.{" "}
+                    <a href={conversationHref}>
+                      Open the conversation to invite your fund contact.
+                    </a>
+                  </p>
+                ) : (
+                  <button disabled={busy} onClick={requestAnswer}>
+                    {busy
+                      ? "Saving question…"
+                      : "Use this question for my fund contact"}
+                  </button>
+                )}
               </>
             )}
+          {!caseView?.answer && !analysis.nextQuestion && offers.length > 0 && (
+            <p>
+              To finish the comparison, you also need your fund’s answer about
+              the payout attributable to your interest.{" "}
+              <a href={conversationHref}>
+                Ask your fund contact in the conversation.
+              </a>
+            </p>
+          )}
           {analysis.confirmedHighestOfferIds.length > 0 && (
             <p aria-live="polite">
               Highest calculated cash before tax:{" "}
               {names(analysis.confirmedHighestOfferIds)}.
             </p>
           )}
-          {caseView?.answer && (
-            <div>
-              <h3>Confirm the distribution basis</h3>
-              <p>{caseView.answer.text}</p>
-              <p>
-                Manager-entered amount: {usd(caseView.answer.distributionCents)}
-                . Confirm only after checking that each quote uses this answer
-                and record date. This is your recorded check, not independent
-                verification.
-              </p>
-              {offers
-                .filter(
-                  (o) =>
-                    !o.withdrawn &&
-                    o.distributionBasisSourceId !== caseView.answer!.source.id,
-                )
-                .map((o) => (
-                  <button
-                    key={o.id}
-                    disabled={busy}
-                    onClick={() =>
-                      void saveOffer({
-                        ...o,
-                        distributionBasisSourceId: caseView.answer!.source.id,
-                      })
-                    }
-                  >
-                    Confirm {o.buyer} against this answer
-                  </button>
-                ))}
-            </div>
-          )}
+          {caseView?.answer &&
+            offers.some(
+              (offer) =>
+                !offer.withdrawn &&
+                offer.distributionBasisSourceId !== caseView.answer!.source.id,
+            ) && (
+              <div>
+                <h3>Check which offers this fund answer applies to</h3>
+                <p>{caseView.answer.text}</p>
+                <p>
+                  Your fund contact reported{" "}
+                  {usd(caseView.answer.distributionCents)}. For each offer
+                  below, check that this answer covers the same fund interest
+                  and date. Also check the buyer’s written terms for who keeps
+                  the payout. Then record your check to include the amount in
+                  the comparison.
+                </p>
+                {offers
+                  .filter(
+                    (o) =>
+                      !o.withdrawn &&
+                      o.distributionBasisSourceId !==
+                        caseView.answer!.source.id,
+                  )
+                  .map((o) => (
+                    <button
+                      key={o.id}
+                      disabled={busy}
+                      onClick={() =>
+                        void saveOffer({
+                          ...o,
+                          distributionBasisSourceId: caseView.answer!.source.id,
+                        })
+                      }
+                    >
+                      I checked: this answer applies to {o.buyer}
+                    </button>
+                  ))}
+              </div>
+            )}
           {showFunding && (
             <FundingPanel
               caseBase={caseBase}
