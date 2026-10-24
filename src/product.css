@@ -1,3 +1,19 @@
+.sl-demo-next {
+  margin: 20px 0;
+  padding: 18px 22px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--surface);
+}
+.sl-demo-next p { margin: 0 0 12px; }
+.sl-root .sl-change-alert .sl-change-delta {
+  font-size: clamp(28px, 4vw, 48px);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.035em;
+  font-variant-numeric: tabular-nums;
+  margin: 20px 0 8px;
+}
 :root {
   /* Soft monochrome: justus-lumin/x1-design, source 0f9923b. */
   color-scheme: dark;
