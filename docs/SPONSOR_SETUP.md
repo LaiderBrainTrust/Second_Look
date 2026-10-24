@@ -1,5 +1,7 @@
 # Sponsor setup — October 24, 2026
 
+**New sponsor-guide caveat:** the supplied Nicrron/Ninoo PDF requires Builder use and a Marketplace listing, in addition to API routing. Its applicability to the whole Deal Flow event and acceptance of imported projects are not yet confirmed. See [Nicrron/Ninoo setup](NICRRON_NINOO_SETUP.md). API use alone must not be claimed sufficient.
+
 ## Akta: live server integration
 
 `AKTA_API_KEY` is saved as a repository **GitHub Actions secret** in `stratten/vc_hackathon`. It is also installed in the ignored, owner-only `.env.local` on Mat's build machine. No key is committed.
