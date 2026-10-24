@@ -76,7 +76,7 @@ export function createApp(store: ReturnType<typeof createStore>, options: { rele
   app.post('/api/case/commands', (req, res, next) => {
     try {
       const { expectedRevision, command } = req.body ?? {};
-      if (!Number.isInteger(expectedRevision) || !command || !['answer', 'revise', 'approve'].includes(command.kind)) throw new DomainError(400, 'Invalid command or revision.');
+      if (!Number.isInteger(expectedRevision) || !command || !['answer', 'revise', 'revise_offer', 'set_question', 'approve'].includes(command.kind)) throw new DomainError(400, 'Invalid command or revision.');
       const result = store.command(res.locals.role, expectedRevision, command as Command);
       res.json(view(result, res.locals.role));
     } catch (error) { next(error); }

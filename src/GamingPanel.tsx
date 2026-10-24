@@ -64,7 +64,6 @@ export function GamingPanel({ revision, onPrepared }: { revision: number; onPrep
       const prepared: ResearchRun = await api(`/api/case/gaming/${displaySnapshot!.id}/prepare`, { expectedRevision: revision, holdingId: item.holding.id });
       if (prepared.status === 'ready' || prepared.status === 'dispatching') await api(`/api/case/research/${prepared.id}/review`, { expectedRevision: revision, findingId: prepared.selectedFindingId });
       setMessage(prepared.status === 'done' ? 'Opening the completed saved review. No new model call was made.' : 'Saved evidence sent to the Roundtable reviewer. The proposed question will appear below.'); onPrepared();
-      window.scrollTo({ top: 0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' });
     })}>{busy ? 'Preparing review…' : 'Turn evidence into a manager question'}</button></div></article>}
     {message && <p role="status" className="waiting">{message}</p>}
     {displaySnapshot && <p className="muted">Evidence snapshot {date(displaySnapshot.createdAt)} · report cutoff {displaySnapshot.reportCutoff}. Ranking prioritizes investigation, not expected returns. A ≥10 percentage-point sample decline comes first, then missing Steam evidence; remaining games sort by sample change, then fictional exposure.</p>}

@@ -1,3 +1,5 @@
+<!-- Current UI ownership: Mat explicitly reassigned the main screen, navigation and styles to Codex on October 24, after confirming Ryan has no unpublished work to preserve. The historical Ryan assignments below are superseded for this takeover. -->
+
 # Team coding-agent instructions
 
 Start with the coding-agent prompt in README.md and the environment checklist in docs/TEAM_START.md. Read docs/PLAN.md for the canonical strategy, docs/TEAM_BOARD.md for work ownership, and docs/BUILD.md before changing code. docs/PROPOSAL.md points to the current plan; files under docs/archive are historical, not active instructions.

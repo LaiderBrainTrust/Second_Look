@@ -1,3 +1,5 @@
+<!-- Current UI ownership: Mat explicitly reassigned the main screen, navigation and styles to Codex on October 24, after confirming Ryan has no unpublished work to preserve. The historical Ryan assignments below are superseded for this takeover. -->
+
 # Team board — claim a bounded task
 
 Read [PLAN.md](PLAN.md) first. This board records proposed work, not automatic delegation. Update the owner when someone accepts a task; tell the team which files are yours before editing.
