@@ -25,9 +25,21 @@ export function AuthScreen({
   onLogin: () => Promise<void>;
   invite?: string;
 }) {
+  const [accessOpen, setAccessOpen] = useState(Boolean(invite));
+  const accessRef = useRef<HTMLElement>(null);
+  const exampleButtonRef = useRef<HTMLButtonElement>(null);
   const [mode, setMode] = useState<"login" | "register" | "example">("login"),
     [busy, setBusy] = useState(false),
     [error, setError] = useState("");
+  function openAccess(nextMode: typeof mode) {
+    setMode(nextMode);
+    setError("");
+    setAccessOpen(true);
+    requestAnimationFrame(() => {
+      accessRef.current?.scrollIntoView({ block: "nearest" });
+      accessRef.current?.querySelector<HTMLInputElement>("input")?.focus({ preventScroll: true });
+    });
+  }
   async function submit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const f = new FormData(e.currentTarget);
@@ -69,45 +81,41 @@ export function AuthScreen({
     <div className="sl-entry">
       <header className="sl-entry-header">
         <Brand />
-        <span>Private-market decisions, made clear.</span>
+        <button type="button" className="sl-link-button" onClick={() => openAccess("login")}>Sign in</button>
       </header>
       <main className="sl-entry-layout">
         <section className="sl-intro">
+          <p className="sl-eyebrow">For fund investors and their advisers</p>
           <h1>
-            The price isn’t
-            <br />
-            the <em>whole</em> deal.
+            Before you sell,<br />
+            know what<br />
+            you’ll <em>keep.</em>
           </h1>
           <p className="sl-lead">
-            Understand what you keep when you sell a fund interest. Check the
-            evidence, get the missing answer, and review the terms before you
-            commit.
+            Selling your share of a fund? Compare the offer, get missing answers,
+            and see how changing terms affect the money you receive.
           </p>
-          <div className="sl-example-illustration">
-            <div>
-              <span>Sale payment</span>
-              <strong>$700,000</strong>
-            </div>
-            <div>
-              <span>Distribution you may keep</span>
-              <strong>+ $100,000</strong>
-            </div>
-            <div className="sl-example-total">
-              <span>Illustrative cash before costs</span>
-              <strong>$800,000</strong>
-            </div>
-            <p>Same headline price. A different outcome.</p>
-            <small>
-              Illustrative example. The distribution and sale rights must be
-              confirmed.
-            </small>
+          <div className="sl-home-actions">
+            <button ref={exampleButtonRef} type="button" className="sl-primary" onClick={() => openAccess("example")}>Try the example <span aria-hidden="true">→</span></button>
+            <a href="/presenter/">See the walkthrough</a>
           </div>
-          <p className="sl-entry-foot">
-            Your evidence. Your collaborators. One shared record of the
-            decision.
-          </p>
+          <p className="sl-home-access-note">Have a team code? Explore the working example. Otherwise, start with the walkthrough.</p>
         </section>
-        <section className="sl-auth">
+        {!accessOpen && <section className="sl-home-comparison" aria-labelledby="home-comparison-title">
+          <p className="sl-eyebrow">One offer. One important difference.</p>
+          <h2 id="home-comparison-title">The offer is $700,000.<br />Who keeps the fund payout?</h2>
+          <div className="sl-home-outcome">
+            <div><h3>You keep the payout</h3><p>$700,000 from the buyer<br />+ $100,000 from the fund</p></div>
+            <div className="sl-home-amount"><span>You receive</span><strong>$800,000</strong></div>
+          </div>
+          <div className="sl-home-outcome">
+            <div><h3>The buyer keeps it</h3><p>$700,000 from the buyer<br />The fund payout goes to them</p></div>
+            <div className="sl-home-amount"><span>You receive</span><strong>$700,000</strong></div>
+          </div>
+          <p className="sl-home-difference"><strong>$100,000 less for you.</strong> The headline price never changed.</p>
+          <p className="sl-help">Illustrative example, before taxes and fees. Actual proceeds depend on the agreed terms.</p>
+        </section>}
+        {accessOpen && <section className="sl-auth" ref={accessRef} aria-label="Access Second Look">
           <h2>
             {invite
               ? "You’ve been invited to a sale review"
@@ -226,7 +234,8 @@ export function AuthScreen({
             Second Look records decisions. It does not execute sales or move
             money.
           </p>
-        </section>
+          {!invite && <button type="button" className="sl-link-button" onClick={() => { setAccessOpen(false); setError(""); requestAnimationFrame(() => exampleButtonRef.current?.focus()); }}>Back to the overview</button>}
+        </section>}
       </main>
     </div>
   );

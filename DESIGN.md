@@ -2,19 +2,19 @@
 name: Second Look
 description: Clarity before commitment
 colors:
-  paper: "#f5f2ec"
-  surface: "#fff"
-  ink: "#192c40"
-  muted: "#566575"
-  line: "#d8d9d8"
-  accent: "#a94728"
-  soft: "#e9edf0"
-  accent-hover: "#89371e"
-  positive: "#246349"
-  positive-soft: "#eaf1eb"
-  warning: "#7b411b"
-  warning-soft: "#f9eddd"
-  input-line: "#98a2ad"
+  paper: "#0c0c0c"
+  surface: "#121212"
+  ink: "#ededed"
+  muted: "#b0b0b0"
+  line: "#353535"
+  accent: "#d9ff43"
+  soft: "#1c1c1c"
+  accent-hover: "#c8ed36"
+  positive: "#ededed"
+  positive-soft: "#161616"
+  warning: "#ededed"
+  warning-soft: "#1c1c1c"
+  input-line: "#6e6e6e"
 typography:
   display:
     fontFamily: "Source Serif 4, Georgia, serif"
@@ -40,21 +40,21 @@ Mat authorized the customer journey replacement and a more distinctive visual di
 
 ## Overview
 
-Ink navy, warm limestone and restrained burnt orange. The reference is a well-edited financial publication that happens to be interactive. No green brand wash, neon status displays, decorative charts or dashboard metric tiles. Green has one job: an answered or recorded state. Amber identifies missing information or changed terms.
+Near-black canvas, charcoal surfaces and light neutral text, based on the soft monochrome palette in justus-lumin/x1-design. Mat requested an acid-lime accent for primary actions, the active step and limited highlights. Status meaning remains explicit in words rather than relying on color. See docs/COLOR_PALETTE.md for the source and contrast decisions.
 
 | Role                   | Token                    | Value             |
 | ---------------------- | ------------------------ | ----------------- |
-| Workspace              | paper                    | #f5f2ec           |
-| Paper / input          | surface                  | #ffffff           |
-| Main text / cash total | ink                      | #192c40           |
-| Secondary text         | muted                    | #566575           |
-| Dividing rule          | line                     | #d8d9d8           |
-| Action / active step   | accent                   | #a94728           |
-| Press / hover          | accent-hover             | #89371e           |
-| Quiet support          | soft                     | #e9edf0           |
-| Completed state        | positive / positive-soft | #246349 / #eaf1eb |
-| Missing or changed     | warning / warning-soft   | #7b411b / #f9eddd |
-| Input boundary         | input-line               | #98a2ad           |
+| Workspace              | paper                    | #0c0c0c           |
+| Paper / input          | surface                  | #121212           |
+| Main text / cash total | ink                      | #ededed           |
+| Secondary text         | muted                    | #b0b0b0           |
+| Dividing rule          | line                     | #353535           |
+| Action / active step   | accent                   | #d9ff43           |
+| Press / hover          | accent-hover             | #c8ed36           |
+| Quiet support          | soft                     | #1c1c1c           |
+| Completed state        | positive / positive-soft | #ededed / #161616 |
+| Missing or changed     | warning / warning-soft   | #ededed / #1c1c1c |
+| Input boundary         | input-line               | #6e6e6e           |
 
 ## Typography
 
@@ -62,9 +62,9 @@ Self-hosted IBM Plex Sans for controls, prose and tabular financial numbers. Sou
 
 ## Layout
 
-The desktop first viewport should contain the actual cash calculation and its next action, not just a title. Keep the header, case path and four-step navigation compact. The navy total is the bottom of a visible calculation; never a detached metric. Unknown amounts remain words and receive the amber treatment, never zero. The adjacent action explains what the user needs to do now. Once recorded, it says to view the record, not repeat the work.
+The desktop first viewport should contain the actual cash calculation and its next action, not just a title. Keep the header, case path and four-step navigation compact. The charcoal total is the bottom of a visible calculation; never a detached metric. Unknown amounts remain words and receive an explicit unresolved treatment, never zero. The adjacent action explains what the user needs to do now. Once recorded, it says to view the record, not repeat the work.
 
-The four stages remain The deal, The evidence, The conversation, Your decision. Case and step live in the URL. Keyboard focus is visible. Controls are at least 44px, inputs at least 16px, and layout becomes one column below 760px. Forms, facts and financial numbers do not enter with animation. Following Emil Kowalski's design engineering guidance, pointer presses have a restrained 140ms response; keyboard and reduced-motion actions have no movement. Use explicit transition properties, not transition: all.
+The four stages are Your offer, Research (optional), Confirm details, and Review & save. Case and step live in the URL. Keyboard focus is visible. Controls are at least 44px, inputs at least 16px, and layout becomes one column below 760px. Forms, facts and financial numbers do not enter with animation. Following Emil Kowalski's design engineering guidance, pointer presses have a restrained 140ms response; keyboard and reduced-motion actions have no movement. Use explicit transition properties, not transition: all.
 
 ## Do’s and Don’ts
 

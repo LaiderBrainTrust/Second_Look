@@ -367,7 +367,7 @@ function CasePage({
             <strong>Fictional example.</strong> Real research tools;
             illustrative fund ownership and sale terms.
           </span>
-          <details>
+          <details key={role}>
             <summary>Presenter controls</summary>
             <label>
               Show this participant
@@ -462,18 +462,36 @@ function CasePage({
           {review?.lastTermChange?.atRevision === data.revision &&
             review.lastTermChange.previousGrossReceiptsCents != null &&
             review.lastTermChange.revisedGrossReceiptsCents != null && (
-              <p className="sl-change-amount">
-                Gross cash changed from{" "}
-                <b>
-                  {currency(review.lastTermChange.previousGrossReceiptsCents)}
-                </b>{" "}
-                to{" "}
-                <b>
-                  {currency(review.lastTermChange.revisedGrossReceiptsCents)}
-                </b>
-                .
-              </p>
+              <div>
+                <p className="sl-change-delta">
+                  {currency(Math.abs(review.lastTermChange.revisedGrossReceiptsCents - review.lastTermChange.previousGrossReceiptsCents))}{" "}
+                  {review.lastTermChange.revisedGrossReceiptsCents < review.lastTermChange.previousGrossReceiptsCents
+                    ? "less for you"
+                    : review.lastTermChange.revisedGrossReceiptsCents > review.lastTermChange.previousGrossReceiptsCents
+                      ? "more for you"
+                      : "change in cash"}
+                </p>
+                <p className="sl-change-amount">
+                  Gross cash changed from{" "}
+                  <b>
+                    {currency(review.lastTermChange.previousGrossReceiptsCents)}
+                  </b>{" "}
+                  to{" "}
+                  <b>
+                    {currency(review.lastTermChange.revisedGrossReceiptsCents)}
+                  </b>
+                  .
+                </p>
+              </div>
             )}
+        </div>
+      )}
+      {!personal && role !== "lp" && data.answer && (
+        <div className="sl-demo-next">
+          <p>This example lets you see both sides of the same sale.</p>
+          <button className="sl-primary" disabled={busy} onClick={() => void switchRole("lp")}>
+            See the investor’s updated total
+          </button>
         </div>
       )}
       {view === "deal" && (
@@ -927,6 +945,14 @@ function CasePage({
               </button>
               <RecordDownload base={base} revision={data.revision} />
             </div>
+            {!personal && approved && (
+              <div className="sl-demo-next">
+                <p>What if the buyer changes who keeps the fund payout after this review?</p>
+                <button className="sl-secondary" onClick={() => void switchRole("buyer")}>
+                  Try changing the buyer’s terms
+                </button>
+              </div>
+            )}
             {!ready &&
               (!data.answer ||
                 data.offer.priceAdjustmentCents === null ||
