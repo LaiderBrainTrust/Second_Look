@@ -6,7 +6,7 @@
     "shadows": [
       {
         "name": "entry-form",
-        "value": "0 8px 32px -12px #192c402b",
+        "value": "0 24px 60px -40px #00000066",
         "purpose": "One lifted sign-in form; financial workspace remains flat."
       }
     ],
@@ -31,5 +31,6 @@
         "value": "1600px"
       }
     ]
-  }
+  },
+  "paletteReference": "docs/COLOR_PALETTE.md"
 }

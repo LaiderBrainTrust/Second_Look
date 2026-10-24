@@ -13,3 +13,11 @@ Owner direction: use the soft monochrome direction from [justus-lumin/x1-design]
 Secondary copy uses `#b0b0b0`, brighter than the reference's muted ink to retain readability in dense financial forms. Status meaning remains explicit in labels and symbols, not dependent on accent color. Existing inputs retain outlines even though the reference prefers borderless surfaces.
 
 Print output retains a light palette. No auth, provider or financial calculation changes are part of this update.
+
+## Checked screens
+
+Screenshots from the isolated hosted browser using the same application source as PR30; all displayed financial data is fictional.
+
+![Entry screen](screenshots/palette-entry.png)
+
+![Offer review](screenshots/palette-offer.png)
