@@ -179,6 +179,7 @@ export function GamingPanel({
   );
   const [useSaved, setUseSaved] = useState(false);
   const [selected, setSelected] = useState("");
+  const [brokenCovers, setBrokenCovers] = useState<Record<string, boolean>>({});
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
@@ -289,14 +290,21 @@ export function GamingPanel({
                 disabled={!evidence}
                 onClick={() => setSelected(holding.id)}
               >
-                {evidence?.steam?.imageUrl && (
+                {evidence?.steam?.imageUrl && !brokenCovers[holding.id] ? (
                   <img
                     src={evidence.steam.imageUrl}
                     alt=""
                     width="460"
                     height="215"
                     loading="lazy"
+                    onError={() =>
+                      setBrokenCovers((b) => ({ ...b, [holding.id]: true }))
+                    }
                   />
+                ) : (
+                  <span className="game-cover-fallback" aria-hidden="true">
+                    {holding.game}
+                  </span>
                 )}
                 <span>
                   <small>
