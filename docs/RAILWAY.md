@@ -37,7 +37,7 @@ There are now account/password hashes, sessions, memberships and invitation reco
 - Transfer the backup privately to the new service's volume and verify `PRAGMA integrity_check` before startup. Keep the prior service/data as a documented rollback point.
 - Start the new instance, verify current case count and revision, account login, a saved answer and review history, then promote the custom domain.
 - Never roll the expanded database back onto a pre-account release: that code does not isolate research by case. The updated local deployment script refuses this downgrade and stops rather than rolling back unsafely if verification fails after account cases exist.
-- Avoid two writable hosts with separate copies of the database. Restart/logout behavior: the old presenter sessions are in-memory; account sessions are persistent but browser cookies are host-specific, so users sign in again on a new domain.
+- Avoid two writable hosts with separate copies of the database. Restart/logout behavior: presenter and individual-account sessions are persistent in SQLite. Presenter sessions expire after eight hours; logout removes the saved session, and rotating DEMO_ACCESS_CODE invalidates prior presenter sessions. Browser cookies are host-specific, so users sign in again on a new domain. The first upgrade from memory-only presenter sessions requires one new login; later redeployments preserve sessions when the volume and access code remain unchanged.
 - Enable volume backups on the hosting account and test restoration to a separate volume. The existing deploy script's local backup does not configure Railway backups.
 
 ## Verification gate

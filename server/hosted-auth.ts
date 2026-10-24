@@ -1,4 +1,6 @@
-import { randomBytes, timingSafeEqual } from 'node:crypto';
+import { timingSafeEqual } from 'node:crypto';
+import type { DatabaseSync } from 'node:sqlite';
+import { createPresenterSessions } from './presenter-sessions.js';
 import type { Express } from 'express';
 import type { Role } from '../shared/contracts.js';
 import type { WorkspaceAccess } from './workspace-access.js';
@@ -6,9 +8,9 @@ import type { WorkspaceAccess } from './workspace-access.js';
 export interface HostedOptions { origin: string; accessCode: string }
 // One explicitly provisioned team presenter account, permitted to operate the
 // three fictional roles in this case. This is not real counterparty identity.
-export function installHostedAuth(app: Express, options: HostedOptions, access?: WorkspaceAccess) {
+export function installHostedAuth(app: Express, options: HostedOptions, db: DatabaseSync, access?: WorkspaceAccess) {
   if (new URL(options.origin).protocol !== 'https:' || options.accessCode.length < 24) throw new Error('Hosted demo needs an HTTPS origin and a strong access code.');
-  const sessions = new Map<string, { expires: number; role: Role; caseId: string; mode: 'presenter' }>();
+  const sessions = createPresenterSessions(db, options.accessCode);
   const cookieName = '__Host-second-look';
   const cookie = (value: string, age = 28800) => `${cookieName}=${value}; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=${age}`;
   function token(value?: string) { return value?.split(';').map(part => part.trim()).find(part => part.startsWith(`${cookieName}=`))?.slice(cookieName.length + 1) ?? ''; }
@@ -20,7 +22,6 @@ export function installHostedAuth(app: Express, options: HostedOptions, access?:
     }
     const id = token(req.header('cookie'));
     const session = sessions.get(id);
-    if (session && session.expires <= Date.now()) sessions.delete(id);
     if (session && session.expires > Date.now() && session.caseId === 'sample-fund') res.locals.session = session;
     else if (access) res.locals.session = access.session(id);
     res.locals.sessionId = id;
@@ -41,10 +42,8 @@ export function installHostedAuth(app: Express, options: HostedOptions, access?:
     const supplied = typeof req.body?.code === 'string' ? Buffer.from(req.body.code) : Buffer.alloc(0);
     const expected = Buffer.from(options.accessCode);
     if (supplied.length !== expected.length || !timingSafeEqual(supplied, expected)) { res.status(401).json({ error: 'The team access code did not match.' }); return; }
-    for (const [id, session] of sessions) if (session.expires <= Date.now()) sessions.delete(id);
-    if (sessions.size >= 500) { res.status(503).json({ error: 'The demo is at session capacity.' }); return; }
-    const id = randomBytes(32).toString('hex');
-    sessions.set(id, { expires: Date.now() + 28800000, role: 'lp', caseId: 'sample-fund', mode: 'presenter' });
+    const id = sessions.issue();
+    if (!id) { res.status(503).json({ error: 'The demo is at session capacity.' }); return; }
     res.setHeader('Set-Cookie', cookie(id)); res.json({ authenticated: true, role: 'lp' });
   });
   if (access) {
@@ -78,6 +77,7 @@ export function installHostedAuth(app: Express, options: HostedOptions, access?:
     if (res.locals.session.mode !== 'presenter') { res.status(403).json({ error: 'Account roles are granted per case and cannot be switched.' }); return; }
     if (!['lp', 'gp', 'buyer'].includes(req.body?.role)) { res.status(400).json({ error: 'Choose a fictional participant.' }); return; }
     res.locals.session.role = req.body.role;
+    sessions.setRole(res.locals.sessionId, req.body.role as Role);
     res.json({ role: res.locals.session.role });
   });
   app.post('/api/session/logout', (_req, res) => {
