@@ -1,0 +1,31 @@
+{
+  "url": "https://x1cloud.tail6fbca0.ts.net",
+  "applicationSourceSha": "cd188004195c4c06f67cabbe4cdcbeb96ede5beb",
+  "checks": {
+    "tests": 29,
+    "build": "passed",
+    "unauthenticatedCaseHttp": 401,
+    "hostedBrowserWalkthrough": "passed",
+    "pageReload": "passed",
+    "serverRestart": "passed",
+    "mobileOverflow": "none at 390px",
+    "freshExternalEvidence": "Steam and Akta succeeded for all three games",
+    "freshReview": {
+      "status": "done",
+      "method": "nicrron",
+      "taskId": "2ab063e75312486e9a03ce423c5a6fa7",
+      "trace": {
+        "id": "c0817aae-eea4-447a-8936-f05722898668",
+        "status": "recorded"
+      }
+    }
+  },
+  "presentationState": "New separate database at revision 1; seller retains distribution; no approvals. QA database retained.",
+  "limits": [
+    "Team presenter account, fictional roles; not verified real counterparties",
+    "Saved Tiny Glade review is preloaded and explicitly labeled; opening it does not make a new API call",
+    "Ryan laptop and spoken rehearsal not yet observed",
+    "Ninoo Builder/Marketplace eligibility not resolved",
+    "Event service survives chat close; runtime credentials must be restored after host reboot"
+  ]
+}

@@ -1,3 +1,5 @@
+> **Current launch instructions:** [RYAN_DEMO.md](RYAN_DEMO.md) has the hosted team-login URL and repeatable local fallback. The prepared Tiny Glade review is dated saved evidence, not a fresh model response.
+
 > Strategy: [PLAN.md](PLAN.md). Work ownership: [TEAM_BOARD.md](TEAM_BOARD.md). This file is the demo run of show.
 
 # Gaming-fund build — active owner: Mat / Codex
@@ -44,7 +46,7 @@ The workflow is the product; the game ranking is an investigation aid. `fundNavE
 - PRISM: actual input/output/model/latency trace adapter. Requires a successful live receipt; it does not prove investment truth.
 - X1: not connected in this build. Do not present SQLite state as live X1 functionality.
 - All app source changes are build-day work. Organizer confirmation of sponsor-specific Builder/Marketplace rules remains separate from API operation.
-- No public deployment or real participant authentication has been verified. Private local/Codespaces development only. Teammate clones are independent databases.
+- An authenticated hosted event demo is deployed and verified; see DEPLOYMENT_RECEIPT.json. It has a shared persistent case and a team presenter account, not verified real counterparty identities. Teammate local clones remain independent databases. The final deployment receipt is linked in RYAN_DEMO.md.
 
 ## Recovery and final ask
 

@@ -90,11 +90,11 @@ npm run doctor
 npm run dev
 ```
 
-For changes, run `npm test` then `npm run build`. Current suite: 26 tests, including trace field-order reconciliation and rejection of actual mismatches. Do not repeat provider calls just to replace a saved source with a prettier result.
+For changes, run `npm test` then `npm run build`. Current suite: 29 tests, including trace field-order reconciliation and rejection of actual mismatches. Do not repeat provider calls just to replace a saved source with a prettier result.
 
 Check the complete browser flow in GAMING_BUILD.md. Refresh/reopen and confirm persistence. Test the game screen and decision screen on a narrow viewport. A build does not establish live provider access; a local browser pass does not establish hosted authentication or user acceptance.
 
-Before public hosting, replace role impersonation with authenticated identities and case membership, preserve mutation/origin protection, and use persistent deployment storage. SQLite on an ephemeral serverless filesystem is not a durable deployment. Production mode intentionally refuses to start today. No deployment is implied by a Git push.
+Before public hosting, replace role impersonation with authenticated identities and case membership, preserve mutation/origin protection, and use persistent deployment storage. SQLite on an ephemeral serverless filesystem is not a durable deployment. Production mode requires explicit hosted configuration: a strong team access code, exact HTTPS origin and persistent database path. Hosted mode ignores x-demo-role and uses the server session role. The authenticated presenter is authorized to simulate all three roles in the fictional case; this is not real counterparty identity proof. See RYAN_DEMO.md for the event deployment. No deployment is implied by a Git push.
 
 ## Provider references
 

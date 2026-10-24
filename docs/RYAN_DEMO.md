@@ -2,7 +2,9 @@
 
 ## Hosted demo
 
-Target URL: https://x1cloud.tail6fbca0.ts.net/ (check the deployment receipt before claiming it is live).
+**Live URL: https://x1cloud.tail6fbca0.ts.net/**
+
+[Deployment receipt](DEPLOYMENT_RECEIPT.json): hosted browser flow, reload/server restart persistence, and fresh all-sponsor calls verified on October 24. A fresh separate case is staged for Ryan. His own laptop and spoken run still need checking.
 
 Open it in a normal browser. No Tailscale, terminal, API keys or repo installation are needed to use the hosted app. Sign in once with the team access code. Mat has it in the ignored `.local/demo-access.txt` on the build host; it is also in the repository's `DEMO_ACCESS_CODE` Codespaces secret for team setup. Share it with presenters/judges privately. It is not a provider API key.
 
@@ -47,6 +49,8 @@ Capture refresh for maintainers: with the configured `npm run dev` worker runnin
 - The hosted database must live outside the release directory. A first empty database imports the labeled capture. Existing records are never reset on startup. To stage another run, stop only this service, select a new database filename, restart, and retain the previous file as history.
 - The service is for this event's fictional workflow. It is not production financial software, has no real counterparty identity proof, and is not intended for real client data.
 - Ninoo supports publishing, but its documented backend is Python and its deployed filesystem is temporary: https://ninoo.ai/docs/builder/backends. The current app needs a persistent Node/SQLite host. Builder/Marketplace eligibility remains a separate sponsor clarification.
+
+The event service runs independently of this chat as `second-look-demo.service` on x1cloud, loopback port 3187 behind HTTPS Funnel port 443. Other Funnel services on port 8443 are unchanged. Release files are under `/home/mat/.local/share/second-look/releases/`; data is under `/home/mat/.local/share/second-look/data/`. Runtime credentials are in owner-only tmpfs and must be restored after a host reboot. Do not reboot the host during the presentation. The service is active for this event, not a promised production SLA.
 
 ## Still a human check
 
