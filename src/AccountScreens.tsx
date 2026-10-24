@@ -237,6 +237,15 @@ export function AuthScreen({
           {!invite && <button type="button" className="sl-link-button" onClick={() => { setAccessOpen(false); setError(""); requestAnimationFrame(() => exampleButtonRef.current?.focus()); }}>Back to the overview</button>}
         </section>}
       </main>
+      <section className="sl-sponsor-credits" aria-labelledby="sponsor-heading">
+        <p className="sl-eyebrow" id="sponsor-heading">Built with the four Deal Flow hackathon sponsors</p>
+        <div className="sl-sponsor-grid">
+          <a href="https://nicrron.ai/"><strong>NicrronNinoo</strong><span>Question drafting through Nicrron</span></a>
+          <a href="https://prism.blockconvey.com/"><strong>PRISM <small>by Block Convey</small></strong><span>Tracing the AI question draft</span></a>
+          <a href="https://akta.pro/"><strong>akta.pro <small>by Wokelo AI</small></strong><span>Outside company research</span></a>
+          <a href="https://roundtable.bot/"><strong>Roundtable</strong><span>Shared research tasks and history</span></a>
+        </div>
+      </section>
     </div>
   );
 }

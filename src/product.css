@@ -2148,3 +2148,15 @@ button.sl-text-button:hover:enabled {
   html:has(.sl-deal-summary) { scroll-padding-top: 180px; }
   .sl-deal-summary ~ div :is(h2, h3, button, summary, input, select, textarea, a) { scroll-margin-top: 180px; }
 }
+
+/* Product credits remain secondary to the investor's first action. */
+.sl-sponsor-credits { max-width: 1280px; margin: 0 auto; padding: 32px clamp(24px, 5vw, 64px) 48px; border-top: 1px solid var(--line); }
+.sl-sponsor-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 28px; margin-top: 24px; }
+.sl-entry .sl-sponsor-grid a { color: var(--ink); text-decoration: none; padding: 8px 0; border-radius: 4px; }
+.sl-sponsor-grid strong { display: block; font-size: 23px; letter-spacing: -0.04em; }
+.sl-sponsor-grid small { display: block; font-size: 12px; font-weight: 400; letter-spacing: 0; margin-top: 4px; }
+.sl-sponsor-grid span { display: block; color: var(--muted); font-size: 13px; line-height: 1.5; margin-top: 12px; }
+.sl-sponsor-grid a:hover strong { color: var(--accent); }
+.sl-sponsor-grid a:focus-visible { outline: 2px solid var(--accent); outline-offset: 6px; }
+@media (max-width: 760px) { .sl-sponsor-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 16px; } }
+@media (max-width: 380px) { .sl-sponsor-grid { grid-template-columns: 1fr; } }
