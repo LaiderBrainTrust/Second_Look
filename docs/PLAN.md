@@ -16,6 +16,12 @@ Lead with the investment and a meaningful next action. Let the user investigate 
 
 The intended result today is a compelling, functioning product slice. The existing hosted team login is not independent real-world counterparty authentication; full production readiness remains a separate claim.
 
+## Active real-use release — October 24
+
+Mat has prioritized making the app usable for user-entered cases, beyond the prepared example. The backend now provides individual accounts, isolated cases, one-time case/role invitations, actor-attributed actions and persistent sessions. The original example remains a separate presenter path. See [REAL_CASE_API.md](REAL_CASE_API.md) for Ryan's integration contract and [RAILWAY.md](RAILWAY.md) for the deployable runtime.
+
+This supersedes earlier single-case/presenter-only implementation limits below, but not the truth boundary: UI integration, multi-device acceptance and the Railway/domain cutover remain open. Entered source references are not parsed or verified documents; account display names are not verified legal identities. Before confidential customer use, provider tenancy, recovery, retention and security review still need completion.
+
 ## 1. The product in ordinary language
 
 An investor is considering selling an interest in a venture fund. The last fund report is old. The games behind some of its investments are still being played, reviewed and updated. There may be useful evidence outside that report—but game popularity does not tell you what the investor legally owns or what cash a sale includes.

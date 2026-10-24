@@ -69,7 +69,7 @@ export async function runReviewer(signal: AbortSignal) {
     .bot({ name: 'second-look-reviewer', project: process.env.ROUNDTABLE_PROJECT, skills: ['Check dated investment evidence and draft a fund-manager question'] })
     .onTask(async (task, ctx) => {
       const path = task.input.path; const version = task.input.version;
-      if (typeof path !== 'string' || !/^second-look\/sample-fund\/[a-f0-9-]+\/input\.json$/.test(path) || typeof version !== 'string') throw new Error('Unexpected review input path.');
+      if (typeof path !== 'string' || !/^second-look\/(?:sample-fund|[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})\/[a-f0-9-]+\/input\.json$/.test(path) || typeof version !== 'string') throw new Error('Unexpected review input path.');
       const source = await ctx.read(path, { version });
       const input = JSON.parse(source.content) as ResearchInput;
       if (input.caseId !== task.input.caseId || input.caseRevision !== task.input.caseRevision) throw new Error('Task and source revisions differ.');

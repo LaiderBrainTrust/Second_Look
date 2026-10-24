@@ -1,11 +1,12 @@
 import type { DiligenceState } from './diligence.js';
 export type Role = 'lp' | 'gp' | 'buyer';
+export interface Actor { userId: string; displayName: string; role: Role }
 export type Provider = 'x1' | 'nicrron' | 'akta' | 'roundtable' | 'prism';
 
 export interface SourceRef {
   id: string;
   label: string;
-  kind: 'synthetic' | 'x1' | 'external';
+  kind: 'synthetic' | 'x1' | 'external' | 'user';
   locator?: string;
   url?: string;
   revision?: string;
@@ -25,6 +26,7 @@ export interface Answer {
   source: SourceRef;
 }
 export interface Review {
+  actor?: Actor;
   revision: number;
   responseText: string;
   approvedAt: string;
@@ -47,6 +49,8 @@ export interface TermChange {
   revisedGrossReceiptsCents: number | null;
 }
 export interface CaseState {
+  mode?: 'user' | 'example';
+  allowExternalResearch?: boolean;
   id: string;
   title: string;
   ownerEntity: string;
@@ -60,9 +64,10 @@ export interface CaseState {
   lastTermChange?: TermChange;
   reviews: Review[];
   diligence?: DiligenceState;
-  events: { revision: number; text: string; at: string }[];
+  events: { revision: number; text: string; at: string; actor?: Actor }[];
 }
 export interface CaseView {
+  mode?: 'user' | 'example';
   id: string;
   title: string;
   revision: number;
@@ -83,6 +88,7 @@ export interface CaseView {
     reviews: Review[];
     events: CaseState['events'];
     diligenceBlockers?: string[];
+    allowExternalResearch?: boolean;
   };
 }
 export interface ProviderStatus {

@@ -1,9 +1,9 @@
 import type { ResearchRun } from '../shared/research.js';
 import { createRoundtableAdapter } from './adapters/roundtable.js';
 import { recordProviderResult } from './adapters/status.js';
-import type { createStore } from './store.js';
+import type { CaseStore } from './store.js';
 
-type Store = ReturnType<typeof createStore>;
+type Store = CaseStore;
 type Reviewer = Pick<ReturnType<typeof createRoundtableAdapter>, 'result'>;
 
 // Both the browser's existing /check route and server recovery share this lane.
