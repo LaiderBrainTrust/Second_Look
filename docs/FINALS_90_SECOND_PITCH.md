@@ -1,5 +1,7 @@
 # Second Look: 90-second finals pitch
 
+**Presentation update:** Prefer the [90-second live app pitch](FINALS_LIVE_90_SECOND_PITCH.md). Keep these screenshot slides as a separate comparison example or fallback. The live pitch preserves the original $100,000 changed-term story.
+
 Open [the finals slides](https://secondlook.ac/finals/). This is a separate pitch for a possible final round, not a replacement for the submitted three-minute script.
 
 Audience: Deal Flow judges. Time: 90 seconds, requested by Mat. The comparison is between two offers for the same fund interest. It is not a ranking of different funds.
