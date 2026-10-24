@@ -4,6 +4,18 @@
 
 Inspected source/deployment: `30adb3937c02f372cd69aa611d2d412f89985c33`. Mat/Codex owns backend fixes; Ryan retains final UI ownership. This audit does not take over his files.
 
+## Customer-journey update — October 24, 2:55pm EDT
+
+Mat explicitly reassigned the UI to Codex after confirming no unpublished Ryan UI work. The customer-experience branch replaces the presentation page with individual sign-in/registration, case navigation, invitation acceptance, and Deal → Evidence → Conversation → Decision navigation. Amount entry and the actual sale are distinct from optional comparison quotes. X1 and research use the selected case. The dedicated decision export replaces printing the application.
+
+Local browser acceptance: entered $125,000 distribution, $720,000 payment and −$2,000 adjustment; seller-retained distribution computed $843,000. Changed terms required a fresh review; approval survived reload; the HTML decision record downloaded. Desktop and narrow layouts inspected. Hosted UI acceptance is still required after this release.
+
+The session fix is now proven across **two real Railway deployments**: a cookie issued on `502515d2794b2aae8e371c720f431b4bb3e87da9` remained authenticated with its GP role on `94a028068e39e128a10364e581532d75af1f766f`. Logout then invalidated it. Older memory-only sessions still need one new login.
+
+The original findings below are retained as the before-state. Operational readiness gaps remain: no email delivery/reminders, self-service account recovery/MFA, general uploaded-document extraction, confidential-client acceptance, or verified Railway restore. Provider details remain diagnostic; use saved task/trace receipts as evidence of remote work. A full timed run on the presenter’s machine remains required.
+
+---
+
 ## Findings and concrete acceptance
 
 | Priority | Finding and observed consequence | Required completion |

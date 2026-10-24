@@ -199,3 +199,11 @@ The comparison also supports **a funding amount and deadline**, with explicit ca
 ### Submission brief and current claims
 
 Use [the corrected founder brief](docs/FOUNDER_BRIEF.md) and [source/status checks](docs/SUBMISSION_CLAIMS.md). These replace older market-period, placeholder and local-only claims in the shared planning document. Customer evidence and full presentation rehearsal remain separate from engineering checks.
+
+## Customer app workflow
+
+Open the hosted app and sign in with your individual handle/password, or use **Create account** with the team enrollment code. **Team example** is a separate, explicitly fictional presentation case. Your real account opens **Your cases**; create a sale review using entered terms, then follow **The deal → The evidence → The conversation → Your decision**.
+
+In a case, the investor can create a one-use manager/buyer invitation under **The conversation**. Share the link privately; the app does not email it. Invitees sign in or create their own account, then get the assigned case role. X1 connection and company research are under **The evidence**. Comparison offers are optional and do not replace the actual sale. The decision screen identifies the current version and downloads its dedicated HTML record.
+
+Presenter controls only appear in **Team example**. Change to Fund manager to enter an answer, Buyer to revise the sale, and Investor to record a review. Changed terms make old reviews historical. These controls never appear for an individual account.
