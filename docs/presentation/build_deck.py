@@ -164,11 +164,11 @@ source(s, 'Second Look estimates (Oct 24, 2026) from stated assumptions; $75M st
 s = slide(None, (
     '[2:20–2:30]\n'
     'Investors approve fund sales on outdated information, and terms change under them. '
-    'Second Look catches both before money is lost. '
+    'Second Look puts the new evidence to the manager and retires an approval the moment the terms change. '
     'We’re Mat, Ryan, Darren and Stratten. The demo link is on screen.\n\n'
     'Never show or say the access code; share it with judges privately.'), kicker='SECOND LOOK')
 text(s, 0.8, 1.6, 11.7, 2.6, 'Investors approve fund sales on outdated information, and terms change under them. '
-     'Second Look catches both before money is lost.', size=36, bold=True)
+     'Second Look puts the new evidence to the manager and retires an approval the moment the terms change.', size=36, bold=True)
 text(s, 0.8, 4.6, 11.7, 0.6, DEMO_URL, size=24, color=ACCENT, bold=True)
 text(s, 0.8, 5.3, 11.7, 0.6, 'Mat Silverstein · Ryan · Darren · Stratten', size=20, color=MUTED)
 source(s, 'Demo: fictional fund and deal; real Steam and Akta data. Team login required; ask us for access.')
