@@ -1,3 +1,4 @@
+import './env.js';
 import { mkdirSync } from 'node:fs';
 import { createApp } from './app.js';
 import { createStore } from './store.js';

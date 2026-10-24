@@ -3,12 +3,14 @@ import type { Role } from '../shared/contracts.js';
 import { DomainError, view, type Command } from './domain.js';
 import { createStore } from './store.js';
 import { providerStatuses } from './adapters/status.js';
+import { researchRouter } from './research.js';
 
 export function createApp(store: ReturnType<typeof createStore>) {
   const app = express();
   app.use(express.json({ limit: '20kb' }));
   app.get('/api/health', (_req, res) => res.json({ ok: true, mode: 'local-synthetic-scaffold' }));
   app.get('/api/providers', (_req, res) => res.json(providerStatuses()));
+  app.use('/api/research', researchRouter());
   app.use('/api/case', (req, res, next) => {
     // Development impersonation ONLY. Replace with real sessions before hosting.
     const role = req.header('x-demo-role');

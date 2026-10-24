@@ -13,7 +13,7 @@ npm run dev
 
 Open `http://localhost:5173`. Requires Node **22.13 or newer** (uses built-in `node:sqlite`). API listens on `127.0.0.1:3001`. SQLite data lives in `.local/second-look.sqlite` and survives restarts. No provider credentials are required to run the local scaffold.
 
-This is a **working local synthetic scaffold**, not the finished hackathon entry. It deliberately shows all five providers as unimplemented. The role selector is development impersonation, **not authentication**. The entrypoint refuses production mode until a teammate replaces that boundary. Do not expose this server to the internet or use real client data.
+This is a **working local synthetic scaffold**, not the finished hackathon entry. Akta research endpoints are implemented; the other app adapters remain unimplemented. The role selector is development impersonation, **not authentication**. The entrypoint refuses production mode until a teammate replaces that boundary. Do not expose this server to the internet or use real client data.
 
 ## Try the core interaction
 
@@ -30,7 +30,8 @@ These are illustrative contract scenarios with explicit zero purchase-price adju
 | Working locally | Still required for the final entry |
 | --- | --- |
 | React/TypeScript UI and Express API | Actual X1 reads from a synthetic demo account |
-| Persistent offer versions, question/answer and historical review | Actual Akta finding relevant to an underlying company |
+| Persistent offer versions, question/answer and historical review | Connect an actual Akta finding to the case question and UI |
+| Akta company search, discovery, enrichment and dated news API | Materiality review of external findings; a company mention is not a valuation |
 | Integer-cent calculations and unknown-total handling | Actual Nicrron model request, Roundtable task and PRISM trace |
 | Atomic stale-revision rejection | Authenticated participants and case-scoped sharing |
 | Role-specific response projection | Deployment with persistent storage and real auth |
@@ -40,6 +41,7 @@ These are illustrative contract scenarios with explicit zero purchase-price adju
 
 - [Detailed proposal and independent-agent review prompt](docs/PROPOSAL.md)
 - [Integration/API contracts and work split](docs/BUILD.md)
+- [Sponsor setup, shared secret and live research endpoints](docs/SPONSOR_SETUP.md)
 - [X1 public builder guide](https://x1wealth.com/build)
 - [X1 custom-app connection requirements](https://x1wealth.com/connect/other)
 

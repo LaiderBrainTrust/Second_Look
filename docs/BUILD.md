@@ -7,7 +7,11 @@ The authoritative TypeScript shapes are in [`shared/contracts.ts`](../shared/con
 | Route | Response / input |
 | --- | --- |
 | `GET /api/health` | Local synthetic mode and health |
-| `GET /api/providers` | Five explicitly unimplemented provider statuses |
+| `GET /api/providers` | Observed app provider statuses; Akta becomes verified after a live request |
+| `POST /api/research/search` | `{ query }` → company candidates |
+| `POST /api/research/discover` | `{ query, limit? }` → candidates plus provider warnings/filters |
+| `POST /api/research/enrichment` | `{ companyId }` → firmographic and management data |
+| `POST /api/research/news` | `{ companyId, after: 'YYYY-MM-DD' }` → dated source-linked findings |
 | `GET /api/case` | `CaseView`; LP-private fields omitted for other demo roles |
 | `POST /api/case/commands` | `{ expectedRevision, command }`; returns updated `CaseView` |
 
@@ -26,7 +30,7 @@ All mutating commands validate the expected case revision inside a SQLite write 
 
 ## Adapter lane
 
-Implement the interfaces in [`server/adapters/contracts.ts`](../server/adapters/contracts.ts) behind the server. Keep credentials out of the browser and logs. Copy `.env.example` into an ignored `.env` if helpful; the current runtime does not automatically load it, so use a reviewed environment loader or export variables without printing them. Add that setup explicitly when implementing adapters.
+Implement the interfaces in [`server/adapters/contracts.ts`](../server/adapters/contracts.ts) behind the server. Akta is implemented in `server/adapters/akta.ts`. Keep credentials out of the browser and logs. Copy `.env.example` into ignored `.env.local`; the API and smoke script load it through Node's built-in loader. Exported values take precedence. See [sponsor setup](SPONSOR_SETUP.md).
 
 1. **X1:** MCP Streamable HTTP at `https://mcp.x1wealth.com/mcp`. A server API key requires an entitled synthetic account; hosted OAuth requires an approved redirect. Discover `tools/list`, then live capabilities/guide before selecting a document-read tool. A coding agent's connection is not automatically this app's connection. No dependence on coordination writes.
 2. **Akta:** resolve the underlying company; retrieve dated news after the report cutoff. Keep source metadata, identity and dates. Do not invent events or turn a news headline into a fund valuation.
@@ -47,7 +51,7 @@ Documentation:
 
 ## Next complete slice
 
-Replace the synthetic report source with one permitted X1 read; show an actual Akta finding that produces the question. Preserve the existing deterministic changed-offer flow. In parallel, replace the development role header with authenticated participant sessions and configure deployment persistence. Do not spend the remaining time rebuilding the domain loop from scratch.
+Replace the synthetic report source with one permitted X1 read; connect the implemented Akta research API to the UI so an actual finding produces the question. Preserve the existing deterministic changed-offer flow. In parallel, replace the development role header with authenticated participant sessions and configure deployment persistence. Do not spend the remaining time rebuilding the domain loop from scratch.
 
 Before public deployment: real sessions, case membership checks, CSRF/origin protection for cookie-based mutations, request/body validation, secret configuration, durable storage, provider failure states and a complete rehearsal. Native SQLite on an ephemeral serverless filesystem is not persistent deployment storage; use a persistent host/volume or adapt the store to the chosen hosted database.
 
