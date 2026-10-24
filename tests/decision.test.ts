@@ -54,3 +54,49 @@ it('saves the public question without leaking private thresholds and enforces re
     expect(requestDecisionAnswer(store, 2).revision).toBe(2);
   } finally { store.close(); }
 });
+
+it('shows a conditional pair threshold, then exact confirmed cash and delta, including cent boundaries', () => {
+  const s = state();
+  expect(analyzeDecision(s).pairs[0]).toMatchObject({ status: 'conditional', cashCents: null, differenceCents: null, tieDistributionCents: 6_000_000, retainingOfferId: 'keep' });
+  s.answer = { version: 1, text: 'Fictional fund notice', distributionCents: 10_000_000, source: { id: 'notice', kind: 'user', label: 'Fictional notice' } };
+  expect(analyzeDecision(s).pairs[0].differenceCents).toBeNull();
+  s.diligence.offers.forEach(o => { o.distributionBasisSourceId = 'notice'; });
+  expect(analyzeDecision(s).pairs[0]).toMatchObject({ status: 'confirmed', cashCents: [80_000_000, 76_000_000], differenceCents: 4_000_000 });
+  for (const difference of [-1, 0, 1]) {
+    s.answer.distributionCents = 6_000_000 + difference;
+    expect(analyzeDecision(s).pairs[0].differenceCents).toBe(difference);
+  }
+  s.answer.source.id = 'changed';
+  expect(analyzeDecision(s).pairs[0]).toMatchObject({ status: 'conditional', cashCents: null, differenceCents: null });
+});
+it('withholds pair outcomes for incomplete, expired, different-date and withdrawn offers', () => {
+  for (const change of [
+    (o: ComparisonOffer) => { o.sellerFeesCents = null; },
+    (o: ComparisonOffer) => { o.priceAdjustmentCents = null; },
+    (o: ComparisonOffer) => { o.recordDate = '2026-10-23'; },
+    (o: ComparisonOffer) => { o.expiresAt = '2026-10-23T00:00:00Z'; },
+  ]) {
+    const s = state(); change(s.diligence.offers[0]);
+    expect(analyzeDecision(s, new Date('2026-10-24T00:00:00Z')).pairs[0]).toMatchObject({ status: 'incomplete', cashCents: null, differenceCents: null, tieDistributionCents: null });
+  }
+  const s = state(); s.diligence.offers[0].withdrawn = true;
+  expect(analyzeDecision(s).pairs).toEqual([]);
+});
+it('keeps pair selection separate from the all-offer winning frontier', () => {
+  const s = state(); s.diligence.offers.push(offer('better', 75_000_000, 'seller'));
+  const r = analyzeDecision(s);
+  expect(r.pairs).toHaveLength(3);
+  expect(r.pairs[0].tieDistributionCents).toBe(6_000_000);
+  expect(r.frontier?.tieDistributionCents).toBe(1_000_000);
+});
+
+it('seeds the comparison only in a fresh isolated case and refuses a changed case', async () => {
+  const { loadComparisonExample } = await import('../server/demo');
+  const store = createStore(':memory:');
+  try {
+    loadComparisonExample(store);
+    expect(analyzeDecision(store.read()).pairs[0].tieDistributionCents).toBe(6_000_000);
+    expect(() => loadComparisonExample(store)).toThrow('fresh fictional case');
+    expect(store.read().offer.purchasePriceCents).toBe(70_000_000);
+  } finally { store.close(); }
+});

@@ -21,3 +21,19 @@
 .comparison-status {
   font-weight: 600;
 }
+
+.offer-difference {
+  margin: 1.5rem 0;
+  padding: clamp(1rem, 3vw, 2rem);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+.offer-pair-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem; }
+.offer-pair-grid > div { min-width: 0; }
+.offer-pair-total { display: block; font-size: clamp(1.2rem, 3vw, 2rem); font-variant-numeric: tabular-nums; }
+.offer-pair-grid dl { display: grid; grid-template-columns: 1fr auto; gap: .5rem 1rem; }
+.offer-pair-grid dd { margin: 0; font-variant-numeric: tabular-nums; }
+.offer-pair-grid details { overflow-wrap: anywhere; }
+.offer-pair-verdict { border-top: 1px solid var(--line); padding-top: 1rem; }
+@media (max-width: 640px) { .offer-pair-grid { grid-template-columns: 1fr; } }
+.offer-pair-verdict strong { display: block; margin-bottom: .5rem; font-size: clamp(1.25rem, 2vw, 1.65rem); line-height: 1.4; }

@@ -2135,3 +2135,16 @@ button.sl-text-button:hover:enabled {
 }
 
 .decision-workbench form > .sl-actions { grid-column: 1 / -1; }
+
+.research-proposal { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2rem; margin: 1.5rem 0; }
+.research-proposal > div { min-width: 0; }
+.research-proposal blockquote { margin: 0; padding: 1rem; border-left: 3px solid var(--accent); }
+.sponsor-proof { margin: 1.25rem 0; padding: 1rem 0; border-block: 1px solid var(--line); }
+.sponsor-proof dt { font-weight: 700; margin-top: 1.25rem; }
+.sponsor-proof dd { margin: .5rem 0 1rem; overflow-wrap: anywhere; }
+@media (max-width: 700px) { .research-proposal { grid-template-columns: 1fr; gap: 1rem; } }
+/* Leave room for the deal summary when navigating to a question or action. */
+@media (min-width: 761px) and (min-height: 651px) {
+  html:has(.sl-deal-summary) { scroll-padding-top: 180px; }
+  .sl-deal-summary ~ div :is(h2, h3, button, summary, input, select, textarea, a) { scroll-margin-top: 180px; }
+}

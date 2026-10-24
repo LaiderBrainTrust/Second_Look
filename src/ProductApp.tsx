@@ -189,6 +189,7 @@ function CasePage({
     [notice, setNotice] = useState(""),
     [providers, setProviders] = useState<ProviderStatus[]>([]),
     [researchVersion, setResearchVersion] = useState(0),
+    [researchSelection, setResearchSelection] = useState<{ holdingId: string; snapshotId: string } | null>(null),
     [hasUpdate, setHasUpdate] = useState(false),
     [draftEpoch, setDraftEpoch] = useState(0);
   const latestData = useRef(data);
@@ -578,7 +579,7 @@ function CasePage({
           </div>
           {role === "lp" && (
             <>
-              <details className="sl-option" id="compare-offers">
+              <details className="sl-option" id="compare-offers" open>
                 <summary>
                   Compare offers
                   <span>
@@ -633,6 +634,13 @@ function CasePage({
       )}
       {view === "evidence" && role === "lp" && (
         <div className="sl-evidence-page">
+          {(!personal || review?.allowExternalResearch) && <div className="sl-actions">
+            <button className="sl-secondary" onClick={() => {
+              const heading = document.getElementById("research-heading");
+              heading?.scrollIntoView({ block: "start" });
+              heading?.focus({ preventScroll: true });
+            }}>Jump to the proposed question</button>
+          </div>}
           {personal ? (
             <>
               <X1Sources
@@ -685,6 +693,7 @@ function CasePage({
           ) : (
             <>
               <GamingPanel
+                onSelection={setResearchSelection}
                 revision={data.revision}
                 onPrepared={() => {
                   setResearchVersion((v) => v + 1);
@@ -699,6 +708,7 @@ function CasePage({
                 }}
               />
               <ResearchPanel
+                selection={researchSelection}
                 key={base}
                 data={data}
                 refreshVersion={researchVersion}

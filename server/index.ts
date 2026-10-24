@@ -1,7 +1,7 @@
 import { dirname } from 'node:path';
 import './env.js';
 import { mkdirSync, mkdtempSync, readFileSync } from 'node:fs';
-import { loadSavedDemo, type SavedDemo } from './demo.js';
+import { loadComparisonExample, loadSavedDemo, type SavedDemo } from './demo.js';
 import { createApp } from './app.js';
 import { installHostedUi } from './hosted-ui.js';
 import { createStore } from './store.js';
@@ -21,6 +21,8 @@ if (rehearsal || (hosted && store.read().revision === 1 && !store.latestGaming()
   loadSavedDemo(store, capture);
   console.log(`Saved research rehearsal: ${capture.capturedAt}. New private database: ${databasePath}`);
 }
+
+if (rehearsal && !hosted && process.argv.includes("--comparison")) loadComparisonExample(store);
 
 const recovery = createReviewRecovery(store.recoveryStore);
 const stopRecovery = startReviewRecovery(recovery);

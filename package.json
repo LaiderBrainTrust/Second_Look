@@ -20,7 +20,8 @@
     "capture:demo": "tsx scripts/capture-demo.ts",
     "start": "node --import tsx server/index.ts",
     "mcp": "node --import tsx scripts/mcp.ts",
-    "connect:agent": "node --import tsx scripts/connect-agent.ts"
+    "connect:agent": "node --import tsx scripts/connect-agent.ts",
+    "demo:comparison": "concurrently -k -n api,web \"tsx server/index.ts --demo --comparison\" \"npm:dev:web\""
   },
   "dependencies": {
     "@modelcontextprotocol/client": "^2.4.0",

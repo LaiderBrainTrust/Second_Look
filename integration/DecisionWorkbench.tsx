@@ -48,6 +48,7 @@ export function DecisionWorkbench({
   const [caseView, setCaseView] = useState<CaseView | null>(null);
   const [form, setForm] = useState(blank);
   const [editing, setEditing] = useState<ComparisonOffer | null>(null);
+  const [selectedPair, setSelectedPair] = useState("");
   const [formOpen, setFormOpen] = useState(false);
   const [formRevision, setFormRevision] = useState<number | null>(null);
   function startOffer(fromCurrent = false) {
@@ -271,6 +272,7 @@ export function DecisionWorkbench({
     ...(caseBase === "/api/case" ? {} : { case: caseBase.split("/").at(-1)! }),
     view: "conversation",
   })}`;
+  const pair = analysis?.pairs.find(p => p.offerIds.join(":") === selectedPair) ?? analysis?.pairs[0];
   const names = (ids: string[]) =>
     ids.map((id) => offers.find((o) => o.id === id)?.buyer ?? id).join(", ");
   return (
@@ -308,6 +310,37 @@ export function DecisionWorkbench({
               buyer’s offer. You can leave details you don’t know blank and
               return to them later. This comparison is private to you.
             </p>
+          )}
+          {pair && (
+            <section className="offer-difference" aria-label="Difference between offers" aria-live="polite">
+              <h3>What changes between these offers?</h3>
+              {analysis.pairs.length > 1 && <label>Choose two offers
+                <select value={pair.offerIds.join(":")} onChange={e => setSelectedPair(e.target.value)}>
+                  {analysis.pairs.map(p => <option key={p.offerIds.join(":")} value={p.offerIds.join(":")}>{names(p.offerIds)}</option>)}
+                </select>
+              </label>}
+              <div className="offer-pair-grid">
+                {pair.offerIds.map((id, index) => {
+                  const o = analysis.offers.find(row => row.id === id)!;
+                  return <div key={id}>
+                    <h4>{o.buyer}</h4>
+                    <strong className="offer-pair-total">{pair.cashCents ? usd(pair.cashCents[index]) : "Cash total needs confirmation"}</strong>
+                    <dl>
+                      <dt>Buyer pays</dt><dd>{usd(o.purchasePriceCents)}</dd>
+                      <dt>Price adjustment</dt><dd>{o.priceAdjustmentCents === null ? "Unknown" : usd(o.priceAdjustmentCents)}</dd>
+                      <dt>Your fees</dt><dd>{o.sellerFeesCents === null ? "Unknown" : usd(o.sellerFeesCents)}</dd>
+                      <dt>Fund payout goes to</dt><dd>{o.distributionRecipient === "seller" ? "You" : o.distributionRecipient === "buyer" ? "The buyer" : "Unknown"}</dd>
+                    </dl>
+                    <details><summary>Entered source and date</summary><p>{o.sourceNotePreview}{o.sourceNoteTruncated ? "…" : ""}</p><p>Rights as of {o.recordDate ?? "an unknown date"}.</p></details>
+                  </div>;
+                })}
+              </div>
+              {pair.differenceCents !== null ? <p className="offer-pair-verdict"><strong>{pair.differenceCents === 0 ? "These offers leave you with the same cash." : `${names([pair.offerIds[pair.differenceCents > 0 ? 0 : 1]])} leaves you with ${usd(Math.abs(pair.differenceCents))} more.`}</strong> Before tax, using the fund answer and terms you checked.</p>
+                : <p>No confirmed cash difference yet. Check the missing details and whether the fund answer applies to each offer.</p>}
+              {pair.tieDistributionCents !== null && <p><strong>The turning point is a {usd(pair.tieDistributionCents)} fund payout.</strong> At that amount these two offers tie. Above it, {names([pair.retainingOfferId!])} leaves you with more cash; below it, the other offer does. This is a condition, not a payout forecast.</p>}
+              {pair.status === "incomplete" && <ul>{pair.reasons.map((r, i) => <li key={i}>{r}</li>)}</ul>}
+              <p className="muted">This compares cash terms for the same fund interest. It does not accept an offer or change your main sale.</p>
+            </section>
           )}
           {!formOpen && (
             <div className="comparison-start-actions sl-actions">
@@ -567,7 +600,7 @@ export function DecisionWorkbench({
               </table>
             </div>
           )}
-          {analysis.frontier && (
+          {analysis.frontier && (analysis.pairs.length > 1 || !pair?.tieDistributionCents) && (
             <div aria-live="polite">
               <h3>
                 {analysis.frontier.withinSupportedRange
@@ -691,7 +724,7 @@ export function DecisionWorkbench({
                   the payout. Then record your check to include the amount in
                   the comparison.
                 </p>
-                {offers
+                <div className="sl-actions">{offers
                   .filter(
                     (o) =>
                       !o.withdrawn &&
@@ -711,7 +744,7 @@ export function DecisionWorkbench({
                     >
                       I checked: this answer applies to {o.buyer}
                     </button>
-                  ))}
+                  ))}</div>
               </div>
             )}
           {showFunding && (
