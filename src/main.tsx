@@ -5,6 +5,7 @@ import type { Command } from '../server/domain';
 import './styles.css';
 import { GamingPanel } from './GamingPanel';
 import { ResearchPanel } from './ResearchPanel';
+import { DecisionWorkbench } from '../integration/DecisionWorkbench';
 
 const labels: Record<Role, string> = { lp: 'Investor', gp: 'Fund manager', buyer: 'Buyer' };
 const usd = (cents: number) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(cents / 100);
@@ -37,7 +38,7 @@ function App() {
   }
   const [rehearsal, setRehearsal] = useState(false);
   useEffect(() => { void fetch('/api/health').then(r => r.json()).then(value => setRehearsal(value.mode === 'saved-research-rehearsal')).catch(() => {}); }, []);
-  const [step, setStep] = useState<'games' | 'question' | 'terms'>('games');
+  const [step, setStep] = useState<'games' | 'question' | 'terms'>('terms');
   const [researchVersion, setResearchVersion] = useState(0);
   const [role, setRole] = useState<Role>('lp');
   const [data, setData] = useState<CaseView | null>(null);
@@ -90,7 +91,8 @@ function App() {
       {error && <div role="alert" className="error">{error} Use “Refresh case” to load the latest saved state.</div>}
       {!data ? <p role="status">{error ? 'Case unavailable.' : 'Loading the saved case…'}</p> : <>
         <div className="heading"><div><p className="eyebrow">Offer v{data.offer.version} · case revision {data.revision}</p><h1>Know the games.<br/>Know the deal.</h1><p>{data.title}</p></div><div className="price"><span>Purchase payment</span><strong>{usd(data.offer.purchasePriceCents)}</strong><span>Distribution goes to the {data.offer.distributionRecipient}.</span></div></div>
-        {review && <nav className="workflow-nav" aria-label="Review steps">{([['games', '1. Inspect the games'], ['question', '2. Ask the manager'], ['terms', '3. Review the deal']] as const).map(([value, label]) => <button key={value} className={step === value ? 'active' : 'secondary'} aria-current={step === value ? 'step' : undefined} onClick={() => setStep(value)}>{label}</button>)}</nav>}
+        {review && <nav className="workflow-nav" aria-label="Review steps">{([['terms', '1. Compare the offers'], ['games', '2. Inspect the games'], ['question', '3. Research the question']] as const).map(([value, label]) => <button key={value} className={step === value ? 'active' : 'secondary'} aria-current={step === value ? 'step' : undefined} onClick={() => setStep(value)}>{label}</button>)}</nav>}
+        {review && step === 'terms' && <DecisionWorkbench caseBase="/api/case" onChanged={()=>void refresh()}/>}
         {review?.status === 'terms_changed' && <section className="changed" aria-live="polite"><strong>The terms or supporting answer changed.</strong><p>Your earlier review remains on record, but it does not apply to this version. Review the current response before approving again.</p></section>}
         {review && step === 'games' && <GamingPanel revision={data.revision} onPrepared={() => { setResearchVersion(v => v + 1); refreshProviders(); setStep('question'); }}/>}
         {review && step === 'question' && <ResearchPanel data={data} refreshVersion={researchVersion} onShared={next => { setData(next); setStep('terms'); }} onProviderChange={refreshProviders}/>}

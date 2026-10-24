@@ -32,3 +32,7 @@ Read [PLAN.md](PLAN.md) first. This board records proposed work, not automatic d
 - Good independent lanes: add `docs/FOUNDER_BRIEF.md` with genuine evidence; prepare a video outside source; verify setup and report results; resolve sponsor interpretation.
 
 A useful teammate handoff says: owner, branch/commit, files changed, commands/checks run, what still fails, and the next action. Do not paste API keys into the board or code review.
+
+## New backend and agent handoff
+
+Mat/Codex: deterministic winning-offer threshold, private decisive-question generation, and case-scoped MCP are implemented. With Mat's explicit authorization, Codex wired `integration/DecisionWorkbench.tsx` into the current investor screen, with quote entry, revision and withdrawal. Ryan retains final design and account-selection UI. Main navigation now starts at the comparison. See `DECISIVE_QUESTION.md` and `MCP.md`. Claude browser-only remote OAuth is not included.

@@ -7,8 +7,10 @@ import { decisionRecordRouter } from './decision-record.js';
 import { diligenceRouter } from './diligence.js';
 import { caseResearchRouter } from './case-research.js';
 import { researchRouter } from './research.js';
+import { decisionRouter } from './decision.js';
+import type { AgentAccess } from './agent-access.js';
 
-export function workspaceRouter(store: ReturnType<typeof createStore>, access: WorkspaceAccess, origin: string, recovery?: ReturnType<typeof createReviewRecovery>) {
+export function workspaceRouter(store: ReturnType<typeof createStore>, access: WorkspaceAccess, origin: string, recovery?: ReturnType<typeof createReviewRecovery>, agents?: AgentAccess) {
   const router = Router();
   router.use((_req, res, next) => {
     if (res.locals.session?.mode !== 'account') { res.status(401).json({ error: 'Sign in to an individual account to open your cases.' }); return; }
@@ -33,6 +35,14 @@ export function workspaceRouter(store: ReturnType<typeof createStore>, access: W
         route.get('/', (_req, res) => res.json(view(scoped.read(), res.locals.role)));
         route.use('/decision-record', decisionRecordRouter(scoped));
         route.use('/diligence', diligenceRouter(scoped));
+        route.use('/decision', decisionRouter(scoped));
+        if (agents) {
+          route.get('/agent-keys', (_req, res) => res.json({ keys: agents.list(caseId, res.locals.session.user.id) }));
+          route.post('/agent-keys', (req, res, next) => {
+            try { res.status(201).json(agents.issue(caseId, res.locals.session.user.id, req.body?.label, req.body?.scope)); } catch (error) { next(error); }
+          });
+          route.post('/agent-keys/:id/revoke', (req, res) => { agents.revoke(caseId, res.locals.session.user.id, String(req.params.id)); res.json({ ok: true }); });
+        }
         route.use('/research', (req, res, next) => {
           if (req.method !== 'GET' && !scoped.read().allowExternalResearch) { res.status(403).json({ error: 'External research is not enabled for this case. The owner must explicitly allow sponsor processing in the case settings.' }); return; }
           next();

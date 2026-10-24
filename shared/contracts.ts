@@ -1,6 +1,6 @@
 import type { DiligenceState } from './diligence.js';
 export type Role = 'lp' | 'gp' | 'buyer';
-export interface Actor { userId: string; displayName: string; role: Role }
+export interface Actor { userId: string; displayName: string; role: Role; agentKeyId?: string }
 export type Provider = 'x1' | 'nicrron' | 'akta' | 'roundtable' | 'prism';
 
 export interface SourceRef {
