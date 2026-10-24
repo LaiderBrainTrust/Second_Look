@@ -77,3 +77,10 @@ X1 supports OAuth, but its current `apps/mcp/lib/oauth-client-policy.ts` admits 
 ### Verification of this slice
 
 76 tests and the production build passed. An isolated signed-in synthetic account exercised the real `FundingPanel` and actual account case routes against X1: connect read-only key, search `capital`, preview/copy page 1, disconnect. The excerpt remained, funding facts stayed unset, and a post-disconnect search returned 503. This verifies the connection slice; the isolated test shell is not the missing customer onboarding UI. Tests also cover encrypted restart, ciphertext substitution refusal, cross-account/manager denial, broad-scope refusal, and disconnect during in-flight connection/search. No production customer credential was used.
+
+## Browser consent
+
+[Connect X1 OAuth](X1_OAUTH.md) adds an optional browser flow for individual case
+owners. It preserves Second Look identity and the manual read-only key fallback.
+Runtime activation and the production browser acceptance check are separate gates;
+the synthetic shared presentation key is not an investor login.

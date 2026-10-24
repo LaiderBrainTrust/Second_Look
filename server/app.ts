@@ -1,3 +1,5 @@
+import { createX1Connections } from './x1-connections.js';
+import { createX1OAuth } from './x1-oauth.js';
 import { fundingRouter } from './funding.js';
 import { mcpHelpRouter } from './mcp-help.js';
 import { x1Router } from './x1-context.js';
@@ -43,15 +45,19 @@ export function createApp(store: ReturnType<typeof createStore>, options: { rele
   const agentAccess = access ? createAgentAccess(store.db, access) : undefined;
   // Dedicated bearer-only route. It never inherits presenter or browser cookies.
   if (agentAccess) app.use('/api/agent', agentApi(store, agentAccess));
+  const connections = access ? createX1Connections(store.db) : undefined;
+  const x1OAuth = access && connections && options.hosted ? createX1OAuth(store.db, access, connections, options.hosted.origin) : undefined;
+  if (x1OAuth) app.use(x1OAuth.publicRouter);
   if (options.hosted) installHostedAuth(app, options.hosted, access);
   else app.get('/api/session', (_req, res) => res.json({ hosted: false, authenticated: true }));
+  if (x1OAuth) app.use('/api/connections/x1', x1OAuth.privateRouter);
   app.get('/api/health', (_req, res) => res.json({ ok: true, mode: options.rehearsal ? 'saved-research-rehearsal' : 'local-synthetic-scaffold', ...(/^[a-f0-9]{40}$/.test(options.releaseSha ?? '') ? { releaseSha: options.releaseSha } : {}) }));
   app.get('/api/providers', (_req, res) => res.json(providerStatuses()));
   app.use('/api/research', (req, res, next) => {
     if (options.hosted && res.locals.session?.mode !== 'presenter') { res.status(403).json({ error: 'Use the research tools within a case you own.' }); return; }
     next();
   }, researchRouter(options.hosted ? [options.hosted.origin] : undefined));
-  if (options.hosted && access) app.use('/api/cases', workspaceRouter(store, access, options.hosted.origin, options.recovery, agentAccess));
+  if (options.hosted && access) app.use('/api/cases', workspaceRouter(store, access, options.hosted.origin, options.recovery, agentAccess, connections, x1OAuth));
   app.use('/api/case', (req, res, next) => {
     // Local role simulation; hosted roles come only from the authenticated, case-scoped presenter session.
     const role = options.hosted ? res.locals.session?.role : req.header('x-demo-role');
