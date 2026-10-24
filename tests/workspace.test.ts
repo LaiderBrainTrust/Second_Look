@@ -87,6 +87,35 @@ it('runs an entered case with distinct accounts, one-time invitations, fixed rol
   } finally { await server.close(); store.close(); }
 });
 
+it('allows an explicitly unknown payout recipient without inventing a total and rejects invalid choices', async () => {
+  const store = createStore(':memory:'); const server = await serverFor(store);
+  const lp = client(server.base), gp = client(server.base), buyer = client(server.base);
+  try {
+    await lp.request('/api/accounts', { handle: 'unknown-owner', displayName: 'Owner', password: pw, registrationCode: accessCode });
+    const payload = { ...input(), distributionRecipient: null };
+    const created = await lp.request('/api/cases', payload);
+    expect(created.status).toBe(201);
+    expect(created.data.offer.distributionRecipient).toBeNull();
+    expect(created.data.privateReview.grossReceiptsCents).toBeNull();
+    expect((await lp.request('/api/cases', payload)).data.id).toBe(created.data.id);
+    for (const recipient of ['unknown', '', undefined]) {
+      expect((await lp.request('/api/cases', { ...input(), distributionRecipient: recipient })).status).toBe(400);
+    }
+    const path = `/api/cases/${created.data.id}`;
+    const invitation = await lp.request(path + '/invitations', { role: 'gp' });
+    await gp.request('/api/invitations/accept', { token: invitation.data.token, handle: 'unknown-contact', displayName: 'Fund Contact', password: pw });
+    expect((await gp.request(path + '/commands', { expectedRevision: 1, command: { kind: 'answer', distributionCents: 10_000_000, text: 'Payout confirmed by notice dated October 24.' } })).status).toBe(200);
+    expect((await lp.request(path + '/commands', { expectedRevision: 2, command: { kind: 'approve' } })).status).toBe(422);
+    expect((await lp.request(path)).data.privateReview.grossReceiptsCents).toBeNull();
+    const buyerInvitation = await lp.request(path + '/invitations', { role: 'buyer' });
+    await buyer.request('/api/invitations/accept', { token: buyerInvitation.data.token, handle: 'unknown-buyer', displayName: 'Buyer', password: pw });
+    expect((await buyer.request(path + '/commands', { expectedRevision: 2, command: { kind: 'revise_offer', purchasePriceCents: payload.purchasePriceCents, priceAdjustmentCents: 0, distributionRecipient: 'seller', sourceNote: 'Sale agreement clause 2 retains payout for seller.' } })).status).toBe(200);
+    const reviewed = await lp.request(path + '/commands', { expectedRevision: 3, command: { kind: 'approve' } });
+    expect(reviewed.status).toBe(200);
+    expect(reviewed.data.privateReview.grossReceiptsCents).toBe(80_000_001);
+  } finally { await server.close(); store.close(); }
+});
+
 it('persists account sessions and memberships across process restart and stores no plaintext credentials', async () => {
   const dir = mkdtempSync(join(tmpdir(), 'workspace-test-')); const path = join(dir, 'state.sqlite');
   let store = createStore(path); let server = await serverFor(store); let user = client(server.base);

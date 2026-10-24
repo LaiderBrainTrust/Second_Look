@@ -12,14 +12,14 @@ export function reviewInput(input: ResearchInput): Omit<ResearchResult, 'sources
   if (!input || !Number.isSafeInteger(input.caseRevision) || input.caseRevision < 1 || typeof input.caseId !== 'string'
     || typeof input.finding?.claim !== 'string' || input.finding.claim.length > 5000 || !input.finding.companyId
     || !input.finding.source?.id || !Number.isSafeInteger(input.offer?.purchasePriceCents)
-    || !['buyer', 'seller'].includes(input.offer.distributionRecipient)
+    || (input.offer.distributionRecipient !== null && !['buyer', 'seller'].includes(input.offer.distributionRecipient))
     || !/^\d{4}-\d{2}-\d{2}$/.test(input.after) || !Number.isFinite(Date.parse(input.finding.publishedAt))
     || input.finding.publishedAt.slice(0, 10) <= input.after) throw new Error('Research input is incomplete or not after the report cutoff.');
   const url = new URL(input.finding.source.url ?? '');
   if (!['https:', 'http:'].includes(url.protocol)) throw new Error('Research needs a valid cited source.');
   return {
     caseId: input.caseId, caseRevision: input.caseRevision, findingId: input.finding.source.id, method: 'rule-based',
-    question: `The ${input.finding.companyName} article dated ${input.finding.publishedAt.slice(0, 10)} reports “${input.finding.claim}”. Does this change the fund's reported value or expected distributions supporting offer v${input.offer.version}? Please provide dated support and confirm whether the distribution still goes to the ${input.offer.distributionRecipient} at the unchanged purchase payment.`,
+    question: `The ${input.finding.companyName} article dated ${input.finding.publishedAt.slice(0, 10)} reports “${input.finding.claim}”. Does this change the fund's reported value or expected distributions supporting offer v${input.offer.version}? Please give the payout amount attributable to this fund interest and the dated notice or report supporting it. Who keeps that payout must be checked separately against the sale agreement.`,
     explanation: `The article is later than the ${input.after} report cutoff and names the selected company. This rule-based check proposes a question; it does not establish materiality, verify the publisher's claim, or change the investment value.`,
   };
 }

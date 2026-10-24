@@ -15,7 +15,7 @@ export interface Offer {
   version: number;
   purchasePriceCents: number;
   currency: 'USD';
-  distributionRecipient: 'seller' | 'buyer';
+  distributionRecipient: 'seller' | 'buyer' | null;
   priceAdjustmentCents: number | null;
   source: SourceRef;
 }

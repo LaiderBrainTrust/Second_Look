@@ -270,11 +270,12 @@ export function Workspace({ session }: { session: Session }) {
         priceAdjustmentCents: f.get("adjustment")
           ? cents(f.get("adjustment"), true)
           : null,
-        distributionRecipient: f.get("recipient"),
+        distributionRecipient:
+          f.get("recipient") === "unknown" ? null : f.get("recipient"),
         reportNote: f.get("report") || "Report not yet provided",
         offerNote: f.get("source"),
         question:
-          "What distribution is attributable to this interest, and who keeps it under the sale terms?",
+          "What distribution is attributable to this fund interest? Please give the amount and the dated notice or report supporting it.",
         allowExternalResearch: f.get("research") === "on",
       };
       const payload = JSON.stringify(body);
@@ -299,7 +300,7 @@ export function Workspace({ session }: { session: Session }) {
           <h1 tabIndex={-1}>Your sale reviews</h1>
           <p>
             Welcome, {session.user?.displayName}. Compare what an offer pays,
-            get the manager’s answer, and keep a record of what you reviewed.
+            confirm the fund payout, and keep a record of what you reviewed.
           </p>
         </div>
         <button
@@ -326,7 +327,7 @@ export function Workspace({ session }: { session: Session }) {
           <h2>What sale are you considering?</h2>
           <p>
             Have the buyer’s email or offer beside you. Enter its terms below;
-            then invite the fund manager to confirm the distribution.
+            then ask your fund contact to confirm the payout amount.
           </p>
           <form
             className="sl-form-grid"
@@ -373,19 +374,21 @@ export function Workspace({ session }: { session: Session }) {
               </span>
             </label>
             <label>
-              Who keeps distributions under this offer?
+              Under the sale agreement, who keeps the fund payouts?
               <select name="recipient" defaultValue="" required>
                 <option value="" disabled>
-                  Choose from the written offer
+                  Choose an answer
                 </option>
+                <option value="unknown">Not confirmed yet</option>
                 <option value="seller">
                   The seller (owner of the interest)
                 </option>
                 <option value="buyer">The buyer</option>
               </select>
               <span className="sl-field-help">
-                Distributions are payouts from the fund. Check who receives them
-                under this offer.
+                Distributions are payouts from the fund. If the offer does not
+                say who keeps them, choose “Not confirmed yet.” You can start
+                now and confirm the sale terms with the buyer later.
               </span>
             </label>
             <label>
@@ -449,7 +452,7 @@ export function Workspace({ session }: { session: Session }) {
                   {c.role === "lp"
                     ? "Investor"
                     : c.role === "gp"
-                      ? "Fund manager"
+                      ? "Fund contact"
                       : "Buyer"}
                 </span>
                 <h2>{c.title}</h2>
@@ -458,7 +461,7 @@ export function Workspace({ session }: { session: Session }) {
                     ? "Open the investor’s question and give your answer"
                     : c.role === "buyer"
                       ? "Confirm or update the offer terms"
-                      : "Open the offer, manager’s answer and your saved review"}
+                      : "Open the offer, fund contact’s answer and your saved review"}
                 </p>
               </div>
               <span aria-hidden="true">→</span>

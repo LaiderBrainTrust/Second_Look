@@ -62,7 +62,7 @@ Mat reassigned UI ownership to Codex; the connected customer journey shipped in 
 Commands:
 
 - GP: `{ kind: 'answer', text, distributionCents }`.
-- Buyer: `{ kind: 'revise', distributionRecipient: 'seller' | 'buyer' }`.
+- Buyer: `{ kind: 'revise', distributionRecipient: 'seller' | 'buyer' | null }`.
 - Investor: `{ kind: 'approve' }`.
 
 General Akta endpoints: `POST /api/research/search {query}`, `/discover {query, limit?}`, `/enrichment {companyId}`, `/news {companyId, after}`. These call fixed provider origins; do not add arbitrary URL fetches.
@@ -70,7 +70,7 @@ General Akta endpoints: `POST /api/research/search {query}`, `/discover {query, 
 ## Financial and evidence invariants
 
 - Amounts are non-negative, bounded, safe integer cents. Unknown is not zero.
-- Gross receipts are unresolved until a distribution response and explicit purchase-price adjustment exist.
+- Gross receipts are unresolved until a distribution response, explicit purchase-price adjustment and confirmed payout recipient exist.
 - The fictional scenario computes purchase payment + explicit price adjustment + distribution if retained by the seller. It does not model tax, fees, dates, carry or other contract provisions.
 - Answer and offer changes advance case revision. Approval binds to one revision; stale commands fail with 409. A repeated approval for the same version is idempotent.
 - A term change saves the previous offer and before/after gross amounts at that moment. It does not rewrite an old approval.

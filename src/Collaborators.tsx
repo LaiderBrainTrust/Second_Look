@@ -66,23 +66,23 @@ export function Collaborators({
           ? "Confirm the missing offer terms"
           : manager
             ? "People in this review"
-            : "Get the manager’s answer"}
+            : "Ask your contact at the fund"}
       </h2>
       <p>
         {needsBuyer
-          ? "The price adjustment is still unknown. Invite the buyer to confirm it, including whether there is no adjustment."
+          ? "Some sale terms are not confirmed. Invite the buyer to confirm the price adjustment and who keeps fund payouts under the agreement."
           : manager
             ? answered
-              ? "The manager’s answer is saved. Review it alongside the sale terms."
+              ? "The fund contact’s answer is saved. Review it alongside the sale terms."
               : `${manager.displayName} has joined. They can open this review and answer the question beside it.`
-            : "Create a private link and send it to your fund manager. They can answer this question from their own account."}
+            : "Send a private link to your contact at the fund—for example, investor relations or the fund administrator. They can confirm the payout amount from their own account."}
       </p>
       {!!participants.length && (
         <ul className="sl-people">
           {participants.map((p) => (
             <li key={p.id}>
               <strong>{p.displayName}</strong>
-              <span>{p.role === "gp" ? "Fund manager" : "Buyer"} · joined</span>
+              <span>{p.role === "gp" ? "Fund contact" : "Buyer"} · joined</span>
             </li>
           ))}
         </ul>
@@ -131,7 +131,7 @@ export function Collaborators({
                 setCopied(false);
               }}
             >
-              <option value="gp">Fund manager</option>
+              <option value="gp">Fund contact</option>
               <option value="buyer">Buyer</option>
             </select>
           </label>
@@ -155,7 +155,7 @@ export function Collaborators({
             <p>
               <strong>
                 Link ready. Send it to the{" "}
-                {inviteRole === "gp" ? "fund manager" : "buyer"}.
+                {inviteRole === "gp" ? "fund contact" : "buyer"}.
               </strong>
             </p>
             <label>

@@ -40,6 +40,21 @@ it('keeps unresolved money and missing historical fields explicit and escapes un
   } finally { store.close(); }
 });
 
+it('exports an unknown payout recipient as unconfirmed and keeps the total unresolved', () => {
+  const store = createStore(':memory:');
+  try {
+    store.command('gp', 1, { kind: 'answer', text: 'Payout amount confirmed.', distributionCents: 10_000_000 });
+    store.command('buyer', 2, { kind: 'revise', distributionRecipient: null });
+    const record = decisionRecord(store);
+    const html = decisionRecordHtml(record);
+    expect(record.case.offer.distributionRecipient).toBeNull();
+    expect(record.case.privateReview?.grossReceiptsCents).toBeNull();
+    expect(html).toContain('Distribution recipient</th><td>Not confirmed');
+    expect(html).toContain('Missing payout or sale terms');
+    expect(html).not.toContain('Ready for investor review');
+  } finally { store.close(); }
+});
+
 it('requires the investor session, validates export options and rejects a stale displayed revision', async () => {
   const store = createStore(':memory:');
   const origin = 'https://demo.test'; const code = 'test-code-with-at-least-32-characters';

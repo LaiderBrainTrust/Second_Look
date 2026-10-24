@@ -23,14 +23,14 @@ import {
 import { X1Sources } from "./X1Sources";
 const names: Record<Role, string> = {
   lp: "Investor",
-  gp: "Fund manager",
+  gp: "Fund contact",
   buyer: "Buyer",
 };
 const steps = [
-  ["deal", "The deal"],
-  ["evidence", "The evidence"],
-  ["conversation", "The conversation"],
-  ["decision", "Your decision"],
+  ["deal", "Your offer"],
+  ["evidence", "Research (optional)"],
+  ["conversation", "Confirm details"],
+  ["decision", "Review & save"],
 ] as const;
 export function ProductApp() {
   const [session, setSession] = useState<Session | null>(null),
@@ -345,7 +345,7 @@ function CasePage({
       : view === "conversation"
         ? "Get the answer that matters."
         : view === "decision"
-          ? "Know exactly what you’re reviewing."
+          ? "Review the terms before you save."
           : "Look at the whole deal.";
   const ready =
     !!data.answer &&
@@ -411,8 +411,8 @@ function CasePage({
             : changed
               ? "Changed since review"
               : data.answer
-                ? "Manager answered"
-                : "Manager’s answer needed"}
+                ? "Fund response saved"
+                : "Fund payout not confirmed"}
         </span>
       </div>
       <nav className="sl-step-nav" aria-label="Review workflow">
@@ -484,7 +484,7 @@ function CasePage({
               <CashTerms data={data} />
               <p className="sl-help">
                 Cash before taxes, fees and timing. These figures use the
-                entered terms and the manager’s stated distribution.
+                entered terms and the fund contact’s stated distribution.
               </p>
               <details className="sl-source">
                 <summary>Where these terms came from</summary>
@@ -500,25 +500,25 @@ function CasePage({
             <aside className="sl-next-step">
               <h2>
                 {role === "gp"
-                  ? "Confirm what the investor keeps."
+                  ? "Confirm the fund’s payout."
                   : role === "buyer"
                     ? "Make your sale terms clear."
                     : approved
                       ? "Your review is on record."
                       : data.answer
                         ? "Check the answer against the offer."
-                        : "Find out who keeps the distribution."}
+                        : "Check the fund payout before you decide."}
               </h2>
               <p>
                 {role === "gp"
-                  ? "Give the investor the amount, contractual basis and source for your answer."
+                  ? "Give the investor the distribution amount and the dated notice or report that supports it. The sale agreement separately determines who keeps it."
                   : role === "buyer"
                     ? "The investor will need to review the sale again if you change its terms."
                     : approved
                       ? "Your review is saved with these terms. You can revisit the record or download a copy to share."
                       : data.answer
-                        ? "The manager has answered. Review the sale and record your decision for this version."
-                        : "A distribution can change the economics of a sale. Get the manager’s answer before treating it as money you will receive."}
+                        ? "The fund contact has answered. Review the sale and record your decision for this version."
+                        : "Ask your contact at the fund—such as investor relations—to confirm the distribution amount. Then check whether your sale agreement lets you keep it."}
               </p>
               <button
                 className="sl-primary"
@@ -542,23 +542,23 @@ function CasePage({
                       ? "View your recorded review"
                       : data.answer
                         ? "Review this sale"
-                        : "Open the manager question"}
+                        : "Ask your fund about the payout"}
               </button>
               {role === "lp" && !data.answer && (
                 <button
                   className="sl-text-button"
                   onClick={() => go("evidence")}
                 >
-                  First, check the evidence
+                  Optional: check company news
                 </button>
               )}
             </aside>
           </div>
           {role === "lp" && (
             <>
-              <details className="sl-option">
+              <details className="sl-option" id="compare-offers">
                 <summary>
-                  Compare an alternative offer
+                  Compare offers
                   <span>
                     Compare cash terms without changing the current sale.
                   </span>
@@ -581,6 +581,15 @@ function CasePage({
                   revision={data.revision}
                   ownerEntity={review?.ownerEntity ?? ""}
                   onChanged={() => void refresh()}
+                  onAddOffer={() => {
+                    const panel = document.getElementById(
+                      "compare-offers",
+                    ) as HTMLDetailsElement | null;
+                    if (panel) {
+                      panel.open = true;
+                      panel.scrollIntoView({ block: "start" });
+                    }
+                  }}
                 />
               </details>
             </>
@@ -605,17 +614,20 @@ function CasePage({
           {personal ? (
             <>
               <X1Sources
+                key={base}
                 caseBase={base}
                 revision={data.revision}
                 onChanged={() => void refresh()}
               />
               {!review?.allowExternalResearch ? (
                 <section className="sl-sheet">
-                  <h2>Research outside the fund report</h2>
+                  <h2>Check news about companies in your fund</h2>
                   <p>
-                    With your permission, selected company evidence and relevant
-                    sale terms are processed by Akta, Roundtable, Nicrron and
-                    PRISM. Your X1 credentials are never shared with them.
+                    Find news published after your fund report, then turn a
+                    relevant change into a question for your fund contact. With
+                    your permission, selected company evidence and relevant sale
+                    terms are processed by Akta, Roundtable, Nicrron and PRISM.
+                    Your X1 credentials are never shared with them.
                   </p>
                   <button
                     className="sl-primary"
@@ -631,11 +643,12 @@ function CasePage({
                       )
                     }
                   >
-                    Enable external research for this case
+                    Allow company research for this review
                   </button>
                 </section>
               ) : (
                 <ResearchPanel
+                  key={base}
                   data={data}
                   caseBase={base}
                   refreshVersion={researchVersion}
@@ -664,6 +677,7 @@ function CasePage({
                 }}
               />
               <ResearchPanel
+                key={base}
                 data={data}
                 refreshVersion={researchVersion}
                 onShared={(d) => {
@@ -692,7 +706,7 @@ function CasePage({
               {data.answer ? (
                 <div className="sl-message sl-message-answer">
                   <span className="sl-person">
-                    Fund manager’s answer ·{" "}
+                    Fund contact’s answer ·{" "}
                     {currency(data.answer.distributionCents)}
                   </span>
                   <p>{data.answer.text}</p>
@@ -703,16 +717,24 @@ function CasePage({
                   <h3>
                     {role === "gp"
                       ? "Add your answer below."
-                      : "The manager’s answer will appear here."}
+                      : "The fund contact’s answer will appear here."}
                   </h3>
                   <p>
                     {role === "gp"
                       ? "Confirm the amount and explain which document supports it."
                       : personal
-                        ? "Use the private invitation beside this question to give the fund manager access."
-                        : "To try the complete example, switch to Fund manager in Presenter controls above, then enter an answer."}
+                        ? "Use the private invitation beside this question to give the fund contact access."
+                        : "This example lets you try both sides. Switch to the fund contact below to answer, then return as the investor."}
                   </p>
                 </div>
+              )}
+              {!personal && role === "lp" && !data.answer && (
+                <button
+                  className="sl-secondary"
+                  onClick={() => void switchRole("gp")}
+                >
+                  Try answering as the fund contact
+                </button>
               )}
               {role === "gp" && (
                 <AnswerForm
@@ -743,7 +765,7 @@ function CasePage({
                             text: f.get("question"),
                             sourceNote: "Question written by the investor",
                           },
-                          "Question updated. A fresh manager answer is required.",
+                          "Question updated. A fresh fund contact answer is required.",
                         );
                       }}
                     >
@@ -796,7 +818,9 @@ function CasePage({
                   caseBase={base}
                   answered={!!data.answer}
                   needsBuyer={
-                    !!data.answer && data.offer.priceAdjustmentCents === null
+                    !!data.answer &&
+                    (data.offer.priceAdjustmentCents === null ||
+                      data.offer.distributionRecipient === null)
                   }
                 />
               ) : (
@@ -813,7 +837,7 @@ function CasePage({
                       ? "Your answer appears in the investor’s review. They can check the amount against the offer and save their review. You don’t need to send a separate document."
                       : role === "buyer"
                         ? "The investor sees the revised terms and must review them again. Their earlier review stays in the history."
-                        : "Use Presenter controls above to switch to Fund manager, answer the question, then return as Investor."}
+                        : "Use Presenter controls above to switch to Fund contact, answer the question, then return as Investor."}
                   </p>
                 </>
               )}
@@ -844,7 +868,7 @@ function CasePage({
             <div className="sl-checklist">
               <p>
                 <span>
-                  {data.answer ? "Confirmed by manager" : "Still needed"}
+                  {data.answer ? "Reported by fund contact" : "Still needed"}
                 </span>{" "}
                 Distribution amount and explanation
               </p>
@@ -864,6 +888,14 @@ function CasePage({
                 </span>{" "}
                 Other questions and requirements
               </p>
+              <p>
+                <span>
+                  {data.offer.distributionRecipient === null
+                    ? "Still needed"
+                    : "Recorded"}
+                </span>{" "}
+                Who keeps the fund payout under the sale agreement
+              </p>
             </div>
             {review?.diligenceBlockers?.map((b) => (
               <p className="sl-error" key={b}>
@@ -872,8 +904,9 @@ function CasePage({
             ))}
             {data.answer && <blockquote>{data.answer.text}</blockquote>}
             <p>
-              Your review records that you checked these terms. It does not
-              accept a sale, send money, or replace the signed agreement.
+              Save the offer, fund response and checked terms in a dated summary
+              you can download and share. Saving a review does not accept the
+              sale or send money.
             </p>
             <div className="sl-actions">
               <button
@@ -890,18 +923,20 @@ function CasePage({
                   ? "Saving review…"
                   : approved
                     ? "Review recorded"
-                    : "Record my review of this sale"}
+                    : "Save this review"}
               </button>
               <RecordDownload base={base} revision={data.revision} />
             </div>
             {!ready &&
-              (!data.answer || data.offer.priceAdjustmentCents === null) && (
+              (!data.answer ||
+                data.offer.priceAdjustmentCents === null ||
+                data.offer.distributionRecipient === null) && (
                 <button
                   className="sl-secondary"
                   onClick={() => go("conversation")}
                 >
                   {!data.answer
-                    ? "Get the manager’s answer"
+                    ? "Get the fund contact’s answer"
                     : "Ask the buyer to confirm the terms"}
                 </button>
               )}
@@ -922,7 +957,9 @@ function CasePage({
           <section className="sl-history">
             <h2>The decision history</h2>
             {!review?.events.length && !review?.reviews.length ? (
-              <p>No decisions recorded yet. Start with the manager’s answer.</p>
+              <p>
+                No decisions recorded yet. Start with the fund contact’s answer.
+              </p>
             ) : (
               <>
                 <ol>
@@ -990,7 +1027,9 @@ function CashTerms({ data }: { data: CaseView }) {
   return (
     <div className="sl-cash-terms">
       <div>
-        <span>Sale payment to investor</span>
+        <span>
+          {data.privateReview ? "Buyer pays you" : "Buyer pays the investor"}
+        </span>
         <strong>{currency(data.offer.purchasePriceCents)}</strong>
       </div>
       <div
@@ -998,25 +1037,37 @@ function CashTerms({ data }: { data: CaseView }) {
           data.offer.priceAdjustmentCents === null ? "sl-cash-unresolved" : ""
         }
       >
-        <span>Price adjustment</span>
+        <span>Adjustment in the offer</span>
         <strong>
           {data.offer.priceAdjustmentCents === null
             ? "Not confirmed"
             : `${data.offer.priceAdjustmentCents >= 0 ? "+ " : ""}${currency(data.offer.priceAdjustmentCents)}`}
         </strong>
       </div>
-      <div className={!data.answer ? "sl-cash-unresolved" : ""}>
+      <div
+        className={
+          !data.answer || data.offer.distributionRecipient === null
+            ? "sl-cash-unresolved"
+            : ""
+        }
+      >
         <span>
-          {data.offer.distributionRecipient === "seller"
-            ? "Investor keeps the distribution"
-            : "Buyer keeps the distribution"}
+          {data.offer.distributionRecipient === null
+            ? "Who keeps the fund payout?"
+            : data.offer.distributionRecipient === "seller"
+              ? data.privateReview
+                ? "Fund payout you keep"
+                : "Fund payout the investor keeps"
+              : "Fund payout goes to the buyer"}
         </span>
         <strong>
-          {data.offer.distributionRecipient === "buyer"
-            ? "Not included"
-            : amount === undefined
-              ? "Needs an answer"
-              : `+ ${currency(amount)}`}
+          {data.offer.distributionRecipient === null
+            ? "Check the sale agreement"
+            : data.offer.distributionRecipient === "buyer"
+              ? "Not included"
+              : amount === undefined
+                ? "Amount not confirmed"
+                : `+ ${currency(amount)}`}
         </strong>
       </div>
       <div
@@ -1027,7 +1078,7 @@ function CashTerms({ data }: { data: CaseView }) {
             ? "Investor’s private review"
             : total == null
               ? "Before calling this your total"
-              : "What the investor receives"}
+              : "Estimated cash before taxes and fees"}
         </span>
         <strong>
           {!data.privateReview
@@ -1107,14 +1158,14 @@ function AnswerForm({
         />
       </label>
       <label>
-        Which document confirms this amount and who keeps it?
+        Which dated notice or report confirms this amount?
         <textarea
           value={text}
           onChange={(e) => setText(e.target.value)}
           required
           maxLength={5000}
           rows={5}
-          placeholder="What supports this amount, and who receives it under the sale terms?"
+          placeholder="e.g. The October distribution notice lists $100,000 for this fund interest."
         />
       </label>
       {example && (
@@ -1125,7 +1176,7 @@ function AnswerForm({
             draft.markDirty();
             setAmount("100000");
             setText(
-              "Fictional manager response: the example distribution notice allocates $100,000 to this LP interest. This is an illustrative contractual assumption, not a forecast from game performance. The signed sale terms determine whether the seller or buyer receives it.",
+              "Fictional fund response: the example distribution notice allocates $100,000 to this LP interest. This is an illustrative contractual assumption, not a forecast from game performance. The signed sale terms determine whether the seller or buyer receives it.",
             );
           }}
         >
@@ -1173,7 +1224,8 @@ function BuyerForm({
             priceAdjustmentCents: f.get("adjustment")
               ? cents(f.get("adjustment"), true)
               : null,
-            distributionRecipient: f.get("recipient"),
+            distributionRecipient:
+              f.get("recipient") === "unknown" ? null : f.get("recipient"),
             sourceNote: f.get("source"),
           });
           if (saved) draft.markClean();
@@ -1207,13 +1259,17 @@ function BuyerForm({
           />
         </label>
         <label>
-          Who receives distributions?
+          Who keeps the fund payout under the sale agreement?
           <select
             name="recipient"
-            defaultValue={data.offer.distributionRecipient}
+            required
+            defaultValue={data.offer.distributionRecipient ?? "unknown"}
           >
-            <option value="seller">Seller</option>
-            <option value="buyer">Buyer</option>
+            <option value="unknown">Not confirmed yet</option>
+            <option value="seller">
+              The investor selling the fund interest
+            </option>
+            <option value="buyer">The buyer of the fund interest</option>
           </select>
         </label>
         <label>
@@ -1281,7 +1337,7 @@ function RecordDownload({
           }
         }}
       >
-        {busy ? "Preparing record…" : "Download decision record"}
+        {busy ? "Preparing record…" : "Download review summary"}
       </button>
       {error && (
         <p role="alert" className="sl-error">
