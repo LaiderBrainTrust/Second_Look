@@ -19,7 +19,7 @@ Choose **read** for analysis only. Choose **work** deliberately to allow the ass
 
 The script saves the token to an owner-only file under `~/.config/second-look/` and prints commands specific to your clone. Run the printed Codex or Claude Code command. Restart/reload the client if it requires that to discover newly configured tools. Do not commit the token file. The printed config contains only its path, not its value.
 
-To use another deployment, set `SECOND_LOOK_URL` to its exact HTTPS origin before setup. Once Railway and DNS are verified this can be `https://secondlook.ac`; it is not currently assumed live. The default is the current public event host.
+To use another deployment, set `SECOND_LOOK_URL` to its exact HTTPS origin before setup. The default is `https://secondlook.ac`, which resolves to Railway. To access cases still held on the older event host, explicitly set its HTTPS origin; the two deployments may hold different case databases.
 
 Example manual configuration pattern (substitute the exact absolute paths printed by setup):
 
@@ -72,3 +72,11 @@ The backend route is `/api/agent/:tool`; it is an internal HTTP bridge for the l
 ## Verification
 
 Tests exercise MCP initialization, schemas and tool calls through the real stdio transport, plus backend role/scope checks, cross-case argument rejection, stale revision, expiration, explicit revocation, password change and membership removal/re-addition. `docs/evaluations/second-look.xml` provides a fixed-scenario human/agent evaluation set; it is not evidence that a Claude or Codex model has independently passed it. Each team member must verify their own host connection.
+
+## Public connection instructions
+
+`/mcp` is a public human-readable setup page. `/mcp.txt` and `/llms.txt` contain agent-readable instructions, while `/mcp.json` describes the local bridge and tools. These routes need no case login and contain no keys. **They are documentation, not remote MCP protocol endpoints.** POST `/mcp` returns 405 with the setup location.
+
+Point a coding assistant at `https://YOUR_DEPLOYMENT/mcp.txt` to explain/setup the connection. Individual sign-in still happens in the user's terminal. Use the HTTPS origin that actually hosts the app; the purchased domain is not usable until DNS and hosting are verified.
+
+Two additional tools extend the original seven: `secondlook_read_funding` reads the private funding/deadline comparison, and `secondlook_save_funding` saves explicitly supplied funding constraints with work scope. Nine tools are now advertised. The offer tool also accepts payment and distribution dates. See [X1_CONTEXT.md](X1_CONTEXT.md).

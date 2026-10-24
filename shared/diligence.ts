@@ -1,3 +1,4 @@
+import type { FundingNeed, X1Evidence } from './funding.js';
 import type { Actor, Role } from './contracts.js';
 
 export interface ComparisonOffer {
@@ -15,6 +16,8 @@ export interface ComparisonOffer {
   conditions: string;
   withdrawn: boolean;
   version: number;
+  paymentDate?: string | null;
+  distributionDate?: string | null;
 }
 export interface TrackedQuestion {
   id: string;
@@ -35,8 +38,10 @@ export interface ClosingCondition {
   status: 'pending' | 'satisfied' | 'not_applicable';
   evidenceNote: string | null;
 }
-export type DiligenceItem = ComparisonOffer | TrackedQuestion | ClosingCondition;
+export type DiligenceItem = ComparisonOffer | TrackedQuestion | ClosingCondition | FundingNeed | X1Evidence;
 export interface DiligenceState {
+  funding?: FundingNeed;
+  x1Evidence?: X1Evidence[];
   offers: ComparisonOffer[];
   questions: TrackedQuestion[];
   conditions: ClosingCondition[];
@@ -44,6 +49,8 @@ export interface DiligenceState {
   history: { revision: number; at: string; by: Role; kind: DiligenceCommand['kind']; item: DiligenceItem; actor?: Actor }[];
 }
 export type DiligenceCommand =
+  | { kind: 'save_funding'; funding: FundingNeed }
+  | { kind: 'attach_x1_evidence'; evidence: X1Evidence }
   | { kind: 'save_offer'; offer: Omit<ComparisonOffer, 'version'> }
   | { kind: 'add_question'; question: Pick<TrackedQuestion, 'id' | 'question' | 'owner' | 'dueAt'> }
   | { kind: 'answer_question'; id: string; text: string }

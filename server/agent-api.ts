@@ -1,3 +1,4 @@
+import { analyzeFunding } from './funding.js';
 import { Router } from 'express';
 import type { AgentAccess } from './agent-access.js';
 import type { createStore } from './store.js';
@@ -27,7 +28,13 @@ export function agentApi(store: ReturnType<typeof createStore>, access: AgentAcc
       if (config.write && grant.scope !== 'work') throw new DomainError(403, 'This connection is read-only. Create an explicitly authorized work connection to save changes.');
       const scoped = store.forCase(grant.caseId), role = grant.actor.role;
       const data = parsed.data;
-      if (tool === 'secondlook_read_case') {
+      if (tool === 'secondlook_read_funding') {
+        if(role!=='lp') throw new DomainError(403,'Funding context is private to the investor.');
+        res.json(analyzeFunding(scoped.read()));
+      } else if(tool === 'secondlook_save_funding') {
+        const input=agentTools.secondlook_save_funding.schema.parse(data);
+        res.json({saved:true,revision:scoped.diligenceCommand(role,input.expectedRevision,{kind:'save_funding',funding:input.funding},grant.actor).revision});
+      } else if (tool === 'secondlook_read_case') {
         const result = view(scoped.read(), role);
         if (result.privateReview) { result.privateReview.events = []; result.privateReview.reviews = []; }
         res.json({ role, scope: grant.scope, case: result, historyOmitted: true });

@@ -36,3 +36,7 @@ A useful teammate handoff says: owner, branch/commit, files changed, commands/ch
 ## New backend and agent handoff
 
 Mat/Codex: deterministic winning-offer threshold, private decisive-question generation, and case-scoped MCP are implemented. With Mat's explicit authorization, Codex wired `integration/DecisionWorkbench.tsx` into the current investor screen, with quote entry, revision and withdrawal. Ryan retains final design and account-selection UI. Main navigation now starts at the comparison. See `DECISIVE_QUESTION.md` and `MCP.md`. Claude browser-only remote OAuth is not included.
+
+## Funding context and public MCP instructions
+
+Mat/Codex owns `shared/funding.ts`, `server/funding.ts`, `server/x1-context.ts`, `server/mcp-help.ts` and the additive `integration/FundingPanel.tsx`. Funding need/deadline comparison is integrated into the existing comparison; Ryan retains final design. Dedicated X1 account credentials/live import verification remain pending Mat's access handoff. Public `/mcp` is a setup guide, not a remote MCP endpoint. See `X1_CONTEXT.md`.

@@ -28,7 +28,7 @@ const reviewer = new AbortController();
 void runReviewer(reviewer.signal).catch(() => {
   if (!reviewer.signal.aborted) recordProviderResult('roundtable', false, 'Reviewer stopped. Check its credentials and restart the API to resume pending work.');
 });
-const app = createApp(store, { recovery, releaseSha: process.env.RELEASE_SHA, rehearsal: rehearsal || hosted, ...(hosted ? { hosted: { origin: process.env.DEMO_ORIGIN!, accessCode: process.env.DEMO_ACCESS_CODE! } } : {}) });
+const app = createApp(store, { recovery, releaseSha: process.env.RAILWAY_GIT_COMMIT_SHA ?? process.env.RELEASE_SHA, rehearsal: rehearsal || hosted, ...(hosted ? { hosted: { origin: process.env.DEMO_ORIGIN!, accessCode: process.env.DEMO_ACCESS_CODE! } } : {}) });
 if (hosted) installHostedUi(app, 'dist');
 const port = hosted ? Number(process.env.PORT ?? 3187) : 3001;
 const bindHost = process.env.BIND_HOST ?? '127.0.0.1';

@@ -15,7 +15,7 @@ React 19 + Vite 6; Express 5; TypeScript/ESM; Node 22.13+; native SQLite. `npm r
 - Nicrron generates question/explanation prose. It does not own IDs, prices, ownership, distributions or approvals.
 - PRISM stores a trace of that actual model call. A trace is not proof of factual correctness.
 - Steam/Akta are external evidence providers; source identity, retrieval dates, sample coverage and uncertainty remain visible.
-- X1 is not connected. If added, X1 would retain authority over its own source records and access policy; the app cannot grant itself access.
+- The optional X1 adapter reads selected document excerpts for one dedicated synthetic case; live acceptance awaits that account access. X1 retains authority over its source records and access policy. See [X1_CONTEXT.md](X1_CONTEXT.md).
 
 ## File map
 
@@ -103,7 +103,7 @@ npm run doctor
 npm run dev
 ```
 
-For changes, run `npm test` then `npm run build`. Current suite: 53 tests, including trace field-order reconciliation and rejection of actual mismatches. Do not repeat provider calls just to replace a saved source with a prettier result.
+For changes, run `npm test` then `npm run build`. Run the full current suite, including trace reconciliation, funding deadlines, MCP permissions and X1 excerpt-import guards. Do not repeat provider calls just to replace a saved source with a prettier result.
 
 Check the complete browser flow in GAMING_BUILD.md. Refresh/reopen and confirm persistence. Test the game screen and decision screen on a narrow viewport. A build does not establish live provider access; a local browser pass does not establish hosted authentication or user acceptance.
 

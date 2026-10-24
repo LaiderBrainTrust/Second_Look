@@ -2,7 +2,7 @@ import { readFileSync, statSync } from 'node:fs';
 import { StdioServerTransport } from '@modelcontextprotocol/server/stdio';
 import { createSecondLookMcp } from '../server/mcp.js';
 
-const origin = new URL(process.env.SECOND_LOOK_URL ?? 'https://x1cloud.tail6fbca0.ts.net');
+const origin = new URL(process.env.SECOND_LOOK_URL ?? 'https://secondlook.ac');
 if (origin.protocol !== 'https:' || origin.username || origin.password || origin.pathname !== '/' || origin.search || origin.hash) throw new Error('SECOND_LOOK_URL must be an HTTPS origin without credentials, path, query or fragment.');
 const path = process.env.SECOND_LOOK_TOKEN_FILE;
 if (!path) throw new Error('Set SECOND_LOOK_TOKEN_FILE to your private case connection file. See docs/MCP.md.');

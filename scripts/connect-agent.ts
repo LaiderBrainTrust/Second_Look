@@ -13,7 +13,7 @@ async function ask(label: string, secret = false) {
   const answer = rl.question(label); muted = secret;
   try { const value = await answer; return secret ? value : value.trim(); } finally { muted = false; if (secret) process.stdout.write('\n'); }
 }
-const origin = new URL(process.env.SECOND_LOOK_URL ?? 'https://x1cloud.tail6fbca0.ts.net');
+const origin = new URL(process.env.SECOND_LOOK_URL ?? 'https://secondlook.ac');
 if (origin.protocol !== 'https:' || origin.username || origin.password || origin.pathname !== '/' || origin.search || origin.hash) throw new Error('SECOND_LOOK_URL must be an HTTPS origin.');
 let cookie = '';
 async function call(path: string, body?: unknown) {
