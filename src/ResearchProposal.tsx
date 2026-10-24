@@ -20,7 +20,7 @@ export function ResearchProposal({ run }: { run: ResearchRun }) {
         {finding.source.url && <a href={finding.source.url} target="_blank" rel="noreferrer">Read {finding.source.label} ↗</a>}
       </> : <p>The selected source is unavailable in this saved result.</p>}
       {run.coverage && <p className="muted">{run.coverage}</p>}
-      {steam && <p className="muted">{steam.baseline.count} earlier and {steam.current.count} later English reviews sampled. {steam.deltaPoints === null ? "Too few reviews to establish a comparable change." : steam.deltaPoints >= 0 ? "This sample does not show a decline in positive reviews." : "This sample shows a decline in positive reviews, not a forecast of sales or fund payouts."} Player counts are point-in-time observations.</p>}
+      {steam && <p className="muted">{steam.baseline.count} earlier and {steam.current.count} later English reviews sampled. {steam.deltaPoints === null ? "Too few reviews to establish a comparable change." : run.gamingContext!.reason} Player counts are point-in-time observations.</p>}
       {run.gamingContext && !run.gamingContext.news.length && <p className="muted">No company news articles saved in this run. This does not establish that no news exists.</p>}
     </div>
     <div>

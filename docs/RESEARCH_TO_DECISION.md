@@ -47,7 +47,7 @@ Sponsor proof uses the saved run's company profile/news, task/input/output versi
 
 ## Verification
 
-104 automated tests across 26 files pass, including pair thresholds, ties, one-cent boundaries, excluded inputs, changed answer bases, research selection and incomplete sponsor evidence. TypeScript and the production build pass.
+The full suite passed 104 tests across 26 files. A final source-assessment refinement passed all 15 targeted comparison/presentation tests, bringing coverage to 105 tests. These cover pair thresholds, ties, one-cent boundaries, excluded inputs, changed answer bases, research selection and incomplete sponsor evidence. TypeScript and the production build pass.
 
 Browser acceptance used an isolated HTTPS database: saved Tiny Glade question and its source, all four persisted sponsor roles, explicit sharing, fictional fund response, per-offer checks, the $40,000 difference, a third offer/pair selector, changed-answer invalidation, and 390px layouts. The local capture uses the repository's validated original research fixture. No shared presentation data was modified.
 

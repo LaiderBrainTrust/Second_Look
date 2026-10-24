@@ -39,3 +39,10 @@ it('explains small samples without inventing a decline', () => {
   const html = renderToStaticMarkup(<ResearchProposal run={r}/>);
   expect(html).toContain('Too few reviews'); expect(html).not.toContain('shows a decline');
 });
+it('preserves the saved no-large-change assessment for a small sample movement', () => {
+  const r = run();
+  const window = { count: 100, positive: 97, positivePercent: 97, from: r.after, to: r.createdAt, excerpts: [] };
+  r.gamingContext!.reason = 'No large deterioration in these sampled reviews.';
+  r.gamingContext!.steam = { appId: 1, game: 'Tiny Glade', developers: [], publishers: [], sourceUrl: 'https://store.steampowered.com', retrievedAt: r.createdAt, current: window, baseline: window, deltaPoints: -2, playersNow: 10 };
+  expect(renderToStaticMarkup(<ResearchProposal run={r}/>)).toContain('No large deterioration');
+});
