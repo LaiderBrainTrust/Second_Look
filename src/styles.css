@@ -651,3 +651,14 @@ main { padding-bottom: 0; }
 .shell .bridge { margin: 48px 0 32px; padding: 32px; }
 .shell .bridge + p, .shell .detail ~ p.fine { margin-top: 24px; }
 .ledger .delta { white-space: normal; }
+
+/* Presenter panel in black and lime */
+.presenter { background: #0a0a0a; color: #f5f5f0; border-color: #2e2e2e; }
+.presenter::backdrop { background: rgba(0, 0, 0, .6); }
+.presenter section, .presenter .providers li { border-color: #2e2e2e; }
+.presenter .fine, .presenter .muted { color: #a3a39c; }
+.presenter button { background: #161616; color: #f5f5f0; border-color: #3a3a3a; }
+.presenter button:hover:enabled { border-color: var(--lime); color: var(--lime); }
+.presenter .segmented button.on { background: var(--lime); border-color: var(--lime); color: #0a0a0a; }
+.presenter .providers li:hover { background: #161616; }
+.presenter :focus-visible { outline-color: var(--lime); }
