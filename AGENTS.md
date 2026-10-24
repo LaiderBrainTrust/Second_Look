@@ -20,3 +20,7 @@ Start with the coding-agent prompt in README.md and the environment checklist in
 - Do not claim sponsor integration from environment-variable presence. Run real calls and preserve safe evidence. Never fabricate external findings.
 - Run npm test and npm run build for relevant changes. Source/tests, live integrations, deployment and customer outcomes are separate claims.
 - Minutes, trading, settlement, autonomous sending and a custom marketplace are outside today's product scope. A sponsor Marketplace listing may still be required; see docs/NICRRON_NINOO_SETUP.md.
+
+## UX acceptance
+
+For product usability or whole-app review requests, follow `docs/UX_ACCEPTANCE.md`. Review screens, roles and important states in the browser, including expanded optional sections. Fix demonstrated issues and record untested states. A passing scripted demo or a few polished screenshots does not establish whole-app usability.

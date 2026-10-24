@@ -2098,3 +2098,40 @@ button.sl-text-button:hover:enabled {
 .funding-example p:last-child {
   margin-bottom: 0;
 }
+
+/* Actions follow the state of the review, including missing-answer states. */
+.sl-review-checks {
+  margin: 24px 0;
+  padding: 8px 0;
+  border-block: 1px solid var(--line);
+}
+.sl-review-checks > div {
+  display: grid;
+  grid-template-columns: minmax(150px, 0.8fr) minmax(0, 1.5fr);
+  gap: 16px;
+  padding: 12px 0;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.sl-review-checks dt { color: var(--muted); }
+.sl-review-checks dd { margin: 0; }
+.sl-review-missing { font-weight: 600; }
+.sl-review-next {
+  padding: 20px;
+  margin: 24px 0;
+  border: 1px solid var(--input-line);
+  border-left: 3px solid var(--accent);
+  border-radius: 8px;
+}
+.sl-review-next h3 { margin: 0 0 12px; font-size: 18px; }
+.sl-review-next ul { padding-left: 20px; margin: 0; }
+.sl-review-next li + li { margin-top: 10px; }
+.sl-review-next p { margin: 14px 0 0; color: var(--muted); font-size: 14px; }
+.sl-review-actions { margin-top: 20px; gap: 12px; }
+.sl-review-saved { font-weight: 600; }
+#review-requirements { scroll-margin-top: 24px; }
+@media (max-width: 600px) {
+  .sl-review-checks > div { grid-template-columns: 1fr; gap: 4px; }
+}
+
+.decision-workbench form > .sl-actions { grid-column: 1 / -1; }

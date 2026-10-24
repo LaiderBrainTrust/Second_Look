@@ -310,7 +310,7 @@ export function DecisionWorkbench({
             </p>
           )}
           {!formOpen && (
-            <div className="comparison-start-actions">
+            <div className="comparison-start-actions sl-actions">
               {offers.length === 0 && caseView && (
                 <button type="button" onClick={() => startOffer(true)}>
                   Start with my current offer
@@ -469,27 +469,30 @@ export function DecisionWorkbench({
                   Saving adds this offer to your private comparison. It does not
                   accept the offer or change the deal on the main screen.
                 </p>
-                <button disabled={busy || formRevision !== analysis.revision}>
-                  {busy
-                    ? "Saving offer…"
-                    : editing
-                      ? "Save revised offer"
-                      : "Save comparison offer"}
-                </button>
-                {formOpen && (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (!confirmDiscardChanges()) return;
-                      draft.markClean();
-                      setEditing(null);
-                      setForm(blank);
-                      setFormOpen(false);
-                    }}
-                  >
-                    Cancel
+                <div className="sl-actions">
+                  <button disabled={busy || formRevision !== analysis.revision}>
+                    {busy
+                      ? "Saving offer…"
+                      : editing
+                        ? "Save revised offer"
+                        : "Save comparison offer"}
                   </button>
-                )}
+                  {formOpen && (
+                    <button
+                      type="button"
+                      className="secondary"
+                      onClick={() => {
+                        if (!confirmDiscardChanges()) return;
+                        draft.markClean();
+                        setEditing(null);
+                        setForm(blank);
+                        setFormOpen(false);
+                      }}
+                    >
+                      Cancel
+                    </button>
+                  )}
+                </div>
               </form>
             </div>
           )}
@@ -542,6 +545,7 @@ export function DecisionWorkbench({
                           : usd(o.netBeforeTaxCents)}
                       </td>
                       <td>
+                        <div className="sl-actions">
                         <button disabled={busy} onClick={() => editOffer(o)}>
                           Edit {o.buyer}
                         </button>
@@ -555,6 +559,7 @@ export function DecisionWorkbench({
                             ? "Include again"
                             : "Exclude from comparison"}
                         </button>
+                        </div>
                       </td>
                     </tr>
                   ))}

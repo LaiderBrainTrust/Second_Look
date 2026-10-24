@@ -312,19 +312,21 @@ export function Workspace({ session }: { session: Session }) {
             confirm the fund payout, and keep a record of what you reviewed.
           </p>
         </div>
-        <button
-          className="sl-primary"
-          onClick={() => {
-            setCreating(true);
-            requestAnimationFrame(() =>
-              document
-                .querySelector<HTMLInputElement>('[name="title"]')
-                ?.focus(),
-            );
-          }}
-        >
-          Review a sale offer
-        </button>
+        {loaded && cases.length > 0 && !creating && (
+          <button
+            className="sl-primary"
+            onClick={() => {
+              setCreating(true);
+              requestAnimationFrame(() =>
+                document
+                  .querySelector<HTMLInputElement>('[name="title"]')
+                  ?.focus(),
+              );
+            }}
+          >
+            Review a sale offer
+          </button>
+        )}
       </div>
       {error && (
         <p className="sl-error" role="alert">
