@@ -54,7 +54,7 @@ export function ReviewRequirements({
     await onChanged();
   }
   return (
-    <section className="sl-sheet" aria-labelledby="requirements-heading">
+    <section id="review-requirements" tabIndex={-1} className="sl-sheet" aria-labelledby="requirements-heading">
       <h2 id="requirements-heading">Other questions and requirements</h2>
       <p>
         Keep the supporting answer or document reference with each item before

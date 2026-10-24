@@ -744,9 +744,11 @@ function CasePage({
                   <p>
                     {role === "gp"
                       ? "Confirm the amount and explain which document supports it."
-                      : personal
-                        ? "Use the private invitation beside this question to give the fund contact access."
-                        : "This example lets you try both sides. Switch to the fund contact below to answer, then return as the investor."}
+                      : role === "buyer"
+                        ? "Your fund contact supplies the payout amount. You can confirm the buyer’s sale terms in the form below."
+                        : personal
+                          ? "Create a private invitation using the invitation form so your fund contact can answer."
+                          : "Choose the button below to try the fund contact’s part of this example."}
                   </p>
                 </div>
               )}
@@ -852,14 +854,14 @@ function CasePage({
                       ? "What happens after you answer?"
                       : role === "buyer"
                         ? "What happens when terms change?"
-                        : "Try the other side of the conversation"}
+                        : "Keep the answer with the offer"}
                   </h2>
                   <p>
                     {role === "gp"
                       ? "Your answer appears in the investor’s review. They can check the amount against the offer and save their review. You don’t need to send a separate document."
                       : role === "buyer"
                         ? "The investor sees the revised terms and must review them again. Their earlier review stays in the history."
-                        : "Use Presenter controls above to switch to Fund contact, answer the question, then return as Investor."}
+                        : "The fund contact supplies the payout amount. The sale agreement says who keeps it. Second Look brings both together so you can review what you would receive."}
                   </p>
                 </>
               )}
@@ -880,75 +882,103 @@ function CasePage({
         <>
           <section className="sl-decision-sheet">
             <div className="sl-decision-title">
-              <h2>Review this sale</h2>
+              <h2>{approved ? "Your review is saved" : ready ? "Ready to save your review" : "Complete your review"}</h2>
               <span>Offer version {data.offer.version}</span>
             </div>
             <CashTerms data={data} />
             <p className="sl-help">
               This is the current sale, not an alternative comparison quote.
             </p>
-            <div className="sl-checklist">
-              <p>
-                <span>
-                  {data.answer ? "Reported by fund contact" : "Still needed"}
-                </span>{" "}
-                Distribution amount and explanation
-              </p>
-              <p>
-                <span>
-                  {data.offer.priceAdjustmentCents === null
-                    ? "Still needed"
-                    : "Recorded"}
-                </span>{" "}
-                Price adjustment
-              </p>
-              <p>
-                <span>
-                  {review?.diligenceBlockers?.length
-                    ? "Still open"
-                    : "No open items recorded"}
-                </span>{" "}
-                Other questions and requirements
-              </p>
-              <p>
-                <span>
-                  {data.offer.distributionRecipient === null
-                    ? "Still needed"
-                    : "Recorded"}
-                </span>{" "}
-                Who keeps the fund payout under the sale agreement
-              </p>
-            </div>
-            {review?.diligenceBlockers?.map((b) => (
-              <p className="sl-error" key={b}>
-                {b}
-              </p>
-            ))}
-            {data.answer && <blockquote>{data.answer.text}</blockquote>}
-            <p>
-              Save the offer, fund response and checked terms in a dated summary
-              you can download and share. Saving a review does not accept the
-              sale or send money.
-            </p>
-            <div className="sl-actions">
-              <button
-                className="sl-primary"
-                disabled={busy || approved || !ready}
-                onClick={() =>
-                  void command(
+            {!ready && (
+              <div className="sl-review-next">
+                <h3>What needs to happen next</h3>
+                <ul>
+                  {!data.answer && <li>Ask your fund contact to confirm the payout amount and the notice that supports it.</li>}
+                  {data.offer.priceAdjustmentCents === null && <li>Ask the buyer whether the price has any additional adjustment.</li>}
+                  {data.offer.distributionRecipient === null && <li>Ask the buyer to confirm who keeps the fund payout under the sale agreement.</li>}
+                  {review?.diligenceBlockers?.map((b) => <li key={b}>{b}</li>)}
+                </ul>
+                <p>You can save your review once these details are complete. You can download the current summary at any time.</p>
+              </div>
+            )}
+            {approved ? (
+              <p className="sl-review-saved" role="status">Your review is saved for these terms. Download a copy to keep or share.</p>
+            ) : ready ? (
+              <p>Save these terms and the fund’s answer in a dated summary. Saving records your review; it does not accept the sale or send money.</p>
+            ) : null}
+            <div className="sl-actions sl-review-actions">
+              {!ready ? (
+                <button
+                  className="sl-primary"
+                  onClick={() => {
+                    if (!data.answer || data.offer.priceAdjustmentCents === null || data.offer.distributionRecipient === null) {
+                      go("conversation");
+                    } else {
+                      const section = document.getElementById("review-requirements");
+                      section?.scrollIntoView({ block: "start" });
+                      section?.focus();
+                    }
+                  }}
+                >
+                  {!data.answer
+                    ? "Get the fund contact’s answer"
+                    : data.offer.priceAdjustmentCents === null || data.offer.distributionRecipient === null
+                      ? "Ask the buyer to confirm the terms"
+                      : "Resolve the open requirements"}
+                </button>
+              ) : !approved ? (
+                <button
+                  className="sl-primary"
+                  disabled={busy}
+                  onClick={() => void command(
                     { kind: "approve" },
                     "Review recorded for this version. A later change will require a fresh review.",
-                  )
-                }
-              >
-                {busy
-                  ? "Saving review…"
-                  : approved
-                    ? "Review recorded"
-                    : "Save this review"}
-              </button>
+                  )}
+                >
+                  {busy ? "Saving review…" : "Save this review"}
+                </button>
+              ) : null}
               <RecordDownload base={base} revision={data.revision} />
             </div>
+            <details className="sl-source sl-review-sources">
+              <summary>Details behind these figures</summary>
+              <dl className="sl-review-checks">
+                <div>
+                  <dt>Fund contact’s answer</dt>
+                  <dd className={!data.answer ? "sl-review-missing" : undefined}>
+                    {data.answer
+                      ? `${currency(data.answer.distributionCents)} reported for this fund interest`
+                      : "Waiting for the payout amount and supporting notice"}
+                  </dd>
+                </div>
+                <div>
+                  <dt>Price adjustment</dt>
+                  <dd className={data.offer.priceAdjustmentCents === null ? "sl-review-missing" : undefined}>
+                    {data.offer.priceAdjustmentCents === null
+                      ? "The buyer needs to confirm this"
+                      : data.offer.priceAdjustmentCents === 0
+                        ? "No adjustment in the recorded offer"
+                        : `${currency(data.offer.priceAdjustmentCents)} in the recorded offer`}
+                  </dd>
+                </div>
+                <div>
+                  <dt>Who keeps the fund payout?</dt>
+                  <dd className={data.offer.distributionRecipient === null ? "sl-review-missing" : undefined}>
+                    {data.offer.distributionRecipient === null
+                      ? "The buyer needs to confirm the sale terms"
+                      : data.offer.distributionRecipient === "seller"
+                        ? "You, under the recorded sale terms"
+                        : "The buyer, under the recorded sale terms"}
+                  </dd>
+                </div>
+              </dl>
+              {data.answer && (
+                <details className="sl-source">
+                  <summary>Read the fund contact’s full answer</summary>
+                  <blockquote>{data.answer.text}</blockquote>
+                </details>
+              )}
+            </details>
             {!personal && approved && (
               <div className="sl-demo-next">
                 <p>What if the buyer changes who keeps the fund payout after this review?</p>
@@ -956,25 +986,6 @@ function CasePage({
                   Try changing the buyer’s terms
                 </button>
               </div>
-            )}
-            {!ready &&
-              (!data.answer ||
-                data.offer.priceAdjustmentCents === null ||
-                data.offer.distributionRecipient === null) && (
-                <button
-                  className="sl-secondary"
-                  onClick={() => go("conversation")}
-                >
-                  {!data.answer
-                    ? "Get the fund contact’s answer"
-                    : "Ask the buyer to confirm the terms"}
-                </button>
-              )}
-            {!ready && (
-              <p className="sl-help">
-                Complete the missing information before recording your review.
-                Any additional questions and requirements are listed below.
-              </p>
             )}
           </section>
           <ReviewRequirements
@@ -984,14 +995,9 @@ function CasePage({
             revision={data.revision}
             onChanged={refresh}
           />
-          <section className="sl-history">
-            <h2>The decision history</h2>
-            {!review?.events.length && !review?.reviews.length ? (
-              <p>
-                No decisions recorded yet. Start with the fund contact’s answer.
-              </p>
-            ) : (
-              <>
+          {!!(review?.events.length || review?.reviews.length) && (
+            <section className="sl-history">
+              <h2>The decision history</h2>
                 <ol>
                   {review?.events.map((e) => (
                     <li key={e.revision}>
@@ -1015,9 +1021,8 @@ function CasePage({
                     <RecordDownload base={base} revision={r.revision} />
                   </details>
                 ))}
-              </>
-            )}
-          </section>
+            </section>
+          )}
         </>
       )}
       <div className="sl-case-bottom">
