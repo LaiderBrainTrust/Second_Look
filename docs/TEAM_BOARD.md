@@ -4,12 +4,13 @@ Read [PLAN.md](PLAN.md) first. This board records proposed work, not automatic d
 
 | Priority | Task | Owner / state | Acceptance |
 | --- | --- | --- | --- |
-| P0 | Core gaming → review → changed-offer workflow | Mat/Codex — implemented and locally verified | 27 tests/build; live source/task/trace receipts; browser financial sequence |
+| P0 | Final customer UI and product design | Ryan — assigned by Mat; implementation/acceptance pending | [RYAN_PRODUCT_BRIEF.md](RYAN_PRODUCT_BRIEF.md); cohesive real-API journey, useful in the first minute, exact deployed commit verified |
+| P0 | Core gaming → review → changed-offer workflow | Mat/Codex — implemented and locally verified | 29 tests/build; live source/task/trace receipts; browser financial sequence. These verify the reference implementation, not the future redesign |
 | P0 | PRISM setup | Mat/Codex — live verified | Actual model trace accepted; setup doctor reports live/app connected |
 | P0 | Team Roundtable credentials | Mat/Codex — configured, restricted grants verified | New bot keys in Actions/Codespaces; access to reporting/shared-notes banks denied. Workspace co-owners remain fully privileged |
 | P0 | Fresh teammate setup | Unclaimed — needs teammate's environment | Follow README on `main`; doctor; live task; screenshot/URL and exact commit. Codespaces secrets exist for all four sponsors |
 | P0 | Judge-accessible demo link | Mat/Codex — deployed and externally verified | See DEPLOYMENT_RECEIPT.json. Team login, persistent database, full browser path and server restart passed; Ryan still opens link on his laptop |
-| P0 | Ninoo Builder/Marketplace eligibility | Mat / sponsor conversation — unresolved | Written clarification of which rules apply and any required submission/listing completed |
+| P0 | Ninoo Builder/Marketplace eligibility | Mat / sponsor conversation — unresolved | Resources links the stricter guide; obtain organizer clarification and complete any required listing. See DEVPOST_RULES_CHECK.md |
 | P0 | Gaming narrative + spoken rehearsal | Ryan proposed; confirm acceptance | Explain one game accurately and complete a timed ≤3-minute run without unsupported financial claims |
 | P0 | Founder brief | Unclaimed | One page with actual customer evidence or explicit gaps, buyer, alternatives and commercial hypothesis |
 | P0 | Video and Devpost submission | Unclaimed | ≤3-minute video, correct repo/demo links, sponsor list; submit by 3:30 PM and verify access |
@@ -19,7 +20,9 @@ Read [PLAN.md](PLAN.md) first. This board records proposed work, not automatic d
 
 ## File ownership while Mat/Codex finishes this lane
 
-- Active integration: `server/`, `shared/`, `src/`, tests and setup scripts. Coordinate before touching these.
+- Ryan / his coding agent owns `src/`, `index.html` and new public visual assets for the final product. He may reorganize or replace the current UI. Other agents coordinate before editing these files.
+- Mat/Codex owns `server/`, `shared/`, provider adapters, backend tests, setup and hosted deployment. Request API changes rather than reimplementing domain logic in the UI.
+- Coordinate shared dependencies and build configuration across both owners. Record Ryan's actual branch/commit when available; do not assume his work is deployed.
 - Plan/docs: `docs/PLAN.md`, `docs/BUILD.md`, `docs/GAMING_BUILD.md`, `README.md` currently maintained by Mat/Codex. Teammates can propose edits in a branch.
 - Good independent lanes: add `docs/FOUNDER_BRIEF.md` with genuine evidence; prepare a video outside source; verify setup and report results; resolve sponsor interpretation.
 
