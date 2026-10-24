@@ -1,3 +1,5 @@
+> Current build-day scope and demo: [GAMING_BUILD.md](GAMING_BUILD.md). That document supersedes broader backlog suggestions below.
+
 # Build contracts and handoff
 
 The authoritative TypeScript shapes are in [`shared/contracts.ts`](../shared/contracts.ts). The longer [proposal](PROPOSAL.md) explains the product and demo. This file describes the current scaffold so agents do not mistake proposals for working integrations.
@@ -51,7 +53,7 @@ Documentation:
 
 ## Next complete slice
 
-Connect PRISM tracing to the integrated Nicrron/Roundtable reviewer. Replace the synthetic report source with one permitted X1 read if retained in the final scope. Preserve the existing deterministic changed-offer flow. In parallel, replace the development role header with authenticated participant sessions and configure deployment persistence. Do not spend the remaining time rebuilding the domain loop from scratch.
+Configure and live-verify the implemented PRISM adapter for the integrated Nicrron/Roundtable reviewer. Replace the synthetic report source with one permitted X1 read if retained in the final scope. Preserve the existing deterministic changed-offer flow. In parallel, replace the development role header with authenticated participant sessions and configure deployment persistence. Do not spend the remaining time rebuilding the domain loop from scratch.
 
 Before public deployment: real sessions, case membership checks, CSRF/origin protection for cookie-based mutations, request/body validation, secret configuration, durable storage, provider failure states and a complete rehearsal. Native SQLite on an ephemeral serverless filesystem is not persistent deployment storage; use a persistent host/volume or adapt the store to the chosen hosted database.
 
@@ -68,7 +70,7 @@ One real external finding, one explicit question/answer, one changed offer that 
 - `POST /api/case/research/:id/check`: `{}`. Reconciles the same task ID and verifies the returned output file and source versions. UI polls pending work every five seconds.
 - `POST /api/case/research/:id/share`: `{ expectedRevision }`. A current completed review can replace the shared question. This advances the case revision and clears its answer; prior approvals remain historical.
 
-`server/adapters/roundtable.ts` runs an app-specific SDK worker as part of API startup. It reads only the pinned task input path under `second-look/` and writes a task-specific output. It is separate from the earlier sponsor template. New tasks call Nicrron after deterministic input validation; the returned method is `nicrron`, with model and request identifiers. Older saved `rule-based` results remain readable. PRISM tracing remains unimplemented.
+`server/adapters/roundtable.ts` runs an app-specific SDK worker as part of API startup. It reads only the pinned task input path under `second-look/` and writes a task-specific output. It is separate from the earlier sponsor template. New tasks call Nicrron after deterministic input validation; the returned method is `nicrron`, with model and request identifiers. Older saved `rule-based` results remain readable. PRISM tracing is implemented; credentials and a successful live receipt remain outstanding.
 
 The SQLite research table preserves selected findings, task IDs, remote write request IDs, snapshots and completed results across restart. Interrupted Akta fetches become retryable blocked runs. An uncertain Roundtable dispatch retains its original request IDs: reconcile it rather than creating another task. Historical tasks may finish, but cannot apply to a newer case.
 

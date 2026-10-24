@@ -54,7 +54,7 @@ export function createRoundtableAdapter() {
       const output = sources.find(s => s.path === `second-look/reviews/${run.taskId}.json`)!;
       const saved = await client(process.env.ROUNDTABLE_APP_KEY).call('read_file', { bank: output.bank, path: output.path, version: output.version });
       const savedResult = JSON.parse(saved.content) as ResearchResult;
-      if (savedResult.question !== data.question || savedResult.explanation !== data.explanation || savedResult.method !== data.method || savedResult.model !== data.model || savedResult.modelRequestId !== data.modelRequestId || savedResult.caseId !== run.caseId || savedResult.caseRevision !== run.caseRevision || savedResult.findingId !== run.selectedFindingId) {
+      if (JSON.stringify(savedResult.trace) !== JSON.stringify(data.trace) || savedResult.question !== data.question || savedResult.explanation !== data.explanation || savedResult.method !== data.method || savedResult.model !== data.model || savedResult.modelRequestId !== data.modelRequestId || savedResult.caseId !== run.caseId || savedResult.caseRevision !== run.caseRevision || savedResult.findingId !== run.selectedFindingId) {
         return { status: 'blocked', error: 'The saved review file does not match the task result.' };
       }
       recordProviderResult('roundtable', true, 'Live review completed with matching case revision and source versions.');

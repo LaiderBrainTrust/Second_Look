@@ -1,17 +1,19 @@
 # Second Look
 
-**Before selling a venture-fund investment, understand what changed—and make sure the deal you review is still the deal you are getting.**
+**Look through a gaming fund to the games people actually play—then connect the evidence to the deal you are being offered.**
+
+One flow: real Steam samples + Akta studio research → a saved Roundtable/Nicrron manager question → a fictional distribution answer → a visible $100,000 difference when offer terms change. [Current gaming build and demo plan](docs/GAMING_BUILD.md).
 
 Deal Flow @ Betaworks, October 24, 2026. **Track 4: Funds. Submission closes 4 PM Eastern.** Target sponsor award: Best Use of External Data.
 
 ## Start here — teammates and coding agents
 
-**Use branch `codex/sponsor-setup` ([PR #1](https://github.com/stratten/vc_hackathon/pull/1)). The setup below is on that branch; do not assume it is already on `main`.**
+**Use branch `codex/sponsor-setup` ([PR #1](https://github.com/LaiderBrainTrust/vc_hackathon/pull/1)). The setup below is on that branch; do not assume it is already on `main`.**
 
 Paste this into Claude Code, Codex, or your coding agent:
 
 ```text
-Set up and run https://github.com/stratten/vc_hackathon on branch
+Set up and run https://github.com/LaiderBrainTrust/vc_hackathon on branch
 codex/sponsor-setup. Read README.md, AGENTS.md, and docs/TEAM_START.md first.
 Preserve any existing local changes; use a fresh directory if this checkout
 belongs to another task. Do not rebuild the app or replace its configuration.
@@ -34,7 +36,7 @@ actually passed. Stop after setup unless I assign you an implementation lane.
 From a **new directory**, with access to the private GitHub repository:
 
 ```sh
-git clone --branch codex/sponsor-setup https://github.com/stratten/vc_hackathon.git
+git clone --branch codex/sponsor-setup https://github.com/LaiderBrainTrust/vc_hackathon.git
 cd vc_hackathon
 node --version                 # must be 22.13 or newer
 npm ci
@@ -54,9 +56,9 @@ Open **http://localhost:5173**. The API is **http://127.0.0.1:3001/api/health**.
 | Local synthetic demo | Switch roles, answer the question, approve, change offer terms, see the old approval become historical | No provider keys |
 | Live company research | Search Akta and save dated findings | `AKTA_API_KEY` |
 | Complete live review | Send a saved finding through Roundtable → Nicrron; retrieve and explicitly share the question | Akta, Nicrron, and all four Roundtable settings below |
-| All four sponsor integrations | Not complete yet | PRISM integration is still outstanding |
+| All four sponsor integrations | PRISM adapter implemented; live verification pending | `PRISM_TRACE_KEY` + `PRISM_PROJECT_ID`, plus the review settings |
 
-**Credential status:** Mat is waiting for repository admin access. Akta and Nicrron keys are saved in **Actions secrets**, but **Codespaces secrets are not yet provisioned**. Cloning does not download keys. Roundtable also needs separate team-only credentials; do not reuse Mat's reporting credentials. See [the current access checklist](docs/TEAM_START.md).
+**Credential status:** Repository admin access is active. `AKTA_API_KEY` and `NICRRON_API_KEY` are saved as both **repository Codespaces secrets** and **Actions secrets**. New/restarted Codespaces can receive them; cloning does not download keys. Roundtable still needs separate team-only credentials, and PRISM needs a trace key/project ID. [Access checklist](docs/TEAM_START.md).
 
 For live review, `npm run doctor` checks these server-side settings:
 
@@ -67,6 +69,8 @@ ROUNDTABLE_APP_KEY
 ROUNDTABLE_WORKER_KEY
 ROUNDTABLE_WORKER_ID
 ROUNDTABLE_PROJECT
+PRISM_TRACE_KEY
+PRISM_PROJECT_ID
 ```
 
 Use an ignored `.env.local` for local development, or environment injection in Codespaces. `NICRRON_MODEL` is optional and defaults to `nicrron/fastest`. Restart the API after changing credentials. A missing-setting result from `doctor` is expected until provisioning finishes; it is not a reason to rewrite the app.
@@ -75,11 +79,11 @@ Use an ignored `.env.local` for local development, or environment injection in C
 
 Select **`codex/sponsor-setup` → Code → Codespaces → Create codespace**. The checked-in devcontainer installs dependencies and runs setup. Run `npm run doctor`, then `npm run dev`, and open forwarded port **5173** with **Private** visibility. The Codespaces route still needs the credential provisioning above; it has not yet been verified in a teammate's Codespace.
 
-This is a working synthetic development app. Akta, Nicrron and Roundtable are integrated; PRISM and optional X1 reads remain outstanding. The role selector is development impersonation, **not authentication**. Do not expose the server publicly or use real client data. The entrypoint refuses production mode until real participant authentication is implemented.
+This is a working synthetic development app. Steam, Akta, Nicrron, Roundtable and PRISM adapters are integrated. Live PRISM verification and optional X1 reads remain outstanding. The role selector is development impersonation, **not authentication**. Do not expose the server publicly or use real client data. The entrypoint refuses production mode until real participant authentication is implemented.
 
 ## Try the core interaction
 
-1. Start as Investor: the $700,000 offer is waiting for a distribution answer.
+1. Start as Investor: in **Inspect the games**, select **Check the three holdings**. Inspect a game and its Akta studio profile, then **Turn evidence into a manager question**. Review and explicitly share the saved proposal. The fictional $700,000 offer is waiting for a distribution answer.
 2. Switch to Fund manager and save the clearly fictional $100,000 response.
 3. Switch to Investor: review $800,000 gross receipts and approve the proposed response.
 4. Switch to Buyer and assign the distribution to the buyer, keeping purchase payment unchanged.
@@ -94,7 +98,7 @@ These are illustrative contract scenarios with explicit zero purchase-price adju
 | React/TypeScript UI and Express API | Actual X1 reads from a synthetic demo account |
 | Persistent offer versions, question/answer and historical review | Confirm materiality and connect the remaining sponsors |
 | Akta company search, discovery, enrichment and dated news API | Materiality review of external findings; a company mention is not a valuation |
-| Integer-cent calculations and unknown-total handling | PRISM trace for the actual Nicrron model request |
+| Integer-cent calculations, term-change dollar comparison and unknown-total handling | Confirm a live PRISM trace for the actual Nicrron model request |
 | Atomic stale-revision rejection | Authenticated participants and case-scoped sharing |
 | Role-specific response projection | Deployment with persistent storage and real auth |
 | Tests for changed terms, stale requests and restart continuity | Source extraction/correction, final rehearsal, video and founder brief |
@@ -110,7 +114,7 @@ With Akta, Nicrron and Roundtable credentials configured, `npm run dev` starts t
 5. Read the proposed question and source versions, then **Share question with fund manager**.
 6. Switch to Fund manager: the shared question and article link are visible. A new answer is needed before the investor can approve again.
 
-A changed case makes earlier research historical. The reviewer validates source/date fields, then calls Nicrron for a proposed question and explanation. It does not assess fair value or verify the publisher's claim. PRISM tracing remains outstanding.
+A changed case makes earlier research historical. Saved gaming evidence can be reused to request a new review of the current offer; the evidence keeps its original retrieval date. The reviewer validates source/date fields, then calls Nicrron for a proposed question and explanation. It does not assess fair value or verify the publisher's claim. PRISM records the same review when configured; its receipt is shown with the result. Failed tracing does not fabricate a receipt or erase a successful question.
 
 ## Team access and credentials
 

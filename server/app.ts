@@ -5,6 +5,7 @@ import { createStore } from './store.js';
 import { providerStatuses } from './adapters/status.js';
 import { researchRouter } from './research.js';
 import { caseResearchRouter } from './case-research.js';
+import { gamingRouter } from './gaming.js';
 import { AktaError } from './adapters/akta.js';
 
 export function createApp(store: ReturnType<typeof createStore>) {
@@ -34,6 +35,7 @@ export function createApp(store: ReturnType<typeof createStore>) {
     next();
   });
   app.get('/api/case', (_req, res) => res.json(view(store.read(), res.locals.role)));
+  app.use('/api/case/gaming', gamingRouter(store));
   app.use('/api/case/research', caseResearchRouter(store));
   app.post('/api/case/commands', (req, res, next) => {
     try {

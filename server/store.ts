@@ -1,13 +1,44 @@
 import { DatabaseSync } from 'node:sqlite';
 import { applyCommand, seedCase, DomainError, type Command } from './domain.js';
 import type { CaseState, Role } from '../shared/contracts.js';
+import type { GamingSnapshot, GamingHolding } from '../shared/gaming.js';
 import type { ResearchRun } from '../shared/research.js';
 
+// Read older demo snapshots without changing their evidence or deleting history.
+function holdingFromStorage(raw: GamingHolding & { exposurePercent?: number }): GamingHolding {
+  const { exposurePercent, ...holding } = raw;
+  const value = holding.fundNavExposurePercent ?? exposurePercent;
+  if (typeof value !== 'number' || !Number.isFinite(value)) throw new DomainError(500, 'Saved fictional exposure is missing. Fetch a new evidence snapshot.');
+  return { ...holding, fundNavExposurePercent: value };
+}
+function gamingFromStorage(body: string): GamingSnapshot {
+  const snapshot = JSON.parse(body) as GamingSnapshot;
+  return { ...snapshot, holdings: snapshot.holdings.map(item => ({ ...item, holding: holdingFromStorage(item.holding) })) };
+}
+function researchFromStorage(body: string): ResearchRun {
+  const run = JSON.parse(body) as ResearchRun;
+  if (run.gamingContext) run.gamingContext.holding = holdingFromStorage(run.gamingContext.holding);
+  return run;
+}
 export function createStore(path: string) {
   const db = new DatabaseSync(path);
   db.exec('PRAGMA journal_mode=WAL; PRAGMA busy_timeout=3000; CREATE TABLE IF NOT EXISTS cases (id TEXT PRIMARY KEY, body TEXT NOT NULL)');
   db.prepare('INSERT OR IGNORE INTO cases (id, body) VALUES (?, ?)').run('sample-fund', JSON.stringify(seedCase()));
   db.exec('CREATE TABLE IF NOT EXISTS research_runs (id TEXT PRIMARY KEY, body TEXT NOT NULL, created_at TEXT NOT NULL)');
+  db.exec('CREATE TABLE IF NOT EXISTS gaming_snapshots (id TEXT PRIMARY KEY, body TEXT NOT NULL, created_at TEXT NOT NULL)');
+  function saveGaming(snapshot: GamingSnapshot) {
+    db.prepare('INSERT INTO gaming_snapshots (id, body, created_at) VALUES (?, ?, ?) ON CONFLICT(id) DO UPDATE SET body = excluded.body').run(snapshot.id, JSON.stringify(snapshot), snapshot.createdAt);
+    return snapshot;
+  }
+  function gaming(id: string): GamingSnapshot {
+    const row = db.prepare('SELECT body FROM gaming_snapshots WHERE id = ?').get(id) as { body: string } | undefined;
+    if (!row) throw new DomainError(404, 'Gaming evidence not found.');
+    return gamingFromStorage(row.body);
+  }
+  for (const row of db.prepare('SELECT body FROM gaming_snapshots').all() as { body: string }[]) {
+    const snapshot = JSON.parse(row.body) as GamingSnapshot;
+    if (snapshot.status === 'fetching') saveGaming({ ...snapshot, status: 'blocked', error: 'The server restarted during research. Refresh to fetch a new snapshot.' });
+  }
   function read(): CaseState {
     const row = db.prepare('SELECT body FROM cases WHERE id = ?').get('sample-fund') as { body: string };
     return JSON.parse(row.body);
@@ -15,7 +46,7 @@ export function createStore(path: string) {
   function research(id: string): ResearchRun {
     const row = db.prepare('SELECT body FROM research_runs WHERE id = ?').get(id) as { body: string } | undefined;
     if (!row) throw new DomainError(404, 'Research not found.');
-    return JSON.parse(row.body);
+    return researchFromStorage(row.body);
   }
   function saveResearch(run: ResearchRun) {
     db.prepare('INSERT INTO research_runs (id, body, created_at) VALUES (?, ?, ?) ON CONFLICT(id) DO UPDATE SET body = excluded.body').run(run.id, JSON.stringify(run), run.createdAt);
@@ -33,8 +64,12 @@ export function createStore(path: string) {
   }
   return {
     read,
-    research, saveResearch, current,
-    listResearch: (): ResearchRun[] => (db.prepare('SELECT body FROM research_runs ORDER BY created_at DESC LIMIT 30').all() as { body: string }[]).map(row => JSON.parse(row.body)),
+    research, saveResearch, current, gaming, saveGaming,
+    latestGaming: (): GamingSnapshot | null => {
+      const row = db.prepare('SELECT body FROM gaming_snapshots ORDER BY created_at DESC LIMIT 1').get() as { body: string } | undefined;
+      return row ? gamingFromStorage(row.body) : null;
+    },
+    listResearch: (): ResearchRun[] => (db.prepare('SELECT body FROM research_runs ORDER BY created_at DESC LIMIT 30').all() as { body: string }[]).map(row => researchFromStorage(row.body)),
     publishResearch(id: string, expected: number) {
       db.exec('BEGIN IMMEDIATE');
       try {

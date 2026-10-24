@@ -14,7 +14,7 @@ export function caseResearchRouter(store: ReturnType<typeof createStore>) {
   const inputFor = (run: ResearchRun) => {
     const state = store.current(run.caseRevision);
     return { caseId: run.caseId, caseRevision: run.caseRevision, runId: run.id, after: run.after,
-      finding: run.findings.find(f => f.source.id === run.selectedFindingId)!, offer: state.offer };
+      gamingContext: run.gamingContext, finding: run.findings.find(f => f.source.id === run.selectedFindingId)!, offer: state.offer };
   };
   router.use((_req, res, next) => {
     if (res.locals.role !== 'lp') { res.status(403).json({ error: 'Research is private to the investor until they share a question.' }); return; }

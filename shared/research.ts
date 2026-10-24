@@ -1,3 +1,4 @@
+import type { GamingContext } from './gaming.js';
 import type { SourceRef } from './contracts.js';
 
 export interface Company { uuid: string; name: string; website: string }
@@ -10,6 +11,7 @@ export interface ResearchResult {
   caseId: string; caseRevision: number; findingId: string;
   question: string; explanation: string; method: 'rule-based' | 'nicrron'; sources: VersionSource[];
   model?: string; modelRequestId?: string;
+  trace?: { status: 'recorded' | 'failed' | 'not_configured'; id?: string };
 }
 export interface ResearchRun {
   id: string; caseId: string; caseRevision: number; company: Company; after: string;
@@ -17,9 +19,11 @@ export interface ResearchRun {
   createdAt: string; findings: Finding[]; coverage?: string; selectedFindingId?: string;
   taskId?: string; inputSource?: VersionSource; result?: ResearchResult; error?: string;
   input?: ResearchInput;
+  gamingContext?: GamingContext;
   acceptedRevision?: number; writeRequestId: string; dispatchRequestId: string;
 }
 export interface ResearchInput {
   caseId: string; caseRevision: number; runId: string; after: string; finding: Finding;
+  gamingContext?: GamingContext;
   offer: { version: number; purchasePriceCents: number; distributionRecipient: 'seller' | 'buyer' };
 }

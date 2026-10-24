@@ -15,6 +15,9 @@ export function providerStatuses(): ProviderStatus[] {
   } : provider === 'roundtable' ? {
     provider, status: process.env.ROUNDTABLE_APP_KEY && process.env.ROUNDTABLE_WORKER_KEY ? 'not_verified' as const : 'not_configured' as const,
     detail: 'Live app review adapter; requires an app key, reviewer key and ID, and shared project.',
+  } : provider === 'prism' ? {
+    provider, status: (process.env.PRISM_TRACE_KEY || process.env.PRISMTRACE_API_KEY) && (process.env.PRISM_PROJECT_ID || process.env.PRISMTRACE_PROJECT_ID) ? 'not_verified' as const : 'not_configured' as const,
+    detail: 'Records the actual Nicrron review in PRISM when the trace key and project ID are configured.',
   } : {
     provider, status: 'not_implemented', detail: 'Adapter contract only. No live provider request has run.',
   }));

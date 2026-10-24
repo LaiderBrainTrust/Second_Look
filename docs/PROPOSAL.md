@@ -1,3 +1,5 @@
+> Build-day update: the selected example is a fictional gaming fund with real Steam/Akta research. See [GAMING_BUILD.md](GAMING_BUILD.md) for the implemented scope and remaining sponsor dependencies. This original proposal also describes capabilities outside the current build.
+
 # Second Look: team proposal and build plan
 
 **For a team vote, not an agreed build.** Prepared October 24, 2026. Track 4: Funds. Proposed sponsor award: Best Use of External Data. Submission deadline: **4:00 PM Eastern today**. Working name only; naming availability has not been checked.

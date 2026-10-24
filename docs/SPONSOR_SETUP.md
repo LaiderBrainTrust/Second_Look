@@ -4,7 +4,7 @@
 
 ## Akta: live server integration
 
-`AKTA_API_KEY` is saved as a repository **GitHub Actions secret** in `stratten/vc_hackathon`. It is also installed in the ignored, owner-only `.env.local` on Mat's build machine. No key is committed.
+`AKTA_API_KEY` is saved as a repository **GitHub Actions secret** in `LaiderBrainTrust/vc_hackathon`. It is also installed in the ignored, owner-only `.env.local` on Mat's build machine. No key is committed.
 
 GitHub secrets cannot be downloaded by teammates. The workflow can consume the secret; a local developer needs their own `.env.local` containing the team-provided key. The hosting platform will need its own server-side `AKTA_API_KEY` setting. Do not use a `VITE_` variable for it.
 
@@ -82,7 +82,7 @@ SDK retries handle backoff. Do not run a tight polling loop, overwrite a shared 
 
 ## Remaining sponsor/product work
 
-- Implement PRISM traces for the Nicrron calls.
+- Configure PRISM_TRACE_KEY and PRISM_PROJECT_ID; verify a recorded trace for the real Nicrron call. The HTTP adapter is implemented.
 - Connect X1 separately if retained in the team's final scope.
 
 Provider references: [Akta documentation](https://docs.akta.pro/llms.txt), [Roundtable CLI](https://github.com/roundtable-bot/roundtable-cli), [SDK guide](https://roundtable.bot/docs/bots), [Funds template](https://github.com/roundtable-bot/roundtable-cli/tree/main/templates/funds).
@@ -102,7 +102,7 @@ The test worker was stopped after verification. This was a sponsor-provided synt
 
 `npm run dev` starts the actual Second Look reviewer alongside the API. Investor view searches Akta, saves dated findings against a case revision, dispatches the selected finding to Roundtable, and displays the completed question with exact input/output versions. The investor explicitly shares the question; sharing clears the old answer and requires a fresh fund-manager response. An older revision cannot replace the current question.
 
-The reviewer now validates the dated input, then calls Nicrron for a source-linked question and explanation. It cannot change offer terms or approve a response. Historical rule-based results remain readable. PRISM tracing is still outstanding.
+The reviewer now validates the dated input, then calls Nicrron for a source-linked question and explanation. It cannot change offer terms or approve a response. Historical rule-based results remain readable. PRISM tracing is implemented in `server/adapters/prism.ts`; a live receipt still requires the trace key and project ID.
 
 Set the variables in `.env.example`: `AKTA_API_KEY`, `NICRRON_API_KEY`, `ROUNDTABLE_APP_KEY`, `ROUNDTABLE_WORKER_KEY`, `ROUNDTABLE_WORKER_ID`, and `ROUNDTABLE_PROJECT`. Both Roundtable identities need access to the same project. `ROUNDTABLE_ENV_FILE` optionally points to an owner-only environment file outside the repo. No machine CLI login is needed for SDK operation.
 
@@ -114,8 +114,17 @@ At source `24f0cbf7337dba066b06e4d49b960c5a27de820a`, the browser retrieved live
 
 ## Team runtime setup
 
-See [TEAM_START.md](TEAM_START.md) for local and Codespaces setup. Both Akta and Nicrron keys are saved in GitHub Actions secrets. Codespaces secret writes were rejected for lack of repository admin rights; they are not provisioned. Roundtable team-only credential provisioning remains outstanding.
+See [TEAM_START.md](TEAM_START.md) for local and Codespaces setup. Both Akta and Nicrron keys are saved in GitHub Actions and repository Codespaces secrets. Admin access is now active; secret names were verified in LaiderBrainTrust/vc_hackathon. Restart an existing Codespace to receive them. Roundtable team-only credential provisioning remains outstanding.
 
 ### Nicrron through the app reviewer
 
 Live app task `6ea9da9d095d4053b430653aacbff62d` completed via Roundtable with method `nicrron` and routed model `anthropic/claude-haiku-5-5`. The app retrieved and verified its source-versioned result. The first attempt was blocked after truncated model output; the current adapter rejects truncation, defaults to `nicrron/fastest`, and withholds monetary fields from the model. Sixteen tests and TypeScript/Vite build passed. This is app integration evidence, not a teammate Codespace acceptance test.
+
+
+## Gaming flow and PRISM
+
+The current entry begins with real Steam evidence plus Akta enrichment for Pounce Light, LocalThunk, and Aggro Crab. The catalog's fund exposures are explicitly fictional. `POST /api/case/gaming/refresh` persists an evidence snapshot before fetching. `POST /api/case/gaming/:id/prepare` pins a selected holding into a normal research run for the current case revision. The ordinary review/check/share routes then drive the same app workflow. All gaming routes require the investor's development role.
+
+Set `PRISM_TRACE_KEY` and `PRISM_PROJECT_ID` on the API server. `PRISMTRACE_API_KEY` and `PRISMTRACE_PROJECT_ID` are also accepted by the adapter, but doctor checks the preferred names. The background reviewer posts synthetic evidence, model output, model name, latency and run ID to the documented trace endpoint. A successful HTTP response must contain an ID before the app reports `recorded`. A failed trace leaves the proposed question usable and reports `failed`; missing credentials report `not_configured`. Neither state satisfies a claim of verified sponsor tracing. No provider credential is placed in the trace messages.
+
+The displayed PRISM receipt is saved in the same versioned review output as the question. Source/receipt mismatches are rejected on retrieval. Tracing is not a guarantee of factual or financial correctness.

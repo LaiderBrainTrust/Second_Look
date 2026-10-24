@@ -28,6 +28,12 @@ export interface Review {
   responseText: string;
   approvedAt: string;
 }
+export interface TermChange {
+  atRevision: number;
+  previousOffer: Offer;
+  previousGrossReceiptsCents: number | null;
+  revisedGrossReceiptsCents: number | null;
+}
 export interface CaseState {
   id: string;
   title: string;
@@ -38,6 +44,7 @@ export interface CaseState {
   question: string;
   questionSource?: SourceRef;
   answer: Answer | null;
+  lastTermChange?: TermChange;
   reviews: Review[];
   events: { revision: number; text: string; at: string }[];
 }
@@ -52,6 +59,7 @@ export interface CaseView {
   nextOwner: Role;
   // Private fields are omitted for GP/buyer, not merely hidden in the UI.
   privateReview?: {
+    lastTermChange?: TermChange;
     ownerEntity: string;
     report: SourceRef;
     grossReceiptsCents: number | null;

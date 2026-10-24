@@ -29,14 +29,14 @@ export function view(state: CaseState, role: Role): CaseView {
     id: state.id, title: state.title, revision: state.revision, offer: state.offer,
     question: state.question, questionSource: state.questionSource, answer: state.answer, nextOwner: state.answer ? 'lp' : 'gp',
     ...(role === 'lp' ? { privateReview: {
-      ownerEntity: state.ownerEntity, report: state.report, grossReceiptsCents: grossReceipts(state),
+      lastTermChange: state.lastTermChange, ownerEntity: state.ownerEntity, report: state.report, grossReceiptsCents: grossReceipts(state),
       responseText: responseText(state), status, reviews: state.reviews, events: state.events,
     } } : {}),
   };
 }
 export function seedCase(): CaseState {
   return {
-    id: 'sample-fund', title: 'Example Ventures Fund II — fictional case', ownerEntity: 'Example Family Trust (fictional)',
+    id: 'sample-fund', title: 'Waypoint Games Fund II — fictional case', ownerEntity: 'Example Family Trust (fictional)',
     revision: 1,
     report: { id: 'fictional-report', label: 'Synthetic quarterly report — not imported from X1', kind: 'synthetic', locator: 'Prepared fixture' },
     offer: {
@@ -76,6 +76,7 @@ export function applyCommand(state: CaseState, role: Role, expectedRevision: num
     if (!['seller', 'buyer'].includes(command.distributionRecipient)) throw new DomainError(400, 'Select seller or buyer.');
     next.offer = { ...next.offer, version: next.offer.version + 1, distributionRecipient: command.distributionRecipient,
       source: { id: `fictional-offer-${next.revision}`, label: `Synthetic offer v${next.offer.version + 1}`, kind: 'synthetic' } };
+    next.lastTermChange = { atRevision: next.revision, previousOffer: structuredClone(state.offer), previousGrossReceiptsCents: grossReceipts(state), revisedGrossReceiptsCents: grossReceipts(next) };
     event = `Offer revised: distribution goes to the ${command.distributionRecipient}. Earlier reviews remain historical.`;
   }
   next.events.push({ revision: next.revision, text: event, at: new Date().toISOString() });
