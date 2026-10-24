@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import type { CaseView, ProviderStatus, Role } from '../shared/contracts';
 import type { Command } from '../server/domain';
@@ -15,6 +15,9 @@ import { People } from './People';
 import { History } from './History';
 import { Presenter } from './Presenter';
 import { DecisionWorkbench } from '../integration/DecisionWorkbench';
+import { Header, type Page } from './Header';
+import { Hero, type NextStep } from './Hero';
+import { Services } from './Services';
 
 type Tab = 'holdings' | 'question' | 'review' | 'offers' | 'people' | 'history';
 const exampleTabs: [Tab, string][] = [['holdings', 'Holdings'], ['question', 'Question'], ['review', 'Review'], ['offers', 'Compare offers'], ['history', 'Record']];
@@ -31,6 +34,8 @@ const capturedInvite = (() => {
 
 function App() {
   const [session, setSession] = useState<SessionInfo | null>(null);
+  const [page, setPage] = useState<Page>('home');
+  const firstScroll = useRef(true);
   const [loadError, setLoadError] = useState('');
   const [invite, setInvite] = useState<string | null>(capturedInvite);
   const [presenterRole, setPresenterRole] = useState<Role>('lp');
@@ -66,7 +71,11 @@ function App() {
 
   // A case entered by a user has no gaming catalog; start on the question and answer.
   useEffect(() => { if (data?.mode === 'user') setTab(t => (t === 'holdings' || t === 'question' ? 'review' : t)); }, [data?.id, data?.mode]);
-  useEffect(() => { window.scrollTo({ top: 0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' }); }, [tab, selected?.id]);
+  // Section changes bring the workspace into view; the first render stays at the top of the page.
+  useEffect(() => {
+    if (firstScroll.current) { firstScroll.current = false; return; }
+    document.getElementById('workspace')?.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth', block: 'start' });
+  }, [tab, selected?.id]);
 
   const refreshProviders = () => { void api('/api/providers').then(setProviders).catch(() => setProviders([])); };
   useEffect(() => { if (session?.authenticated && !account) refreshProviders(); }, [session?.authenticated, account]);
@@ -103,35 +112,39 @@ function App() {
   const userCase = data?.mode === 'user';
   const game = data?.researchContext?.game;
   const tabs = userCase ? caseTabs : exampleTabs;
+  const go = (target: Tab, label: string): NextStep => ({ label, onSelect: () => { setPage('home'); setTab(target); document.getElementById('workspace')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); } });
+  const next: NextStep | null = !investor || !review ? null
+    : review.status === 'terms_changed' ? go('review', 'Review the changed terms')
+    : review.status === 'needs_review' ? go('review', 'Review the answer')
+    : review.status === 'approved' ? go('history', 'Open the record')
+    : !userCase && !data?.researchContext ? go('holdings', 'Inspect the holdings')
+    : go('review', 'Open the question');
 
   return <>
     <a className="skip" href="#main">Skip to content</a>
-    <header className="topbar">
-      <a className="brand" href="/">Second Look</a>
-      <div className="topbar-right">
-        {account
-          ? <>
-              <span className="viewing">{session.user?.displayName}{selected ? `, ${roleLabels[role]}` : ''}</span>
-              {selected && <button className="secondary" onClick={() => { setSelected(null); setData(null); setError(''); }}>All reviews</button>}
-              <button className="secondary" onClick={() => void signOut()}>Sign out</button>
-            </>
-          : <>
-              <span className="viewing">Viewing as {roleLabels[role]}</span>
-              <button className="secondary" onClick={() => setPresenterOpen(true)}>Presenter</button>
-            </>}
-      </div>
-    </header>
+    <Header page={page} onPage={setPage}>
+      {account
+        ? <>
+            <span className="viewing">{session.user?.displayName}{selected ? `, ${roleLabels[role]}` : ''}</span>
+            {selected && <button className="ghost" onClick={() => { setSelected(null); setData(null); setError(''); setPage('home'); }}>All reviews</button>}
+            <button className="ghost" onClick={() => void signOut()}>Sign out</button>
+          </>
+        : <>
+            <span className="viewing">Viewing as {roleLabels[role]}</span>
+            <button className="ghost" onClick={() => setPresenterOpen(true)}>Presenter</button>
+          </>}
+    </Header>
 
     <main id="main">
-      {account && !selected
+      {page === 'services' ? <Services/> : account && !selected
         ? <Cases displayName={session.user?.displayName ?? 'your account'} invited={Boolean(invite)} onAcceptInvitation={() => acceptInvitation()} onOpen={openCase}/>
         : <>
           {error && <div className="alert banner" role="alert">{error} <button className="link" onClick={() => void refresh()}>Reload the latest case</button></div>}
           {!data
             ? <p role="status" className="muted pad">{error ? 'The case is unavailable.' : 'Loading the saved case'}</p>
-            : <div className="shell">
+            : <><Hero data={data} next={next}/><div className="shell">
                 <DealRail data={data}/>
-                <div className="workspace">
+                <div className="workspace" id="workspace">
                   {game && investor && <p className="thread">Selected game <strong>{game}</strong> through {data.researchContext?.studio} to this interest</p>}
                   {investor && caseBase && <>
                     <nav className="tabs no-print" aria-label="Sections">
@@ -150,7 +163,7 @@ function App() {
                     onReviseOffer={offer => void act({ kind: 'revise_offer', ...offer })}/>}
                   {!investor && role === 'lp' && <p className="muted">The investor view is unavailable for this case.</p>}
                 </div>
-              </div>}
+              </div></>}
         </>}
     </main>
 
