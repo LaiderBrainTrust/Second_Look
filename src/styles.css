@@ -609,3 +609,40 @@ html, body { overflow-x: clip; }
   .dark-why li { grid-template-columns: 1fr; gap: 16px; }
   .why-no { border-right: 0; font-size: 56px; }
 }
+
+/* Header sits at the top of the page and scrolls away */
+.pill-wrap { position: absolute; top: 16px; left: 0; right: 0; padding-top: 0; }
+.landing-home { margin-top: -32px; }
+.lh-top { padding-top: 160px; }
+#workspace { scroll-margin-top: 32px; }
+
+/* Reveal: rise and open as content enters the view */
+.reveal { opacity: 0; transform: translateY(40px) scale(.98); clip-path: inset(0 0 12% 0); transition: opacity .7s var(--ease), transform .7s var(--ease), clip-path .8s var(--ease); }
+.reveal.in { opacity: 1; transform: none; clip-path: inset(0 0 0 0); }
+
+/* Second half of Home: the same pitch black and lime */
+main { padding-bottom: 0; }
+.shell { margin: 0 calc(50% - 50vw); padding: 96px max(48px, calc(50vw - 640px)); background: #0a0a0a; color: #f5f5f0;
+  --ink: #f5f5f0; --muted: #a3a39c; --line: #2e2e2e; --surface: #161616; --tint: #1c1c1c; --tint-line: #3a3a3a; --accent: #f5f5f0; --accent-hover: #ffffff; }
+.shell .rail { background: #111; border-color: #2e2e2e; border-top: 4px solid var(--lime); }
+.shell button, .shell input, .shell select, .shell textarea { background: #161616; color: var(--ink); border-color: #3a3a3a; }
+.shell button.primary { background: var(--lime); border-color: var(--lime); color: #0a0a0a; }
+.shell button.primary:hover:enabled { background: #fff; border-color: #fff; color: #0a0a0a; }
+.shell button.secondary:hover:enabled, .shell .button-link:hover { background: #1c1c1c; border-color: var(--lime); color: var(--lime); }
+.shell .tab, .shell .link { background: none; }
+.shell .tab[aria-current='page'] { color: #fff; }
+.shell .badge { background: #161616; }
+.shell .badge.strong { border-color: var(--lime); color: var(--lime); }
+.shell .bridge { background: #161616; border-color: #2e2e2e; }
+.shell .payoff { background: #111; border: 1px solid #2e2e2e; }
+.shell .detail { border-top-color: var(--lime); }
+.shell .holding { background: #111; }
+.shell .holding:hover:enabled:not(.on) { background: #161616; }
+.shell .chain li:hover::before { background: var(--lime); border-color: var(--lime); color: #0a0a0a; }
+.shell .callout, .shell .notice { border-left-color: var(--lime); }
+.shell blockquote { border-left-color: var(--lime); }
+.shell a:hover { color: #fff; }
+.shell .alert { color: #ff8a80; border-color: #ff8a80; }
+.shell .segmented button.on { background: var(--lime); color: #0a0a0a; }
+.footer { max-width: none; margin: 0; padding: 32px max(32px, calc(50vw - 640px)); background: #0a0a0a; color: #8a8a84; border-top: 1px solid #2e2e2e; }
+.shell .ledger { border-left-color: var(--lime); border-color: #2e2e2e; border-left-width: 4px; }
