@@ -54,6 +54,7 @@ Open **http://localhost:5173**. The API is **http://127.0.0.1:3001/api/health**.
 | Mode | What you can do | What is needed |
 | --- | --- | --- |
 | Local synthetic demo | Switch roles, answer the question, approve, change offer terms, see the old approval become historical | No provider keys |
+| Live game evidence | Compare bounded Steam review samples and current players | No provider keys |
 | Live company research | Search Akta and save dated findings | `AKTA_API_KEY` |
 | Complete live review | Send a saved finding through Roundtable → Nicrron; retrieve and explicitly share the question | Akta, Nicrron, and all four Roundtable settings below |
 | All four sponsor integrations | PRISM adapter implemented; live verification pending | `PRISM_TRACE_KEY` + `PRISM_PROJECT_ID`, plus the review settings |
@@ -95,7 +96,7 @@ These are illustrative contract scenarios with explicit zero purchase-price adju
 
 | Working locally | Still required for the final entry |
 | --- | --- |
-| React/TypeScript UI and Express API | Actual X1 reads from a synthetic demo account |
+| React/TypeScript UI and Express API | Optional X1 reads from a synthetic demo account |
 | Persistent offer versions, question/answer and historical review | Confirm materiality and connect the remaining sponsors |
 | Akta company search, discovery, enrichment and dated news API | Materiality review of external findings; a company mention is not a valuation |
 | Integer-cent calculations, term-change dollar comparison and unknown-total handling | Confirm a live PRISM trace for the actual Nicrron model request |
