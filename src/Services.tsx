@@ -1,3 +1,4 @@
+import { Burst } from './Burst';
 const services = [
   { title: 'Holdings evidence', text: 'Recent player reviews and current player counts from Steam, beside company profiles and dated news from Akta. Sample sizes and capture dates are shown. Available for the example holdings.' },
   { title: 'A question for the manager', text: 'Saved evidence becomes one proposed question about the cash attached to the interest. It is a proposal. Nothing is sent until the investor shares it.' },
@@ -7,14 +8,22 @@ const services = [
 
 export function Services() {
   return <section className="services" aria-labelledby="services-title">
-    <p className="eyebrow">Services</p>
-    <div className="hero-top">
-      <h1 id="services-title">What the work covers.</h1>
-      <p className="hero-sub">Four parts, each tied to the offer version under review.</p>
+    <div className="landing">
+      <div className="landing-stripes" aria-hidden="true">
+        <svg width="100%" height="100%" preserveAspectRatio="none">
+          <defs><pattern id="stripes" width="24" height="24" patternUnits="userSpaceOnUse" patternTransform="rotate(-32)"><rect width="24" height="24" fill="#dfe8df"/><rect width="10" height="24" fill="#c9d9cb"/></pattern></defs>
+          <rect width="100%" height="100%" fill="url(#stripes)"/>
+        </svg>
+      </div>
+      <div className="landing-mid" aria-hidden="true"/>
+      <div className="landing-panel">
+        <h1 id="services-title">Services</h1>
+        <p>Four parts, each tied to the offer version under review.</p>
+      </div>
     </div>
     <div className="service-block">
       {services.map((s, i) => <article key={s.title} className="service">
-        <span className="service-no">{String(i + 1).padStart(2, '0')}</span>
+        <div className="service-head"><Burst variant={i}/><span className="service-no">{String(i + 1).padStart(2, '0')}</span></div>
         <h2>{s.title}</h2>
         <p>{s.text}</p>
       </article>)}

@@ -18,6 +18,7 @@ import { DecisionWorkbench } from '../integration/DecisionWorkbench';
 import { Header, type Page } from './Header';
 import { Hero, type NextStep } from './Hero';
 import { Services } from './Services';
+import { startReveal } from './reveal';
 
 type Tab = 'holdings' | 'question' | 'review' | 'offers' | 'people' | 'history';
 const exampleTabs: [Tab, string][] = [['holdings', 'Holdings'], ['question', 'Question'], ['review', 'Review'], ['offers', 'Compare offers'], ['history', 'Record']];
@@ -178,4 +179,5 @@ function App() {
   </>;
 }
 
+startReveal();
 createRoot(document.getElementById('root')!).render(<React.StrictMode><App/></React.StrictMode>);

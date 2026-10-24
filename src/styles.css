@@ -8,12 +8,12 @@
   --tint-line: #d4d4cd;
   --accent: #0a0a0a;
   --accent-hover: #2a2a2a;
-  --lime: #c8f560;
+  --lime: #1f4d2e;
   --alert: #a4262c;
   --ease: cubic-bezier(.2, .7, .2, 1);
   --radius: 4px;
   --body: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --display: 'Space Grotesk', 'Inter', system-ui, sans-serif;
+  --display: 'Source Serif 4', Georgia, 'Times New Roman', serif;
   font-family: var(--body);
   color: var(--ink);
   background: #fff;
@@ -519,3 +519,42 @@ button:active:enabled { transform: translateY(1px); }
 }
 .payoff .figure, .ledger .delta { white-space: nowrap; }
 #workspace { scroll-margin-top: 112px; }
+
+/* Formal pass: dark forest green accent, serif headings, restrained sizes */
+.hero h1, .services h1 { font-weight: 400; font-size: clamp(36px, 4.5vw, 60px); line-height: 1.1; letter-spacing: -.01em; }
+.payoff-title { letter-spacing: -.01em; font-size: clamp(32px, 4vw, 52px); }
+.figure, .hero-figures dd, .payoff .figure, .metrics .figure, .service-no { font-family: var(--body); font-weight: 500; letter-spacing: -.01em; }
+.cta, .bridge button.primary, .pill-cta, button.primary:hover:enabled { color: #fff; }
+.cta:hover:enabled, .bridge button.primary:hover:enabled, .pill-cta:hover { background: #fff; color: var(--ink); }
+.hero-status, .payoff-delta .figure, .service-no { color: #9cc7a8; }
+.service:hover { border-color: #9cc7a8; }
+.pill-brand::before, .navlink::after { background: #9cc7a8; }
+.ghost:hover:enabled { border-color: #9cc7a8; color: #9cc7a8; }
+.bridge :focus-visible, .hero-block :focus-visible, .pill :focus-visible { outline-color: #9cc7a8; }
+
+/* Scroll reveal */
+.reveal { opacity: 0; transform: translateY(24px); transition: opacity .6s var(--ease), transform .6s var(--ease); }
+.reveal.in { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; } }
+@media print { .reveal { opacity: 1 !important; transform: none !important; } }
+
+/* Burst marks */
+.burst { display: inline-grid; place-items: center; width: 64px; height: 64px; border-radius: 4px; background: #2a2a2a; color: #9cc7a8; transition: transform .5s var(--ease), background-color .3s var(--ease); }
+.burst svg { transition: transform .8s var(--ease); }
+.service:hover .burst svg { transform: rotate(45deg); }
+.service:hover .burst { background: #1f4d2e; color: #fff; }
+.service-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; }
+.service-head .service-no { margin: 0; font-size: 20px; line-height: 24px; color: #8a8a84; }
+.hero-fund .burst { width: 48px; height: 48px; margin-bottom: 8px; }
+
+/* Services landing */
+.services { padding-top: 0; }
+.landing { display: grid; grid-template-columns: 1fr .5fr 1.5fr; min-height: calc(100vh - 160px); margin: 0 -32px; overflow: hidden; }
+.landing-stripes { overflow: hidden; }
+.landing-stripes svg { display: block; animation: drift 24s linear infinite; width: 140%; height: 100%; }
+@keyframes drift { to { transform: translateX(-24%); } }
+.landing-mid { background: #d6d6d1; }
+.landing-panel { display: flex; flex-direction: column; justify-content: flex-end; padding: 64px 48px; background: #5f5f5c; color: #fff; }
+.landing-panel h1 { color: #fff; font-size: clamp(48px, 6vw, 88px) !important; padding-bottom: 32px; border-bottom: 1px solid #fff; animation: rise .6s var(--ease) both; }
+.landing-panel p { font-size: 20px; line-height: 28px; margin: 32px 0 0; animation: rise .6s var(--ease) .1s both; }
+@media (max-width: 960px) { .landing { grid-template-columns: 1fr; margin: 0 -16px; } .landing-stripes, .landing-mid { min-height: 160px; } }

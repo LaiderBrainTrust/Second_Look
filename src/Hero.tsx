@@ -1,6 +1,7 @@
 import type { CaseView } from '../shared/contracts';
 import { recipientLabel, statusLabel } from './format';
 import { CountUp } from './CountUp';
+import { Burst } from './Burst';
 
 export interface NextStep { label: string; onSelect: () => void }
 
@@ -10,11 +11,11 @@ export function Hero({ data, next }: { data: CaseView; next: NextStep | null }) 
   return <section className="hero" aria-labelledby="hero-title">
     <p className="eyebrow">{data.mode === 'user' ? 'Terms entered by the investor' : 'Illustrative fund and deal'}</p>
     <div className="hero-top">
-      <h1 id="hero-title">Know what you are selling.</h1>
-      <p className="hero-sub">Outside evidence on the fund&rsquo;s holdings, the manager&rsquo;s answer, and the exact terms you approved, kept together.</p>
+      <h1 id="hero-title">Review of a proposed secondary sale</h1>
+      <p className="hero-sub">Evidence on the fund&rsquo;s holdings, the manager&rsquo;s response, and the offer terms under review, recorded by version.</p>
     </div>
     <div className="hero-block">
-      <div className="hero-fund">
+      <div className="hero-fund"><Burst variant={1}/>
         <span className="label">Fund interest</span>
         <strong>{data.title}</strong>
         {status && <span className="hero-status">{statusLabel[status]}</span>}
