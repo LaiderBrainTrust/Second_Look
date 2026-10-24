@@ -6,3 +6,7 @@ dist/
 !.env.example
 *.log
 
+
+__pycache__/
+*.pyc
+.venv/
