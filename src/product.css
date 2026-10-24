@@ -1578,7 +1578,9 @@ button.sl-text-button:hover:enabled {
   max-width: 880px;
   padding: 40px 44px;
   border-radius: 10px;
-  box-shadow: 0 1px 0 #ffffff inset, 0 18px 50px -36px #192c4066;
+  box-shadow:
+    0 1px 0 #ffffff inset,
+    0 18px 50px -36px #192c4066;
 }
 .sl-root .sl-decision-title h2 {
   font-family: "Source Serif 4", Georgia, serif;
@@ -1764,7 +1766,9 @@ button.sl-text-button:hover:enabled {
 .sl-auth {
   padding: 36px;
   border-radius: 14px;
-  box-shadow: 0 1px 0 #fff inset, 0 24px 60px -40px #192c4080;
+  box-shadow:
+    0 1px 0 #fff inset,
+    0 24px 60px -40px #192c4080;
   border: 1px solid #ffffff;
 }
 .sl-auth h2 {
@@ -1790,6 +1794,11 @@ button.sl-text-button:hover:enabled {
   }
 }
 @media (max-width: 900px) {
+  .sl-deal-layout,
+  .sl-conversation-layout {
+    grid-template-columns: minmax(0, 1.4fr) minmax(240px, 1fr);
+    gap: 32px;
+  }
   .sl-root .sl-cash-terms strong {
     font-size: 28px;
   }
@@ -1798,6 +1807,27 @@ button.sl-text-button:hover:enabled {
   }
 }
 @media (max-width: 760px) {
+  .sl-deal-layout,
+  .sl-conversation-layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+  }
+  .sl-root .sl-app-header {
+    flex-wrap: wrap;
+  }
+  .sl-app-header nav {
+    margin-left: auto;
+  }
+  .sl-app-header nav a {
+    white-space: nowrap;
+  }
+  .sl-root .sl-cash-terms .sl-cash-total {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .sl-root .sl-cash-terms .sl-cash-total > span {
+    max-width: none;
+  }
   .sl-app-header,
   .sl-entry-header,
   .sl-app-footer {

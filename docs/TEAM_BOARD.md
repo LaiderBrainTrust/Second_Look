@@ -1,3 +1,5 @@
+**Latest design direction — October 24:** Ryan is preparing the marketing site in black and white with neon green/yellow accents. Preserve his actual incoming design and assets; the current earthy app palette is not a constraint on it. Mat/Codex owns reviewing PR27 and integrating Ryan’s work while preserving the working account/review flows. See [marketing integration handoff](MARKETING_INTEGRATION.md). This update supersedes conflicting historical design ownership below.
+
 **Current UI ownership (October 24): Mat explicitly reassigned the main screen, navigation and styles to Codex after confirming Ryan had no unpublished work to preserve. PR 23 is merged and live. This supersedes the historical Ryan assignments below. Hosted acceptance: `docs/CUSTOMER_JOURNEY_ACCEPTANCE.md` (or `CUSTOMER_JOURNEY_ACCEPTANCE.md` from this folder). Coordinate any further UI edits with Mat.**
 
 # Team board — claim a bounded task

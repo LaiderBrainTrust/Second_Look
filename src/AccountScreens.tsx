@@ -93,7 +93,7 @@ export function AuthScreen({
               <strong>+ $100,000</strong>
             </div>
             <div className="sl-example-total">
-              <span>What you actually receive</span>
+              <span>Illustrative cash before costs</span>
               <strong>$800,000</strong>
             </div>
             <p>Same headline price. A different outcome.</p>
