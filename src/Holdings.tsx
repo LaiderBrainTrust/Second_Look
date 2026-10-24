@@ -16,7 +16,7 @@ function Evidence({ item }: { item: HoldingEvidence }) {
       <dl className="metrics">
         <div><dt>Before the report</dt><dd className="figure">{percent(steam.baseline.positivePercent)}</dd><dd className="fine">positive, {steam.baseline.count} sampled reviews<br/>{shortDate(steam.baseline.from)} to {shortDate(steam.baseline.to)}</dd></div>
         <div><dt>After the report</dt><dd className="figure">{percent(steam.current.positivePercent)}</dd><dd className="fine">positive, {steam.current.count} sampled reviews<br/>{shortDate(steam.current.from)} to {shortDate(steam.current.to)}</dd></div>
-        <div><dt>Change in sample</dt><dd className="figure">{steam.deltaPoints === null ? 'Unknown' : `${steam.deltaPoints > 0 ? '+' : ''}${steam.deltaPoints} pp`}</dd><dd className="fine">{steam.playersNow === null ? 'Player count unavailable' : `${steam.playersNow.toLocaleString('en-US')} players online at observation`}<br/>Observed {shortDate(steam.retrievedAt)}</dd></div>
+        <div><dt>Change in sample</dt><dd className="figure">{steam.deltaPoints === null ? 'Unknown' : `${steam.deltaPoints > 0 ? '+' : steam.deltaPoints < 0 ? '−' : ''}${Math.abs(steam.deltaPoints)} pp`}</dd><dd className="fine">{steam.playersNow === null ? 'Player count unavailable' : `${steam.playersNow.toLocaleString('en-US')} players online at observation`}<br/>Observed {shortDate(steam.retrievedAt)}</dd></div>
       </dl>
       <details>
         <summary>Player reviews and the limits of this sample</summary>

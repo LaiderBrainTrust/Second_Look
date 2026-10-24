@@ -44,6 +44,10 @@ function App() {
     return () => controller.abort();
   }, [role, session?.authenticated]);
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' });
+  }, [tab]);
+
   const refreshProviders = () => { void api('/api/providers').then(setProviders).catch(() => setProviders([])); };
   useEffect(() => { if (session?.authenticated) refreshProviders(); }, [session?.authenticated]);
 

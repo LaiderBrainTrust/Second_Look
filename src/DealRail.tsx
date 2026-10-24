@@ -20,19 +20,6 @@ export function DealRail({ data }: { data: CaseView }) {
     </dl>
 
     {review ? <>
-      <section className="receipts" aria-live="polite" aria-label="Scenario gross receipts">
-        <p className="label">Scenario gross receipts</p>
-        <p className="figure large" key={`${data.revision}-${review.grossReceiptsCents}`}>
-          {review.grossReceiptsCents === null ? 'Unresolved' : usd(review.grossReceiptsCents)}
-        </p>
-        <p className="fine">
-          {review.grossReceiptsCents === null
-            ? 'The amount stays unresolved until the manager answers.'
-            : `Purchase payment plus a distribution retained by the seller${data.offer.distributionRecipient === 'buyer' ? ' (none under the current terms)' : ''}.`}
-          {' '}Taxes, fees and timing are excluded. Price adjustment: {data.offer.priceAdjustmentCents === null ? 'not set' : usd(data.offer.priceAdjustmentCents)}.
-        </p>
-      </section>
-
       {change && <section className="ledger" key={change.atRevision} aria-label="Change in terms">
         <p className="label">Terms changed, offer v{change.previousOffer.version} to v{data.offer.version}</p>
         {before !== null && after !== null
@@ -44,6 +31,21 @@ export function DealRail({ data }: { data: CaseView }) {
           : <p className="delta">Cash effect unresolved</p>}
         <p className="fine">Purchase payment unchanged at {usd(data.offer.purchasePriceCents)}. Distribution moved from {recipientLabel(change.previousOffer.distributionRecipient)} to {recipientLabel(data.offer.distributionRecipient)}. Recorded at revision {change.atRevision}.</p>
       </section>}
+
+      <section className="receipts" aria-live="polite" aria-label="Scenario gross receipts">
+        <p className="label">Scenario gross receipts</p>
+        <p className="figure large" key={`${data.revision}-${review.grossReceiptsCents}`}>
+          {review.grossReceiptsCents === null ? 'Unresolved' : usd(review.grossReceiptsCents)}
+        </p>
+        <p className="fine">
+          {review.grossReceiptsCents === null
+            ? 'The amount stays unresolved until the manager answers.'
+            : data.offer.distributionRecipient === 'seller'
+              ? 'Purchase payment plus the distribution, which the seller retains.'
+              : 'Purchase payment only. The distribution goes to the buyer.'}
+          {' '}Taxes, fees and timing are excluded. Price adjustment: {data.offer.priceAdjustmentCents === null ? 'not set' : usd(data.offer.priceAdjustmentCents)}.
+        </p>
+      </section>
 
       <section className="status" aria-label="Status">
         <p className="label">Status</p>

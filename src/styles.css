@@ -88,7 +88,7 @@ main { max-width: 1280px; margin: 0 auto; padding: 32px; }
 .terms .figure { font-size: 32px; line-height: 40px; }
 .receipts { padding-top: 24px; border-top: 1px solid var(--ink); }
 .receipts .large { font-size: 40px; line-height: 48px; margin: 0 0 8px; animation: settle .4s ease-out; }
-.ledger { margin-top: 24px; padding: 16px; border: 1px solid var(--accent); border-left: 4px solid var(--accent); animation: settle .4s ease-out; }
+.ledger { margin: 0 0 24px; padding: 16px; border: 1px solid var(--accent); border-left: 4px solid var(--accent); animation: settle .4s ease-out; }
 .ledger-row { display: flex; justify-content: space-between; align-items: baseline; padding: 4px 0; font-size: 14px; }
 .ledger-row .figure { font-size: 20px; }
 .was { position: relative; color: var(--muted); }
@@ -109,6 +109,7 @@ main { max-width: 1280px; margin: 0 auto; padding: 32px; }
 .lede { color: var(--muted); max-width: 640px; margin: 8px 0 0; }
 .disclosure { padding: 8px 0 8px 16px; border-left: 4px solid var(--line); margin-bottom: 24px; }
 .block { padding: 24px 0; border-top: 1px solid var(--line); }
+.block.approve button { margin: 8px 0 16px; }
 .block.approve h3 { font-size: 32px; line-height: 40px; font-variant-numeric: tabular-nums; }
 .chain { counter-reset: step; margin-bottom: 24px; border-top: 1px solid var(--line); }
 .chain li { padding: 16px 0 16px 40px; border-bottom: 1px solid var(--line); position: relative; }
@@ -210,6 +211,12 @@ h3 + .events, h3 + .approval { margin-top: 8px; }
   .section-head > button, .bridge button, .share button { width: 100%; }
   .verdict { flex-direction: column; gap: 8px; }
   .login { padding: 48px 16px; }
+  .rail { padding: 16px; }
+  .rail-title { margin-bottom: 16px; }
+  .terms { margin-bottom: 16px; }
+  .terms .figure { font-size: 24px; line-height: 32px; }
+  .receipts .large { font-size: 32px; line-height: 40px; }
+  .receipts .fine, .status .fine { display: none; }
   button { min-height: 48px; }
 }
 @media (prefers-reduced-motion: reduce) {
