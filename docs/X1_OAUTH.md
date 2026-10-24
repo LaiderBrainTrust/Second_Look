@@ -88,3 +88,30 @@ Automated route tests exercise PKCE, browser/account/session binding, replay, ex
 issuer substitution, encrypted storage, refresh and disconnect races with a fake
 provider. X1's policy suite separately verifies callback admission and read-only
 scope capping. These do not replace an actual production consent round trip.
+
+
+## Live acceptance — October 24, 2026
+
+Verified on `secondlook.ac` at application release
+`35fe0c31acf6972b25a3bef1b0bd440b1904194b`, with X1 production release
+`b31e096f67da051859350b5d34099af7dd8de776` ([X1 PR4032](https://github.com/x1wealth/x1wealth/pull/4032)):
+
+- Railway reported encryption and browser OAuth configured, without exposing its key.
+- An individual synthetic Second Look account started consent for its own case.
+- The dedicated synthetic X1 account approved access and returned through the exact callback.
+- Same-session completion verified actual read-only X1 capabilities and saved the connection.
+- Search returned the fictional `capital-call.pdf`; selected import copied one cited excerpt,
+  advanced the case revision from 1 to 2, and did not populate financial fields.
+- Disconnect received provider confirmation of revocation; a subsequent search returned 503
+  and connection status was false. The copied excerpt remained in case history.
+
+This used the real account/case APIs and hosted consent/return page in a browser.
+Ryan's customer account/case-navigation screens and a timed presenter rehearsal remain
+separate acceptance work. The source records were explicitly fictional; this is no
+claim of a real investor outcome, trade, or complete production onboarding.
+
+Second Look app changes: [PR17](https://github.com/LaiderBrainTrust/Second_Look/pull/17)
+and [PR18](https://github.com/LaiderBrainTrust/Second_Look/pull/18). Validation: 82 app
+tests passed, with the 10 connection tests rerun after the final atomic-storage guard;
+TypeScript and production build passed. X1 release gates passed both typechecks,
+5,215 MCP tests and the 14 connection-page contract tests.
