@@ -12,11 +12,11 @@ body {
 }
 html {
   scroll-padding-top: 20px;
-  scrollbar-color: #98a2ad #f5f2ec;
+  scrollbar-color: var(--input-line) var(--paper);
 }
 ::selection {
-  background: #efd6c8;
-  color: #192c40;
+  background: var(--ink);
+  color: var(--paper);
 }
 a {
   color: inherit;
@@ -30,7 +30,7 @@ textarea {
 button {
   min-height: 44px;
   background: var(--accent);
-  color: white;
+  color: var(--on-accent);
   border: 1px solid var(--accent);
   padding: 12px 18px;
   border-radius: 5px;
@@ -119,9 +119,9 @@ textarea {
   line-height: 1.5;
 }
 .error {
-  color: #7a2d14;
-  background: #fff2e8;
-  border: 1px solid #d4a38b;
+  color: var(--warning);
+  background: var(--warning-soft);
+  border: 1px solid var(--input-line);
   border-radius: 6px;
   padding: 18px 22px;
   margin: 20px 0;
@@ -155,7 +155,7 @@ hr {
   border-radius: 4px;
   max-width: 100%;
   width: 100%;
-  background: white;
+  background: var(--surface);
 }
 .research select {
   width: 100%;
@@ -348,9 +348,9 @@ hr {
   font-weight: 700;
 }
 .priority-alert {
-  color: #743520;
-  background: #fff0e3;
-  border-color: #bf8267;
+  color: var(--warning);
+  background: var(--warning-soft);
+  border-color: var(--input-line);
 }
 .game-metrics {
   display: grid;
@@ -416,9 +416,9 @@ summary {
   margin-block: 1rem;
 }
 .term-diff {
-  border: 1px solid #d9b58d;
+  border: 1px solid var(--input-line);
   padding: 0.75rem 1rem;
-  background: #fff3e7;
+  background: var(--warning-soft);
   margin: 1rem 0;
 }
 .term-diff strong {
