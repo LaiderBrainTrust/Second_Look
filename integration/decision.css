@@ -1,19 +1,103 @@
-.decision-workbench { border-top: 1px solid var(--line); padding: 1.5rem 0 2rem; }
-.decision-workbench summary { cursor: pointer; padding: .75rem 0; font-weight: 600; }
-.decision-workbench form { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 0 1.25rem; max-width: 56rem; }
-.decision-workbench form p { grid-column: 1 / -1; }
-.decision-workbench input, .decision-workbench select { display:block; width:100%; min-height:44px; margin-top:.5rem; padding:.6rem; font:inherit; font-size:16px; border:1px solid var(--line); border-radius:4px; background:white; color:inherit; }
-.decision-table { overflow-x:auto; margin:1rem 0 1.5rem; }
-.decision-table table { width:100%; border-collapse:collapse; font-variant-numeric:tabular-nums; }
-.decision-table caption { text-align:left; color:var(--muted); padding:.5rem 0; }
-.decision-table th, .decision-table td { text-align:left; vertical-align:top; padding:.75rem; border-bottom:1px solid var(--line); }
-.decision-table td:nth-child(2), .decision-table td:nth-child(3), .decision-table td:nth-child(5) { white-space:nowrap; }
-.decision-table button { display:block; background:transparent; color:var(--accent); font-size:13px; padding:.4rem .6rem; margin:0 0 .35rem; white-space:nowrap; }
-.decision-table button:hover:enabled { background:var(--line); }
-.decision-workbench > div > button { margin:0 .5rem .5rem 0; }
-@media(max-width:700px) { .decision-workbench form { grid-template-columns:1fr; } }
-.funding-panel { margin-top:2rem; padding-top:1rem; border-top:1px solid var(--line); }
-.decision-workbench .funding-check { display:flex; align-items:center; gap:.75rem; grid-column:1/-1; }
-.decision-workbench .funding-check input { width:24px; flex-shrink:0; }
-.funding-panel li { margin:.75rem 0; line-height:1.5; }
-.funding-panel article { overflow-wrap:anywhere; border-left:2px solid var(--line); padding-left:1rem; }
+.decision-workbench {
+  border-top: 1px solid var(--line);
+  padding: 1.5rem 0 2rem;
+}
+.decision-workbench summary {
+  cursor: pointer;
+  padding: 0.75rem 0;
+  font-weight: 600;
+}
+.decision-workbench form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 1.25rem;
+  max-width: 56rem;
+}
+.decision-workbench form p {
+  grid-column: 1 / -1;
+}
+.decision-workbench input,
+.decision-workbench select {
+  display: block;
+  width: 100%;
+  min-height: 44px;
+  margin-top: 0.5rem;
+  padding: 0.6rem;
+  font: inherit;
+  font-size: 16px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: white;
+  color: inherit;
+}
+.decision-table {
+  overflow-x: auto;
+  margin: 1rem 0 1.5rem;
+}
+.decision-table table {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+.decision-table caption {
+  text-align: left;
+  color: var(--muted);
+  padding: 0.5rem 0;
+}
+.decision-table th,
+.decision-table td {
+  text-align: left;
+  vertical-align: top;
+  padding: 0.75rem;
+  border-bottom: 1px solid var(--line);
+}
+.decision-table td:nth-child(2),
+.decision-table td:nth-child(3),
+.decision-table td:nth-child(5) {
+  white-space: nowrap;
+}
+.decision-table button {
+  display: block;
+  background: transparent;
+  color: var(--accent);
+  font-size: 13px;
+  padding: 0.4rem 0.6rem;
+  margin: 0 0 0.35rem;
+  white-space: nowrap;
+}
+.decision-table button:hover:enabled {
+  background: var(--line);
+}
+.decision-workbench > div > button {
+  margin: 0 0.5rem 0.5rem 0;
+}
+@media (max-width: 700px) {
+  .decision-workbench form {
+    grid-template-columns: 1fr;
+  }
+}
+.funding-panel {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--line);
+}
+.decision-workbench .funding-check {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  grid-column: 1/-1;
+}
+.decision-workbench .funding-check input {
+  width: 24px;
+  flex-shrink: 0;
+}
+.funding-panel li {
+  margin: 0.75rem 0;
+  line-height: 1.5;
+}
+.funding-panel article {
+  overflow-wrap: anywhere;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 1rem;
+}

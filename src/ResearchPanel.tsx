@@ -98,7 +98,6 @@ export function ResearchPanel({
       : runs.filter((run) => run.gamingContext).slice(0, 1);
   return (
     <section className="research" aria-labelledby="research-heading">
-      <p className="eyebrow">Live external research · Akta + Roundtable</p>
       <h2 id="research-heading">Turn evidence into a focused question</h2>
       <p>
         Connect the company evidence to a specific question: what cash, if any,
