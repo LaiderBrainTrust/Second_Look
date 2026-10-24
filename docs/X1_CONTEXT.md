@@ -52,3 +52,35 @@ The local and fallback runtime are configured for `sample-fund`. Repository Acti
 Try searching **capital** or **liquidity** in the investor's “Use evidence from X1” section. Read the returned excerpt, then explicitly copy it into the private case. Copying advances the case revision and makes earlier reviews historical; it does not fill funding fields. The fixture's $750,000 need is due November 1; its $100,000 retained distribution arrives November 10. All documents prominently identify the scenario as fictional.
 
 The isolated app integration also passed against the live X1 account: browser search → readable cited preview → explicit copy → case revision 1 to 2. The copied excerpt persisted in the case projection, financial inputs remained unset, and the manager role was denied the private funding/evidence route. This does not yet establish Railway runtime configuration; follow [Stratten's setup steps](STRATTEN_X1_SETUP.md) for that last host-specific step.
+
+## Individual connections — October 24 follow-up
+
+Second Look's individual authentication is separate from X1 authorization. The backend supports password accounts, durable sessions, case membership and invitations. **The current main screen still mounts the presenter example; Ryan owns the individual sign-in and case-picker UI.** Mount `DecisionWorkbench` with `/api/cases/<selected-id>` after sign-in; its funding panel now supplies connect/disconnect controls. There is no completed customer onboarding claim yet.
+
+For individual case owners, the adapter accepts their own **read-only** X1 key. It checks `get_user_capabilities` before saving; only exactly `mcp:read` and own-document passage search are accepted. The key is encrypted using AES-256-GCM with actor, case and connection version bound as authenticated data. It is never returned by status/case APIs or placed in evidence, sponsor requests, browser storage or agent tools. The form clears the input on submission.
+
+Set `X1_CONNECTION_ENCRYPTION_KEY` once to a random 32-byte hex value in the server's private runtime configuration. Missing configuration disables individual linking without breaking the example. Keep this value separately from database backups; changing or losing it makes stored connections unreadable, requiring users to reconnect. Do not distribute the production encryption key to developers or reuse it across environments. Database backup retention also applies to encrypted connection rows; disconnect deletes the live credential, not historical backup snapshots. Revoke the key in X1 if it must stop working everywhere.
+
+- `POST /api/cases/:id/x1/connection {key}`: current case owner only; validates the read-only key then saves it. Invalid keys do not overwrite a working connection.
+- `POST /api/cases/:id/x1/disconnect {}`: deletes this owner's connection for this case and invalidates outstanding previews. Saved excerpts/history remain.
+- `GET .../x1`: adds `canConnect` and mode `individual_case_read_only`; exposes no credential.
+- Search rechecks ownership and the unchanged connection after the remote read. Disconnect/replacement during a search refuses its result. A disconnected or replaced connection cannot import an old preview.
+
+The presentation environment key applies only to the presentation router. Individual cases never inherit it, even if an operator sets `X1_CASE_ID` to their ID. Each case requires its own explicit connection. Other case members cannot search the owner's X1.
+
+### Clerk and OAuth direction
+
+Keep the existing sign-in for today's presentation. A Clerk migration would change identity/session mapping and invitation ownership without completing X1 linking. For a customer launch, prefer managed authentication such as Clerk, preserve Second Look user IDs and memberships through an explicit identity mapping, and implement recovery/verification before claiming production readiness.
+
+X1 supports OAuth, but its current `apps/mcp/lib/oauth-client-policy.ts` admits specific callback origins; `secondlook.ac` is not among them. The existing native/local callback rules are not a workaround for a hosted app. A future approved Second Look OAuth client needs exact callback admission, PKCE/state bound to the signed-in user/case, encrypted tokens, expiry/refresh, disconnect/revocation and cross-account tests. No X1 policy was relaxed in this change. This key-based connection is an interim integration, not OAuth or SSO.
+
+### Verification of this slice
+
+76 tests and the production build passed. An isolated signed-in synthetic account exercised the real `FundingPanel` and actual account case routes against X1: connect read-only key, search `capital`, preview/copy page 1, disconnect. The excerpt remained, funding facts stayed unset, and a post-disconnect search returned 503. This verifies the connection slice; the isolated test shell is not the missing customer onboarding UI. Tests also cover encrypted restart, ciphertext substitution refusal, cross-account/manager denial, broad-scope refusal, and disconnect during in-flight connection/search. No production customer credential was used.
+
+## Browser consent
+
+[Connect X1 OAuth](X1_OAUTH.md) adds an optional browser flow for individual case
+owners. It preserves Second Look identity and the manual read-only key fallback.
+Runtime activation and the production browser acceptance check are separate gates;
+the synthetic shared presentation key is not an investor login.

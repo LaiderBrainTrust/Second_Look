@@ -14,6 +14,8 @@ Current status: all four sponsor integrations are implemented and live calls hav
 
 ### User-created cases and separate participants
 
+**X1 account linking:** individual case owners can connect a read-only X1 key through the reusable funding panel. The server needs `X1_CONNECTION_ENCRYPTION_KEY`; see [connection setup and limitations](docs/X1_CONTEXT.md#individual-connections--october-24-follow-up). Ryan still owns individual sign-in/case-selection UI; the current landing screen opens the presenter example. This is not OAuth/SSO.
+
 The new [account and case APIs](docs/REAL_CASE_API.md) support user-entered cases, separate investor/manager/buyer accounts, one-time invitations, revocation and durable sessions. Ryan owns the matching UI. The existing example remains separate and compatible. [Railway deployment instructions](docs/RAILWAY.md) cover the supplied Docker image, persistent volume and domain cutover; the Railway deployment itself is not yet verified.
 
 ### New backend capabilities for Ryan
@@ -193,3 +195,7 @@ No project license or ownership allocation is implied by this bootstrap. Agree t
 Run `npm run connect:agent` in your terminal to create a private, expiring connection to one case. See [MCP setup and permissions](docs/MCP.md), [decisive-question API](docs/DECISIVE_QUESTION.md), and the additive [Ryan comparison component](integration/DecisionWorkbench.tsx). The investor screen now opens with the comparison and quote-entry workflow. Ryan retains overall design ownership.
 
 The comparison also supports **a funding amount and deadline**, with explicit cash constraints and payment dates. See [optional X1 source integration](docs/X1_CONTEXT.md). To help an agent connect, point it at the running app's `/mcp.txt` (human page: `/mcp`; metadata: `/mcp.json`). These are public instructions for the local MCP bridge, not remote MCP endpoints.
+
+### Submission brief and current claims
+
+Use [the corrected founder brief](docs/FOUNDER_BRIEF.md) and [source/status checks](docs/SUBMISSION_CLAIMS.md). These replace older market-period, placeholder and local-only claims in the shared planning document. Customer evidence and full presentation rehearsal remain separate from engineering checks.

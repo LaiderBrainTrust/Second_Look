@@ -4,6 +4,16 @@ This repository includes a Node 24 Docker image. It serves the built UI and API 
 
 Intended domain: **secondlook.ac**, reportedly purchased by Stratten at Namecheap (owner report; account ownership and DNS not yet verified). Leave registration at Namecheap. Add the domain to the Railway service and copy the exact DNS records Railway supplies into Namecheap; do not guess a Railway hostname or replace unrelated mail records. Once HTTPS is active, set `DEMO_ORIGIN=https://secondlook.ac`. A `www` hostname needs its own explicit redirect to the canonical origin, rather than a second independent app origin.
 
+## Immediate sponsor activation — October 24, 2:40pm EDT
+
+The authenticated provider endpoint on **secondlook.ac** currently reports all four sponsors as `not_configured`. Earlier live receipts came from the build/fallback host; GitHub Actions and Codespaces secrets do not populate Railway. Do not describe the domain as ready for live sponsor research until it passes the workflow below.
+
+Stratten: open the Second Look **production service → Variables → Raw Editor**. Add the eight settings from the privately supplied `railway-sponsors.env` file, preserving the existing variables, especially `DEMO_*` and `X1_*`. Apply the variables and deploy/restart the service. The file contains only team sponsor credentials, not personal X1 or reporting credentials. Do not commit or post the file publicly.
+
+After restart, the sponsors should move to `not verified`; this means configured, not tested. In the app, run a fresh Akta company/game lookup and submit its evidence for review. Wait for a completed Roundtable/Nicrron result and PRISM trace. Only successful calls turn the respective process badges to `verified`. A restart clears these process badges; saved task/trace receipts remain the durable evidence.
+
+X1 is optional and case-specific. Its global badge now says `available` when connections are enabled; it never means another investor's account is connected. The earlier `not implemented` label was a status bug, corrected in this release. Real hosted X1 consent/search/import/disconnect acceptance is documented in [X1_OAUTH.md](X1_OAUTH.md).
+
 ## Service setup
 
 1. Connect `LaiderBrainTrust/Second_Look`, branch `main`. Let Railway build the root Dockerfile; keep its entrypoint and command.

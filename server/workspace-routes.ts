@@ -1,5 +1,8 @@
+import type { X1OAuth } from './x1-oauth.js';
+import type { X1Connections } from './x1-connections.js';
 import { fundingRouter } from './funding.js';
 import { x1Router } from './x1-context.js';
+import { createX1Connections } from './x1-connections.js';
 import { Router } from 'express';
 import type { WorkspaceAccess } from './workspace-access.js';
 import type { createStore } from './store.js';
@@ -12,8 +15,9 @@ import { researchRouter } from './research.js';
 import { decisionRouter } from './decision.js';
 import type { AgentAccess } from './agent-access.js';
 
-export function workspaceRouter(store: ReturnType<typeof createStore>, access: WorkspaceAccess, origin: string, recovery?: ReturnType<typeof createReviewRecovery>, agents?: AgentAccess) {
+export function workspaceRouter(store: ReturnType<typeof createStore>, access: WorkspaceAccess, origin: string, recovery?: ReturnType<typeof createReviewRecovery>, agents?: AgentAccess, savedConnections?: X1Connections, oauth?: X1OAuth) {
   const router = Router();
+  const connections = savedConnections ?? createX1Connections(store.db);
   router.use((_req, res, next) => {
     if (res.locals.session?.mode !== 'account') { res.status(401).json({ error: 'Sign in to an individual account to open your cases.' }); return; }
     res.setHeader('Cache-Control', 'no-store'); next();
@@ -39,7 +43,7 @@ export function workspaceRouter(store: ReturnType<typeof createStore>, access: W
         route.use('/diligence', diligenceRouter(scoped));
         route.use('/decision', decisionRouter(scoped));
         route.use('/funding', fundingRouter(scoped));
-        route.use('/x1', x1Router(scoped));
+        route.use('/x1', x1Router(scoped, undefined, { access, connections, oauth }));
         if (agents) {
           route.get('/agent-keys', (_req, res) => res.json({ keys: agents.list(caseId, res.locals.session.user.id) }));
           route.post('/agent-keys', (req, res, next) => {
