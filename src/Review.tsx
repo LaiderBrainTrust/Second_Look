@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { CaseView } from '../shared/contracts';
 import { SCENARIO_DISTRIBUTION_CENTS, centsToInput, recipientLabel, roleLabels, toCents, usd } from './format';
+import { CountUp } from './CountUp';
 
 function Question({ data }: { data: CaseView }) {
   return <section className="block" aria-label="Question for the fund manager">
@@ -30,6 +31,21 @@ export function Review({ data, busy, onApprove }: { data: CaseView; busy: boolea
       <p className="lede">The game evidence led to a question. Only the manager&rsquo;s response can establish the cash assumption. Player counts and fund NAV exposure do not calculate it.</p>
     </div></div>
 
+    {review.lastTermChange && review.lastTermChange.previousGrossReceiptsCents !== null && review.lastTermChange.revisedGrossReceiptsCents !== null && (() => {
+      const change = review.lastTermChange!;
+      const before = change.previousGrossReceiptsCents!, after = change.revisedGrossReceiptsCents!;
+      const delta = after - before; // difference of two server amounts, display only
+      return <section className="payoff" aria-label="Change in terms">
+        <p className="eyebrow light">Offer v{change.previousOffer.version} to v{data.offer.version}</p>
+        <h3 className="payoff-title">Same price, different deal.</h3>
+        <div className="payoff-grid">
+          <div><span className="label">Purchase payment</span><span className="figure">{usd(data.offer.purchasePriceCents)}</span><span className="fine">Unchanged</span></div>
+          <div><span className="label">Gross receipts</span><span className="figure"><span className="was">{usd(before)}</span> <CountUp cents={after} from={before}/></span><span className="fine">Distribution moved from {recipientLabel(change.previousOffer.distributionRecipient)} to {recipientLabel(data.offer.distributionRecipient)}</span></div>
+          <div className="payoff-delta"><span className="label">Difference to the seller</span><span className="figure">{delta < 0 ? '\u2212' : '+'}{usd(Math.abs(delta))}</span></div>
+        </div>
+        <p className="fine">Amounts calculated by the server at revision {change.atRevision}. Taxes, fees and timing are excluded.</p>
+      </section>;
+    })()}
     {review.status === 'terms_changed' && <div className="callout" role="status">
       <strong>The terms or the supporting answer changed.</strong>
       <p>Your earlier approval remains on record but does not apply to offer version {data.offer.version}. Review the current response before approving again.</p>

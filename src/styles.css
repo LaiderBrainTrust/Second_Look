@@ -472,3 +472,50 @@ button:active:enabled { transform: translateY(1px); }
   .approval, .block { break-inside: avoid; }
   a { color: inherit; }
 }
+
+/* Stage 2: selecting a game cross-fades the evidence and draws a lime underline under the chosen card */
+.detail { animation: swap .35s var(--ease) both; }
+@keyframes swap { from { opacity: 0; transform: translateX(16px); } to { opacity: 1; transform: none; } }
+.holding::after { content: ''; position: absolute; left: 16px; right: 16px; bottom: 0; height: 3px; background: var(--lime); transform: scaleX(0); transform-origin: left; transition: transform .35s var(--ease); }
+.holding.on::after { transform: scaleX(1); }
+.holding.on { border-color: var(--ink); }
+
+/* Stage 3: waiting states pulse; running work shows a moving bar */
+.notice[role='status'] { position: relative; overflow: hidden; }
+.notice[role='status']::after { content: ''; position: absolute; left: 0; bottom: 0; height: 2px; width: 30%; background: var(--lime); animation: progress 1.6s var(--ease) infinite; }
+@keyframes progress { from { transform: translateX(-100%); } to { transform: translateX(340%); } }
+.status-line.waiting::before { content: ''; display: inline-block; width: 8px; height: 8px; margin-right: 8px; border-radius: 50%; background: var(--lime); box-shadow: 0 0 0 1px var(--ink); animation: pulse 1.4s ease-in-out infinite; }
+@keyframes pulse { 50% { opacity: .3; } }
+.proposal { border-left-color: var(--lime); }
+
+/* Stage 4: the payoff */
+.payoff { margin: 0 0 32px; padding: 32px; background: var(--ink); color: #fff; border-radius: var(--radius); animation: rise .45s var(--ease) both; }
+.eyebrow.light { border-color: #555; color: #d8d8d2; }
+.payoff-title { font-family: var(--display); font-weight: 400; font-size: clamp(40px, 5vw, 72px); line-height: 1; letter-spacing: -.04em; margin: 0 0 32px; }
+.payoff-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid #333; }
+.payoff-grid > div { display: grid; gap: 8px; align-content: start; padding: 24px 24px 24px 0; }
+.payoff-grid > div + div { padding-left: 24px; border-left: 1px solid #333; }
+.payoff .label, .payoff .fine { color: #a3a39c; }
+.payoff .figure { font-size: 32px; line-height: 40px; }
+.payoff .was { font-size: 20px; color: #8a8a84; margin-right: 8px; }
+.payoff .was::after { border-top-color: #d8d8d2; }
+.payoff-delta .figure { color: var(--lime); font-size: 48px; line-height: 56px; animation: slidein .5s var(--ease) .5s both; }
+@keyframes slidein { from { opacity: 0; transform: translateX(-24px); } to { opacity: 1; transform: none; } }
+.ledger .delta { animation: slidein .5s var(--ease) .4s both; }
+
+/* The old approval settles into a muted, struck state */
+.approval.historical { animation: mute .6s var(--ease) .2s both; }
+.approval.historical header strong { position: relative; }
+.approval.historical header strong::after { content: ''; position: absolute; left: 0; right: 0; top: 50%; border-top: 2px solid var(--ink); transform-origin: left; animation: strike .5s var(--ease) .4s backwards; }
+@keyframes mute { to { opacity: .6; background: var(--surface); } }
+
+@media (max-width: 960px) {
+  .payoff-grid { grid-template-columns: 1fr; }
+  .payoff-grid > div + div { padding-left: 0; border-left: 0; border-top: 1px solid #333; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .approval.historical { opacity: .6; background: var(--surface); }
+}
+.payoff .figure, .ledger .delta { white-space: nowrap; }
+#workspace { scroll-margin-top: 112px; }

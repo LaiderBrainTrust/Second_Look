@@ -1,5 +1,6 @@
 import type { CaseView } from '../shared/contracts';
 import { recipientLabel, roleLabels, statusLabel, usd } from './format';
+import { CountUp } from './CountUp';
 
 export function DealRail({ data }: { data: CaseView }) {
   const review = data.privateReview;
@@ -35,7 +36,7 @@ export function DealRail({ data }: { data: CaseView }) {
       <section className="receipts" aria-live="polite" aria-label="Scenario gross receipts">
         <p className="label">Scenario gross receipts</p>
         <p className="figure large" key={`${data.revision}-${review.grossReceiptsCents}`}>
-          {review.grossReceiptsCents === null ? 'Unresolved' : usd(review.grossReceiptsCents)}
+          {review.grossReceiptsCents === null ? 'Unresolved' : <CountUp cents={review.grossReceiptsCents}/>}
         </p>
         <p className="fine">
           {review.grossReceiptsCents === null
@@ -49,7 +50,7 @@ export function DealRail({ data }: { data: CaseView }) {
 
       <section className="status" aria-label="Status">
         <p className="label">Status</p>
-        <p className={`status-line ${review.status}`}>{statusLabel[review.status]}</p>
+        <p className={`status-line ${review.status}${review.status === 'awaiting_answer' ? ' waiting' : ''}`}>{statusLabel[review.status]}</p>
         <p className="fine">Next: {roleLabels[data.nextOwner]}</p>
       </section>
     </> : <p className="fine">This role receives the shared question, the answer and the offer. The investor&rsquo;s private review is not sent to it.</p>}

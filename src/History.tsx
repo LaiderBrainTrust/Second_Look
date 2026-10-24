@@ -23,7 +23,7 @@ export function History({ data, base }: { data: CaseView; base: string }) {
     {review.reviews.length
       ? review.reviews.map(approval => {
           const current = approval.revision === data.revision;
-          return <article className="approval" key={approval.revision}>
+          return <article className={`approval${current ? '' : ' historical'}`} key={approval.revision}>
             <header><strong>Approved at revision {approval.revision}</strong><span className={`badge ${current ? 'strong' : ''}`}>{current ? 'Current version' : 'Historical, does not approve the current version'}</span></header>
             <p>{approval.responseText}</p>
             {approval.researchContext && <p className="fine">Research: {approval.researchContext.game}, {approval.researchContext.studio}</p>}

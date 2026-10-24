@@ -115,7 +115,7 @@ export function Holdings({ revision, onPrepared }: { revision: number; onPrepare
     </div>
     {!items.length && snapshot?.status !== 'fetching' && <p className="muted">No evidence has been captured for this case. Select &ldquo;Check the three holdings&rdquo; to retrieve Steam and Akta observations.</p>}
 
-    {item && <article className="detail" aria-label={`${item.holding.game} evidence`}>
+    {item && <article key={item.holding.id} className="detail" aria-label={`${item.holding.game} evidence`}>
       <header className="detail-head">
         <div><p className="label">{item.holding.studio}</p><h3>{item.holding.game}</h3></div>
         <span className="fine">Observed evidence</span>

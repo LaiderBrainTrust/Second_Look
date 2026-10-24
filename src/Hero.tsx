@@ -1,5 +1,6 @@
 import type { CaseView } from '../shared/contracts';
-import { recipientLabel, statusLabel, usd } from './format';
+import { recipientLabel, statusLabel } from './format';
+import { CountUp } from './CountUp';
 
 export interface NextStep { label: string; onSelect: () => void }
 
@@ -19,7 +20,7 @@ export function Hero({ data, next }: { data: CaseView; next: NextStep | null }) 
         {status && <span className="hero-status">{statusLabel[status]}</span>}
       </div>
       <dl className="hero-figures">
-        <div><dt>Purchase payment</dt><dd className="figure">{usd(data.offer.purchasePriceCents)}</dd></div>
+        <div><dt>Purchase payment</dt><dd className="figure"><CountUp cents={data.offer.purchasePriceCents}/></dd></div>
         <div><dt>Distribution goes to</dt><dd className="figure">{recipientLabel(data.offer.distributionRecipient)}</dd></div>
         <div><dt>Offer</dt><dd className="figure">v{data.offer.version}</dd></div>
       </dl>
