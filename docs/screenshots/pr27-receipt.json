@@ -1,0 +1,25 @@
+{
+  "sourceSha": "3d9df7f46ae0969e3ccd618120bf1583e083d4a2",
+  "reviewedOriginalHead": "7081b32b25528da1d0bc82ea22ed2302802601d1",
+  "worktree": "/home/mat/Sites/vc_hackathon",
+  "origin": "https://localhost:3191",
+  "synthetic": true,
+  "tests": 92,
+  "build": "passed",
+  "before": {
+    "viewport": 390,
+    "saleColumn": 0,
+    "scrollWidth": 392
+  },
+  "after": {
+    "viewport": 390,
+    "saleColumn": 350,
+    "scrollWidth": 390
+  },
+  "screenshots": [
+    "pr27-mobile.png",
+    "pr27-desktop.png",
+    "pr27-conversation.png"
+  ],
+  "pending": "Ryan marketing contribution not yet visible; design direction saved in MARKETING_INTEGRATION.md"
+}
