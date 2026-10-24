@@ -9,7 +9,7 @@ it('negotiates actual MCP stdio, advertises schemas, rejects invalid input and r
   try {
     await client.connect(transport);
     const tools = await client.listTools();
-    expect(tools.tools).toHaveLength(7);
+    expect(tools.tools).toHaveLength(9);
     expect(tools.tools.find(t=>t.name==='secondlook_compare_offers')?.annotations?.readOnlyHint).toBe(true);
     expect(tools.tools.some(t=>t.name.includes('approve'))).toBe(false);
     const read = await client.callTool({name:'secondlook_read_case',arguments:{}});

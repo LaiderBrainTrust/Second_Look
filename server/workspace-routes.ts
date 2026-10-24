@@ -1,3 +1,5 @@
+import { fundingRouter } from './funding.js';
+import { x1Router } from './x1-context.js';
 import { Router } from 'express';
 import type { WorkspaceAccess } from './workspace-access.js';
 import type { createStore } from './store.js';
@@ -36,6 +38,8 @@ export function workspaceRouter(store: ReturnType<typeof createStore>, access: W
         route.use('/decision-record', decisionRecordRouter(scoped));
         route.use('/diligence', diligenceRouter(scoped));
         route.use('/decision', decisionRouter(scoped));
+        route.use('/funding', fundingRouter(scoped));
+        route.use('/x1', x1Router(scoped));
         if (agents) {
           route.get('/agent-keys', (_req, res) => res.json({ keys: agents.list(caseId, res.locals.session.user.id) }));
           route.post('/agent-keys', (req, res, next) => {

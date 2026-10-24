@@ -1,3 +1,4 @@
+import { fundingSchema } from '../shared/funding.js';
 import { Router } from 'express';
 import type { CaseState, Role } from '../shared/contracts.js';
 import type { ClosingCondition, ComparisonOffer, DiligenceCommand, DiligenceItem, DiligenceState, DiligenceView, OfferComparison } from '../shared/diligence.js';
@@ -99,7 +100,16 @@ export function applyDiligence(state: CaseState, role: Role, expected: number, c
   if (command.kind !== 'answer_question') requireInvestor(role);
   let item: DiligenceItem;
   let event: string;
-  if (command.kind === 'save_offer') {
+  if (command.kind === 'save_funding') {
+    const parsed = fundingSchema.safeParse(command.funding);
+    if (!parsed.success) throw new DomainError(400, 'Enter valid funding amounts, dates, entity and source.');
+    d.funding = parsed.data; item = parsed.data; event = 'Investor updated the funding scenario. Earlier reviews are historical.';
+  } else if (command.kind === 'attach_x1_evidence') {
+    const evidence = command.evidence;
+    d.x1Evidence ??= [];
+    if(d.x1Evidence.length >= 20) throw new DomainError(422,'This case has reached its saved X1 excerpt limit.');
+    d.x1Evidence.push(evidence); item=evidence; event='Investor saved a dated X1 source excerpt. Financial fields and legal ownership were not inferred.';
+  } else if (command.kind === 'save_offer') {
     object(command.offer);
     const o = command.offer;
     const offerId = id(o.id);
@@ -113,6 +123,7 @@ export function applyDiligence(state: CaseState, role: Role, expected: number, c
       priceAdjustmentCents: nullableMoney(o.priceAdjustmentCents, true), sellerFeesCents: nullableMoney(o.sellerFeesCents),
       distributionRecipient: o.distributionRecipient, distributionBasisSourceId: basis,
       recordDate: date(o.recordDate), expiresAt: timestamp(o.expiresAt),
+      paymentDate: date(o.paymentDate ?? null), distributionDate: date(o.distributionDate ?? null),
       sourceNote: text(o.sourceNote, 'Offer source'), conditions: text(o.conditions, 'Closing conditions'),
       withdrawn: flag(o.withdrawn), version: (existing?.version ?? 0) + 1,
     };
@@ -174,6 +185,7 @@ export function diligenceRouter(store: CaseStore) {
   router.post('/commands', (req, res, next) => {
     try {
       const { expectedRevision, command } = req.body ?? {};
+      if(command?.kind === 'attach_x1_evidence') throw new DomainError(403,'Use the X1 read-and-import route; client-authored excerpts cannot claim a verified retrieval.');
       if (!Number.isSafeInteger(expectedRevision) || expectedRevision < 1) throw new DomainError(400, 'Provide the current case revision.');
       res.json(diligenceView(store.diligenceCommand(res.locals.role, expectedRevision, command, res.locals.actor), res.locals.role));
     } catch (error) { next(error); }

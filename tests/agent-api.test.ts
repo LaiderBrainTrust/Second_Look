@@ -27,6 +27,9 @@ it('enforces case, user, role, work scope and revocation on every agent request'
     expect((await call(work.token,'secondlook_answer_distribution',answer)).status).toBe(403);
     expect((await call(gpKey.token,'secondlook_compare_offers')).status).toBe(403);
     expect((await call(gpKey.token,'secondlook_read_case')).data.case.privateReview).toBeUndefined();
+    expect((await call(gpKey.token,'secondlook_read_funding')).status).toBe(403);
+    expect((await call(readonly.token,'secondlook_read_funding')).status).toBe(200);
+    expect((await call(readonly.token,'secondlook_save_funding',{expectedRevision:1,funding:{ownerEntity:'Synthetic',amountCents:1,neededBy:'2026-11-01',availableCashCents:null,cashAsOf:null,cashConfirmedForThisEntity:false,sourceNote:'Synthetic'}})).status).toBe(403);
     expect((await call(gpKey.token,'secondlook_answer_distribution',answer)).status).toBe(200);
     expect(store.forCase(c.id).read().events.at(-1)?.actor?.agentKeyId).toBe(gpKey.id);
     expect((await call(gpKey.token,'secondlook_answer_distribution',answer)).status).toBe(409);

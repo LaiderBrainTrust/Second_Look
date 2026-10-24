@@ -1,3 +1,4 @@
+import { FundingPanel } from './FundingPanel';
 import './decision.css';
 import { useEffect, useState } from 'react';
 import type { DecisionAnalysis } from '../shared/decision';
@@ -7,7 +8,7 @@ import type { ComparisonOffer } from '../shared/diligence';
 
 const usd = (c: number) => new Intl.NumberFormat('en-US', {style:'currency', currency:'USD'}).format(c / 100);
 
-const blank = { buyer:'', payment:'', fees:'', adjustment:'', recipient:'', date:'', source:'' };
+const blank = { buyer:'', payment:'', fees:'', adjustment:'', recipient:'', date:'', source:'', paymentDate:'', distributionDate:'' };
 function cents(value: string, nullable = false) {
   if (!value.trim() && nullable) return null;
   if (!/^-?\d{1,10}(\.\d{1,2})?$/.test(value.trim())) throw new Error('Enter amounts in dollars, without commas, with at most two decimal places. Leave unknown fees or adjustments blank.');
@@ -27,7 +28,7 @@ export function DecisionWorkbench({ caseBase, onChanged }: { caseBase: string; o
   const [formOpen, setFormOpen] = useState(false);
   function editOffer(offer: ComparisonOffer) {
     setEditing(offer); setFormOpen(true);
-    setForm({buyer:offer.buyer,payment:String(offer.purchasePriceCents/100),fees:offer.sellerFeesCents === null ? '' : String(offer.sellerFeesCents/100),adjustment:offer.priceAdjustmentCents === null ? '' : String(offer.priceAdjustmentCents/100),recipient:offer.distributionRecipient ?? '',date:offer.recordDate ?? '',source:offer.sourceNote});
+    setForm({buyer:offer.buyer,payment:String(offer.purchasePriceCents/100),fees:offer.sellerFeesCents === null ? '' : String(offer.sellerFeesCents/100),adjustment:offer.priceAdjustmentCents === null ? '' : String(offer.priceAdjustmentCents/100),recipient:offer.distributionRecipient ?? '',date:offer.recordDate ?? '',source:offer.sourceNote,paymentDate:offer.paymentDate??'',distributionDate:offer.distributionDate??''});
   }
   const dirty = Object.values(form).some(Boolean);
   useEffect(() => {
@@ -85,7 +86,7 @@ export function DecisionWorkbench({ caseBase, onChanged }: { caseBase: string; o
   async function addOffer(event: React.FormEvent) {
     event.preventDefault();
     try {
-      const saved = await saveOffer({id:editing?.id ?? crypto.randomUUID(),buyer:form.buyer,purchasePriceCents:cents(form.payment)!,priceAdjustmentCents:cents(form.adjustment,true),sellerFeesCents:cents(form.fees,true),distributionRecipient:form.recipient ? form.recipient as 'seller'|'buyer' : null,distributionBasisSourceId:null,recordDate:form.date||null,expiresAt:editing?.expiresAt ?? null,sourceNote:form.source,conditions:editing?.conditions ?? 'Closing conditions not assessed in this comparison.',withdrawn:editing?.withdrawn ?? false});
+      const saved = await saveOffer({id:editing?.id ?? crypto.randomUUID(),buyer:form.buyer,purchasePriceCents:cents(form.payment)!,priceAdjustmentCents:cents(form.adjustment,true),sellerFeesCents:cents(form.fees,true),distributionRecipient:form.recipient ? form.recipient as 'seller'|'buyer' : null,distributionBasisSourceId:null,recordDate:form.date||null,paymentDate:form.paymentDate||null,distributionDate:form.distributionDate||null,expiresAt:editing?.expiresAt ?? null,sourceNote:form.source,conditions:editing?.conditions ?? 'Closing conditions not assessed in this comparison.',withdrawn:editing?.withdrawn ?? false});
       if(saved) { setForm(blank); setEditing(null); setFormOpen(false); }
     } catch(e) { setError(e instanceof Error ? e.message : 'Check the entered terms.'); }
   }
@@ -105,6 +106,8 @@ export function DecisionWorkbench({ caseBase, onChanged }: { caseBase: string; o
         <label>Price adjustment (USD; blank means unknown)<input name="adjustment" inputMode="decimal" value={form.adjustment} onChange={e=>setForm({...form,adjustment:e.target.value})}/></label>
         <label>Distribution goes to<select name="recipient" value={form.recipient} onChange={e=>setForm({...form,recipient:e.target.value})}><option value="">Unknown</option><option value="seller">Seller</option><option value="buyer">Buyer</option></select></label>
         <label>Comparison record date<input name="date" type="date" value={form.date} onChange={e=>setForm({...form,date:e.target.value})}/></label>
+        <label>Purchase payment date (optional)<input name="paymentDate" type="date" value={form.paymentDate} onChange={e=>setForm({...form,paymentDate:e.target.value})}/></label>
+        <label>Retained distribution payment date (optional)<input name="distributionDate" type="date" value={form.distributionDate} onChange={e=>setForm({...form,distributionDate:e.target.value})}/></label>
         <label>Source reference<input name="source" value={form.source} required maxLength={2000} onChange={e=>setForm({...form,source:e.target.value})}/></label>
         <p>This saves a private comparison quote. It does not replace the current deal or accept an offer. Fees and adjustments must be explicitly entered, including zero when known.</p>
         <button disabled={busy}>{busy ? 'Saving offer…' : editing ? 'Save revised offer' : 'Save comparison offer'}</button>
@@ -116,6 +119,7 @@ export function DecisionWorkbench({ caseBase, onChanged }: { caseBase: string; o
       {analysis.nextQuestion && !(caseView?.answer && caseView.question === analysis.nextQuestion.text) && <><h3>The answer to get next</h3><p>{analysis.nextQuestion.text}</p><p>Saving replaces the shared manager question and clears its old answer. Previous reviews remain historical. Competing bids and this threshold stay private. No external message is sent.</p><button disabled={busy} onClick={requestAnswer}>{busy ? 'Saving manager question…' : 'Save this question for the manager'}</button></>}
       {analysis.confirmedHighestOfferIds.length > 0 && <p aria-live="polite">Highest calculated cash before tax: {names(analysis.confirmedHighestOfferIds)}.</p>}
       {caseView?.answer && <div><h3>Confirm the distribution basis</h3><p>{caseView.answer.text}</p><p>Manager-entered amount: {usd(caseView.answer.distributionCents)}. Confirm only after checking that each quote uses this answer and record date. This is your recorded check, not independent verification.</p>{offers.filter(o=>!o.withdrawn && o.distributionBasisSourceId!==caseView.answer!.source.id).map(o=><button key={o.id} disabled={busy} onClick={()=>void saveOffer({...o,distributionBasisSourceId:caseView.answer!.source.id})}>Confirm {o.buyer} against this answer</button>)}</div>}
+      <FundingPanel caseBase={caseBase} revision={analysis.revision} ownerEntity={caseView?.privateReview?.ownerEntity ?? ''} onChanged={()=>{setRefresh(x=>x+1);onChanged?.();}}/>
       <details><summary>Calculation assumptions</summary><p>{analysis.assumptions}</p></details>
     </>}
   </section>;

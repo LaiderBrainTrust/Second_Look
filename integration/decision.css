@@ -12,3 +12,8 @@
 .decision-table button:hover:enabled { background:var(--line); }
 .decision-workbench > div > button { margin:0 .5rem .5rem 0; }
 @media(max-width:700px) { .decision-workbench form { grid-template-columns:1fr; } }
+.funding-panel { margin-top:2rem; padding-top:1rem; border-top:1px solid var(--line); }
+.decision-workbench .funding-check { display:flex; align-items:center; gap:.75rem; grid-column:1/-1; }
+.decision-workbench .funding-check input { width:24px; flex-shrink:0; }
+.funding-panel li { margin:.75rem 0; line-height:1.5; }
+.funding-panel article { overflow-wrap:anywhere; border-left:2px solid var(--line); padding-left:1rem; }

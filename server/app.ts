@@ -1,3 +1,6 @@
+import { fundingRouter } from './funding.js';
+import { mcpHelpRouter } from './mcp-help.js';
+import { x1Router } from './x1-context.js';
 import { createWorkspaceAccess } from './workspace-access.js';
 import { workspaceRouter } from './workspace-routes.js';
 import { decisionRecordRouter } from './decision-record.js';
@@ -25,6 +28,7 @@ export function createApp(store: ReturnType<typeof createStore>, options: { rele
   }
   if (options.hosted) allowedOrigins.push(options.hosted.origin);
   app.disable('x-powered-by');
+  app.use(mcpHelpRouter());
   app.use((req, res, next) => {
     if (['POST', 'PUT', 'PATCH', 'DELETE'].includes(req.method)) {
       const origin = req.header('origin');
@@ -59,6 +63,8 @@ export function createApp(store: ReturnType<typeof createStore>, options: { rele
   app.use('/api/case/decision-record', decisionRecordRouter(store));
   app.use('/api/case/diligence', diligenceRouter(store));
   app.use('/api/case/decision', decisionRouter(store));
+  app.use('/api/case/funding', fundingRouter(store));
+  app.use('/api/case/x1', x1Router(store));
   app.use('/api/case/gaming', gamingRouter(store));
   app.use('/api/case/research', caseResearchRouter(store, options.recovery));
   app.post('/api/case/commands', (req, res, next) => {

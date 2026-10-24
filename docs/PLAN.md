@@ -182,3 +182,7 @@ Submission checklist: name/description; Track 4; sponsor award selection; founde
 ## 13. What we deliberately defer
 
 Global game discovery, a new general-purpose dashboard, SPV creation, secondary marketplace execution, automatic valuation, fabricated alpha scores, Minutes integration, autonomous outreach, production financial records, a replacement for the team's existing tooling, and an X1 platform expansion. Revisit after the event only if customer evidence earns the work.
+
+## Optional X1 context: the investor's actual funding question
+
+The next integrated slice compares available cash and the timing of each offer against an explicit funding need. X1 can supply selected source evidence using a dedicated account bound to one Second Look case; users still enter/check financial assumptions. This does not turn document mentions into ownership, a bank balance into unrestricted cash, or projected proceeds into settlement. See [X1_CONTEXT.md](X1_CONTEXT.md). Live X1 access remains separately qualified; the app works with entered facts while disconnected. Public `/mcp` provides agent setup instructions without exposing secrets or pretending to be a remote transport.
