@@ -82,8 +82,9 @@ SDK retries handle backoff. Do not run a tight polling loop, overwrite a shared 
 
 ## Remaining sponsor/product work
 
-- Configure PRISM_TRACE_KEY and PRISM_PROJECT_ID; verify a recorded trace for the real Nicrron call. The HTTP adapter is implemented.
-- Connect X1 separately if retained in the team's final scope.
+- Provision team-only Roundtable credentials and verify a fresh teammate setup. Akta, Nicrron and PRISM settings are already in repository Codespaces secrets.
+- Resolve Ninoo Builder/Marketplace eligibility and finish submission evidence; all four sponsor API calls have been exercised in the app.
+- Connect X1 separately only if retained after the critical path. See [PLAN.md](PLAN.md) and [TEAM_BOARD.md](TEAM_BOARD.md).
 
 Provider references: [Akta documentation](https://docs.akta.pro/llms.txt), [Roundtable CLI](https://github.com/roundtable-bot/roundtable-cli), [SDK guide](https://roundtable.bot/docs/bots), [Funds template](https://github.com/roundtable-bot/roundtable-cli/tree/main/templates/funds).
 

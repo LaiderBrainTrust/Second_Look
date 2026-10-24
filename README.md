@@ -100,15 +100,15 @@ These are illustrative contract scenarios with explicit zero purchase-price adju
 
 ## What exists / what remains
 
-| Working locally | Still required for the final entry |
+| Verified locally | Remaining event work |
 | --- | --- |
-| React/TypeScript UI and Express API | Optional X1 reads from a synthetic demo account |
-| Persistent offer versions, question/answer and historical review | Confirm materiality and connect the remaining sponsors |
-| Akta company search, discovery, enrichment and dated news API | Materiality review of external findings; a company mention is not a valuation |
-| Integer-cent calculations, term-change dollar comparison and unknown-total handling | Verify all integrations in a teammate’s environment |
-| Atomic stale-revision rejection | Authenticated participants and case-scoped sharing |
-| Role-specific response projection | Deployment with persistent storage and real auth |
-| Tests for changed terms, stale requests and restart continuity | Source extraction/correction, final rehearsal, video and founder brief |
+| Three-step UI, real Steam samples and Akta studio research | Fresh teammate setup and team-only Roundtable access |
+| Live Roundtable/Nicrron review with a recorded PRISM trace | Ninoo-specific eligibility clarification |
+| Saved questions, responses, offer versions and historical approvals | Presenter rehearsal and video |
+| Integer-cent comparison and stale-revision rejection | Genuine founder-brief evidence and Devpost submission |
+| Mobile check, printable decision record, 26 tests and build | Judge-accessible demo arrangement; authenticated persistent hosting if chosen |
+
+X1 import is optional after the critical path, not a current capability or submission prerequisite. See [PLAN.md](docs/PLAN.md) and [TEAM_BOARD.md](docs/TEAM_BOARD.md) for the complete strategy, boundaries and acceptance criteria.
 
 ## Use the live research flow
 
@@ -166,6 +166,6 @@ npm run build
 
 ## Existing infrastructure and submission disclosure
 
-New app code was written on build day. X1 is proposed existing infrastructure. Confirm the organizer's interpretation of existing-service use; use all four required sponsors for prize eligibility. Observed Akta/Nicrron/Roundtable checks are documented in [sponsor setup](docs/SPONSOR_SETUP.md); they do not establish full sponsor eligibility, customer validation, fair value or financial gain.
+New app code was written on build day. X1 is proposed existing infrastructure. Confirm the organizer's interpretation of existing-service use; use all four required sponsors for prize eligibility. Observed Akta/Nicrron/Roundtable/PRISM checks are documented in [sponsor setup](docs/SPONSOR_SETUP.md); they do not establish full sponsor eligibility, customer validation, fair value or financial gain.
 
 No project license or ownership allocation is implied by this bootstrap. Agree those with the team before publishing code under a license. Never commit `.env`, `.local`, credentials, or private financial records.
