@@ -2,6 +2,8 @@
 
 October 24, 2026. Owner: Mat/Codex. Ryan retains the UI lane in `src/`, `index.html` and public assets.
 
+Deployment: [BACKEND_RELEASE_RECEIPT.json](BACKEND_RELEASE_RECEIPT.json). Source `a38ee65d93599657cfe6f18f6acfd86505b45f57` is live. Exact source, login protection, unchanged case and retained saved research were verified. The previous release and database backup remain available.
+
 ## What the UI can rely on
 
 - Existing API response shapes, login, role selection and revision-checked commands are preserved. No frontend change is required for this release.

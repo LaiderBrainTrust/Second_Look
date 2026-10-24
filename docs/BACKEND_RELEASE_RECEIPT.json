@@ -1,0 +1,30 @@
+{
+  "applicationSourceSha": "a38ee65d93599657cfe6f18f6acfd86505b45f57",
+  "url": "https://x1cloud.tail6fbca0.ts.net/",
+  "status": "deployed-and-verified",
+  "tests": 34,
+  "build": "passed",
+  "checks": [
+    "exact-source-local-and-public",
+    "anonymous-401",
+    "hosted-login-and-case",
+    "sqlite-backup-integrity",
+    "case-unchanged-across-release",
+    "saved-research-and-snapshot-ids-retained"
+  ],
+  "caseRevision": 1,
+  "liveRecovery": {
+    "taskId": "2f02780df9354f0485d2556060f48be1",
+    "traceId": "8136f548-da38-4a8a-816d-61b5d5d32246",
+    "result": "matching saved result recovered after database reopen",
+    "newModelCall": false,
+    "caseChanged": false
+  },
+  "scope": "Backend recovery, hosted route support and deployment tooling. Ryan UI not modified.",
+  "remaining": [
+    "Ryan UI integration and visual acceptance",
+    "Ryan laptop spoken rehearsal",
+    "Ninoo requirements clarification and any required publishing",
+    "Final video, founder brief and submission"
+  ]
+}
