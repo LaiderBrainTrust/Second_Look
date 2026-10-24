@@ -36,7 +36,7 @@ export function Review({ data, busy, onApprove }: { data: CaseView; busy: boolea
 
     <ol className="chain">
       <li><span className="label">Evidence</span>{context ? <>{context.game}, {context.studio}. Question shared at revision {context.sharedAtRevision}.</> : 'No game evidence has been shared yet. Start under Holdings.'}</li>
-      <li><span className="label">Cash attributable to this interest</span>{data.answer ? <>{usd(data.answer.distributionCents)}, entered by the fund manager role as a fictional scenario.</> : 'Unresolved. Waiting for the manager.'}</li>
+      <li><span className="label">Cash attributable to this interest</span>{data.answer ? <>{usd(data.answer.distributionCents)}, entered by the fund manager role as a scenario assumption.</> : 'Unresolved. Waiting for the manager.'}</li>
       <li><span className="label">Current offer</span>Version {data.offer.version}. Distribution goes to {recipientLabel(data.offer.distributionRecipient)}. {review.status === 'approved' ? 'Reviewed for this version.' : 'Investor review is still required.'}</li>
     </ol>
 
@@ -46,7 +46,7 @@ export function Review({ data, busy, onApprove }: { data: CaseView; busy: boolea
     <section className="block approve" aria-label="Your review">
       <h3>{review.grossReceiptsCents === null ? 'Amount not yet established' : `${usd(review.grossReceiptsCents)} gross receipts`}</h3>
       <p>{review.responseText}</p>
-      <p className="fine">Fictional scenario. Investment owner: {review.ownerEntity}. Source: {review.report.label}.</p>
+      <p className="fine">Scenario figures. Investment owner: {review.ownerEntity}. Source: {review.report.label}.</p>
       <button className="primary" disabled={busy || review.status === 'approved' || review.grossReceiptsCents === null} onClick={onApprove}>
         {review.status === 'approved' ? 'Reviewed for this version' : busy ? 'Saving' : 'Approve this proposed response'}
       </button>
@@ -67,16 +67,16 @@ export function Respond({ data, role, busy, answer, setAnswer, onAnswer, onRevis
   return <section aria-labelledby="respond-heading">
     <div className="section-head"><div>
       <h2 id="respond-heading">{role === 'gp' ? 'Respond as the fund manager' : 'Revise the offer as the buyer'}</h2>
-      <p className="lede">Viewing as {roleLabels[role]}, a fictional participant operated by the presenter. The investor&rsquo;s private review is not available to this role.</p>
+      <p className="lede">Viewing as {roleLabels[role]}, operated from the presenter panel. The investor&rsquo;s private review is not available to this role.</p>
     </div></div>
     <Question data={data}/>
     <Answer data={data}/>
     {role === 'gp' && <form className="block" onSubmit={e => { e.preventDefault(); onAnswer(); }}>
       <h3>Your response</h3>
-      <p className="fine">Scenario assumption: a {usd(SCENARIO_DISTRIBUTION_CENTS)} distribution attributable to this LP interest. It is entered by the manager role, not inferred from game performance. The presenter panel can insert a labeled fictional response.</p>
+      <p className="fine">Scenario assumption: a {usd(SCENARIO_DISTRIBUTION_CENTS)} distribution attributable to this LP interest. It is entered by the manager role, not inferred from game performance. The presenter panel can insert a labeled illustrative response.</p>
       <label htmlFor="answer">Explanation of the rights and the distribution</label>
       <textarea id="answer" value={answer} onChange={e => setAnswer(e.target.value)} maxLength={5000} required rows={5}/>
-      <button className="primary" disabled={busy || !answer.trim()}>{busy ? 'Saving' : 'Save fictional response'}</button>
+      <button className="primary" disabled={busy || !answer.trim()}>{busy ? 'Saving' : 'Save response'}</button>
     </form>}
     {role === 'buyer' && <section className="block" aria-label="Revise the distribution term">
       <h3>Distribution term</h3>

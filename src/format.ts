@@ -20,7 +20,7 @@ export const statusLabel: Record<ReviewStatus, string> = {
   terms_changed: 'Terms changed since your approval',
 };
 
-// The fictional manager response is a labeled scenario input, never inferred from player data.
+// The manager response is a labeled scenario input, never inferred from player data.
 export const SCENARIO_DISTRIBUTION_CENTS = 10_000_000;
 export const scenarioAnswer = (game: string) =>
-  `Fictional manager response for ${game}: under the scenario's assumed contractual rights, commercial proceeds flow to the fund. A fictional distribution notice allocates $100,000 to this LP interest. This is not calculated from player counts or the holding's share of fund NAV. Whether the seller keeps it depends on the written sale terms; review the current offer.`;
+  `Illustrative manager response for ${game}: under the scenario's assumed contractual rights, commercial proceeds flow to the fund. An illustrative distribution notice allocates $100,000 to this LP interest. This is not calculated from player counts or the holding's share of fund NAV. Whether the seller keeps it depends on the written sale terms; review the current offer.`;

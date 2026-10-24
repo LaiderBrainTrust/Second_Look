@@ -28,12 +28,12 @@ export function Presenter(p: Props) {
 
     <section>
       <h3>View as</h3>
-      <div className="segmented" role="group" aria-label="Fictional participant">
+      <div className="segmented" role="group" aria-label="Participant">
         {(Object.keys(roleLabels) as Role[]).map(value =>
           <button key={value} className={p.role === value ? 'on' : ''} aria-pressed={p.role === value} disabled={p.busy} onClick={() => p.onRole(value)}>{roleLabels[value]}</button>)}
       </div>
       <p className="fine">{p.hosted
-        ? 'The presenter session may operate all three fictional roles. The server sets the role; these are not verified counterparty identities.'
+        ? 'The presenter session may operate all three roles. The server sets the role; these are not verified counterparty identities.'
         : 'Local role simulation using a request header. This is not authentication.'}</p>
       <div className="row">
         <button className="secondary" disabled={p.busy} onClick={p.onRefresh}>{p.busy ? 'Working' : 'Refresh case'}</button>
@@ -42,7 +42,7 @@ export function Presenter(p: Props) {
     </section>
 
     {p.canInsertAnswer && <section>
-      <h3>Fictional manager response</h3>
+      <h3>Manager response</h3>
       <p className="fine">Fills the response field with a labeled scenario answer assuming a $100,000 distribution. It is a scenario input, not a finding from player data.</p>
       <button className="secondary" onClick={() => { p.onInsertAnswer(); p.onClose(); }}>Insert labeled response</button>
     </section>}

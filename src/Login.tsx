@@ -26,6 +26,5 @@ export function Login({ ready, loadError, onSignedIn }: { ready: boolean; loadEr
           <button className="primary" disabled={busy}>{busy ? 'Signing in' : 'Sign in'}</button>
         </form>
       : !loadError && <p role="status" className="muted">Connecting</p>}
-    <p className="fine">Illustrative fund and deal. Every financial record in this application is fictional.</p>
   </main>;
 }
