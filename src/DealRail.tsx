@@ -10,7 +10,7 @@ export function DealRail({ data }: { data: CaseView }) {
   const delta = before !== null && after !== null ? after - before : null;
 
   return <aside className="rail" aria-label="The offer">
-    <p className="label">Illustrative fund and deal</p>
+    <p className="label">{data.mode === 'user' ? 'Terms entered by the investor' : 'Illustrative fund and deal'}</p>
     <h2 className="rail-title">{data.title}</h2>
 
     <dl className="terms">

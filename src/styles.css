@@ -198,6 +198,28 @@ h3 + .events, h3 + .approval { margin-top: 8px; }
 .login form button { margin-top: 8px; }
 .login .fine { margin-top: 24px; }
 
+/* Accounts, case list, start a review, people */
+.login .segmented.wide { max-width: 360px; margin-bottom: 24px; }
+.login .tabs.compact { gap: 24px; margin-bottom: 16px; }
+.login form label, .start label, .block form label { display: block; margin-top: 8px; }
+.cases { max-width: 720px; }
+.h2 { font-size: 24px; line-height: 32px; }
+.start { border: 1px solid var(--line); border-radius: var(--radius); padding: 24px; margin: 0 0 32px; display: grid; gap: 8px; }
+.start h2 { margin-bottom: 8px; }
+.start .lede { margin-bottom: 16px; }
+.two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.choice { display: flex; align-items: center; gap: 16px; color: var(--ink); font-size: 16px; margin: 8px 0; }
+.choice input { width: 24px; min-height: 24px; accent-color: var(--accent); }
+.case-list li + li { margin-top: 8px; }
+.case-list button { display: grid; gap: 4px; width: 100%; text-align: left; padding: 16px; min-height: 0; }
+.case-list button:hover { border-color: var(--ink); }
+.case-title { font-family: var(--display); font-weight: 500; font-size: 18px; line-height: 24px; }
+.people li { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 8px 0; border-top: 1px solid var(--line); flex-wrap: wrap; }
+.fine.inline { display: inline; }
+.button-link { display: inline-flex; align-items: center; min-height: 40px; padding: 0 16px; border: 1px solid var(--line); border-radius: var(--radius); color: var(--ink); text-decoration: none; }
+.button-link:hover { border-color: var(--ink); }
+.block form { display: block; }
+
 /* Presenter dialog */
 .presenter { width: min(480px, calc(100vw - 32px)); max-height: calc(100vh - 32px); margin: 16px 16px 16px auto; padding: 24px; border: 1px solid var(--ink); border-radius: var(--radius); color: var(--ink); }
 .presenter::backdrop { background: rgba(17, 20, 24, .4); }
@@ -228,6 +250,7 @@ h3 + .events, h3 + .approval { margin-top: 8px; }
   .viewing { display: none; }
   .tabs { gap: 16px; overflow-x: auto; }
   .section-head, .bridge, .share, .detail-head { flex-direction: column; align-items: stretch; }
+  .two { grid-template-columns: 1fr; }
   .section-head > button, .bridge button, .share button { width: 100%; }
   .verdict { flex-direction: column; gap: 8px; }
   .login { padding: 48px 16px; }

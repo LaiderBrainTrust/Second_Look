@@ -1,14 +1,17 @@
 import type { CaseView } from '../shared/contracts';
 import { dateTime } from './format';
 
-export function History({ data }: { data: CaseView }) {
+export function History({ data, base }: { data: CaseView; base: string }) {
   const review = data.privateReview!;
   return <section aria-labelledby="history-heading">
     <div className="section-head"><div>
       <h2 id="history-heading">Decision record</h2>
       <p className="lede">What was asked, what was answered, and which version each approval applied to. Saved in the application database and kept across a reload or restart.</p>
     </div>
-      <button className="secondary no-print" onClick={() => window.print()}>Print or save as PDF</button>
+      <div className="row no-print">
+        <a className="button-link" href={`${base}/decision-record?format=html&revision=${data.revision}`} target="_blank" rel="noreferrer">Open the decision record</a>
+        <button className="secondary" onClick={() => window.print()}>Print this page</button>
+      </div>
     </div>
 
     <h3>Events</h3>

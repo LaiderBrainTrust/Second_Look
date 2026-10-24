@@ -1,5 +1,6 @@
+import { useState } from 'react';
 import type { CaseView } from '../shared/contracts';
-import { SCENARIO_DISTRIBUTION_CENTS, recipientLabel, roleLabels, usd } from './format';
+import { SCENARIO_DISTRIBUTION_CENTS, centsToInput, recipientLabel, roleLabels, toCents, usd } from './format';
 
 function Question({ data }: { data: CaseView }) {
   return <section className="block" aria-label="Question for the fund manager">
@@ -55,33 +56,65 @@ export function Review({ data, busy, onApprove }: { data: CaseView; busy: boolea
   </section>;
 }
 
+interface OfferRevision { purchasePriceCents: number; priceAdjustmentCents: number | null; distributionRecipient: 'seller' | 'buyer'; sourceNote: string }
 interface RespondProps {
-  data: CaseView; role: 'gp' | 'buyer'; busy: boolean;
+  data: CaseView; role: 'gp' | 'buyer'; busy: boolean; userCase: boolean;
   answer: string; setAnswer: (text: string) => void;
-  onAnswer: () => void; onRevise: () => void;
+  onAnswer: (distributionCents: number) => void; onRevise: () => void; onReviseOffer: (offer: OfferRevision) => void;
 }
 
 // Fund manager and buyer views: the shared question plus the one command that role may issue.
-export function Respond({ data, role, busy, answer, setAnswer, onAnswer, onRevise }: RespondProps) {
+export function Respond({ data, role, busy, userCase, answer, setAnswer, onAnswer, onRevise, onReviseOffer }: RespondProps) {
   const next = data.offer.distributionRecipient === 'seller' ? 'buyer' : 'seller';
+  const [amount, setAmount] = useState('');
+  const [price, setPrice] = useState(centsToInput(data.offer.purchasePriceCents));
+  const [adjustment, setAdjustment] = useState(data.offer.priceAdjustmentCents === null ? '' : centsToInput(data.offer.priceAdjustmentCents));
+  const [recipient, setRecipient] = useState<'seller' | 'buyer'>(data.offer.distributionRecipient);
+  const [sourceNote, setSourceNote] = useState('');
+  const [localError, setLocalError] = useState('');
+  const guard = (work: () => void) => { setLocalError(''); try { work(); } catch (e) { setLocalError(e instanceof Error ? e.message : 'Check the entered amounts.'); } };
+
   return <section aria-labelledby="respond-heading">
     <div className="section-head"><div>
       <h2 id="respond-heading">{role === 'gp' ? 'Respond as the fund manager' : 'Revise the offer as the buyer'}</h2>
-      <p className="lede">Viewing as {roleLabels[role]}, operated from the presenter panel. The investor&rsquo;s private review is not available to this role.</p>
+      <p className="lede">{userCase ? `You are signed in as the ${roleLabels[role].toLowerCase()} on this case.` : `Viewing as ${roleLabels[role]}, operated from the presenter panel.`} The investor&rsquo;s private review is not available to this role.</p>
     </div></div>
+    {localError && <p className="alert" role="alert">{localError}</p>}
     <Question data={data}/>
     <Answer data={data}/>
-    {role === 'gp' && <form className="block" onSubmit={e => { e.preventDefault(); onAnswer(); }}>
+
+    {role === 'gp' && <form className="block" onSubmit={e => { e.preventDefault(); guard(() => onAnswer(userCase ? toCents(amount)! : SCENARIO_DISTRIBUTION_CENTS)); }}>
       <h3>Your response</h3>
-      <p className="fine">Scenario assumption: a {usd(SCENARIO_DISTRIBUTION_CENTS)} distribution attributable to this LP interest. It is entered by the manager role, not inferred from game performance. The presenter panel can insert a labeled illustrative response.</p>
+      {userCase
+        ? <>
+            <label htmlFor="amount">Distribution attributable to this interest (USD)</label>
+            <input id="amount" inputMode="decimal" value={amount} onChange={e => setAmount(e.target.value)} required/>
+            <p className="fine">This is your own statement. It is recorded under your account and is not checked against fund documents.</p>
+          </>
+        : <p className="fine">Scenario assumption: a {usd(SCENARIO_DISTRIBUTION_CENTS)} distribution attributable to this LP interest. It is entered by the manager role, not inferred from game performance. The presenter panel can insert a labeled illustrative response.</p>}
       <label htmlFor="answer">Explanation of the rights and the distribution</label>
       <textarea id="answer" value={answer} onChange={e => setAnswer(e.target.value)} maxLength={5000} required rows={5}/>
-      <button className="primary" disabled={busy || !answer.trim()}>{busy ? 'Saving' : 'Save response'}</button>
+      <button className="primary" disabled={busy || !answer.trim() || (userCase && !amount.trim())}>{busy ? 'Saving' : 'Save response'}</button>
     </form>}
-    {role === 'buyer' && <section className="block" aria-label="Revise the distribution term">
+
+    {role === 'buyer' && !userCase && <section className="block" aria-label="Revise the distribution term">
       <h3>Distribution term</h3>
       <p>Keep the {usd(data.offer.purchasePriceCents)} purchase payment and move the distribution from {recipientLabel(data.offer.distributionRecipient)} to {recipientLabel(next)}. This creates offer version {data.offer.version + 1} and makes any earlier approval historical.</p>
       <button className="primary" disabled={busy} onClick={onRevise}>{busy ? 'Saving' : `Assign the distribution to ${recipientLabel(next)}`}</button>
     </section>}
+
+    {role === 'buyer' && userCase && <form className="block" onSubmit={e => { e.preventDefault(); guard(() => onReviseOffer({ purchasePriceCents: toCents(price)!, priceAdjustmentCents: toCents(adjustment, true), distributionRecipient: recipient, sourceNote: sourceNote.trim() })); }}>
+      <h3>Revise the offer</h3>
+      <p className="fine">Saving creates offer version {data.offer.version + 1} and makes any earlier approval historical. Taxes, fees and timing are not modeled.</p>
+      <div className="two">
+        <div><label htmlFor="r-price">Purchase payment (USD)</label><input id="r-price" inputMode="decimal" value={price} onChange={e => setPrice(e.target.value)} required/></div>
+        <div><label htmlFor="r-adj">Price adjustment (USD, blank if unknown)</label><input id="r-adj" inputMode="decimal" value={adjustment} onChange={e => setAdjustment(e.target.value)}/></div>
+      </div>
+      <label htmlFor="r-recipient">Distribution goes to</label>
+      <select id="r-recipient" value={recipient} onChange={e => setRecipient(e.target.value as 'seller' | 'buyer')}><option value="seller">The seller</option><option value="buyer">The buyer</option></select>
+      <label htmlFor="r-source">Reference for this revision (written offer, clause)</label>
+      <input id="r-source" value={sourceNote} onChange={e => setSourceNote(e.target.value)} required maxLength={1000}/>
+      <button className="primary" disabled={busy}>{busy ? 'Saving' : 'Save the revised offer'}</button>
+    </form>}
   </section>;
 }
