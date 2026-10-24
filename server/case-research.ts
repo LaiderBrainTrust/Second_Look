@@ -73,8 +73,8 @@ export function caseResearchRouter(store: ReturnType<typeof createStore>) {
     active.add(id);
     try {
       let run = store.research(id);
-      if (run.taskId && run.status === 'queued') {
-        run = { ...run, ...await rt.result(run) }; store.saveResearch(run);
+      if (run.taskId && ['queued', 'blocked'].includes(run.status)) {
+        run = { ...run, error: undefined, ...await rt.result(run) }; store.saveResearch(run);
       }
       res.json(run);
     } catch (error) { next(error); }
