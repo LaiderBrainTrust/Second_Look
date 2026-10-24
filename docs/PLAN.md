@@ -6,7 +6,7 @@
 
 This is the canonical product and strategy plan. Read it before changing scope. Implementation contracts are in [BUILD.md](BUILD.md), setup in [TEAM_START.md](TEAM_START.md), assignments in [TEAM_BOARD.md](TEAM_BOARD.md), and the live presentation in [GAMING_BUILD.md](GAMING_BUILD.md). Older proposals in `archive/` are historical, not instructions for today's build.
 
-Repository: [LaiderBrainTrust/vc_hackathon](https://github.com/LaiderBrainTrust/vc_hackathon). Team branch: `main`. [PR #1](https://github.com/LaiderBrainTrust/vc_hackathon/pull/1) is merged. Further work uses small reviewed branches.
+Repository: [LaiderBrainTrust/vc_hackathon](https://github.com/LaiderBrainTrust/Second_Look). Team branch: `main`. [PR #1](https://github.com/LaiderBrainTrust/Second_Look/pull/1) is merged. Further work uses small reviewed branches.
 
 ## Product experience directive — October 24
 

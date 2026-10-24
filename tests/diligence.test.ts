@@ -139,6 +139,10 @@ it('exports the complete comparison and question record with safe escaping and n
     expect(record.diligence?.privateDiligence?.comparison.offers[0].netBeforeTaxCents).toBe(79_500_000);
     const html = decisionRecordHtml(record);
     expect(html).toContain('$795,000.00'); expect(html).toContain('&lt;script&gt;bad&lt;/script&gt;'); expect(html).not.toContain('<script>');
+    store.diligenceCommand('lp', 3, { kind: 'save_condition', condition });
+    const blockedHtml = decisionRecordHtml(decisionRecord(store));
+    expect(blockedHtml).toContain('require resolution before approval');
+    expect(blockedHtml).not.toContain('Ready for investor review');
   } finally { store.close(); }
 });
 
