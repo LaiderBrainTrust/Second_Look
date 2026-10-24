@@ -1,6 +1,6 @@
 # Ryan’s three-minute Second Look demo
 
-Before the timer starts, open https://secondlook.ac, refresh, choose Team example and enter the team code. Start on Your offer with a $700,000 purchase payment and an unconfirmed fund payout. Read only the Say paragraphs aloud. The screenshots are captured examples, not a live view of the app.
+Before the timer starts, open https://secondlook.ac, refresh, click Try the example and enter the team code. Start on Your offer with a $700,000 purchase payment and an unconfirmed fund payout. Read only the Say paragraphs aloud. The screenshots are captured examples, not a live view of the app.
 
 [Open the screenshot presentation](https://secondlook.ac/presenter/) · [Download the PDF](https://secondlook.ac/presenter/second-look-demo.pdf) · [Original product plan](PLAN.md)
 
