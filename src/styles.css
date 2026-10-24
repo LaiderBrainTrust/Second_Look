@@ -662,3 +662,20 @@ main { padding-bottom: 0; }
 .presenter .segmented button.on { background: var(--lime); border-color: var(--lime); color: #0a0a0a; }
 .presenter .providers li:hover { background: #161616; }
 .presenter :focus-visible { outline-color: var(--lime); }
+
+/* Services uses the Home landing */
+.services .landing-home h1 { font-family: var(--body); font-weight: 300; font-size: clamp(56px, 8vw, 128px) !important; line-height: .95; letter-spacing: -.05em; }
+.services .lh-side p { margin-top: 8px; }
+.services .service-block { margin-top: 0; border-radius: 0; margin-left: calc(50% - 50vw); margin-right: calc(50% - 50vw); padding: 96px max(48px, calc(50vw - 640px)); }
+
+/* Presenter: calm charcoal, lime only as a quiet marker */
+.presenter { background: #141414; border-color: #262626; }
+.presenter::backdrop { background: rgba(10, 10, 10, .35); }
+.presenter section, .presenter .providers li { border-color: #232323; }
+.presenter h2, .presenter h3 { color: #ececE6; font-weight: 400; }
+.presenter .fine { color: #8f8f89; }
+.presenter button { background: #1b1b1b; color: #d8d8d2; border-color: #2c2c2c; }
+.presenter button:hover:enabled { border-color: #4a4a46; color: #fff; background: #202020; }
+.presenter .segmented button.on { background: #262626; border-color: #3a3a36; color: #fff; box-shadow: inset 0 -2px 0 #9fbf5a; }
+.presenter .providers li:hover { background: #1a1a1a; }
+.presenter .providers .muted { color: #8f8f89; }

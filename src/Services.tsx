@@ -8,17 +8,18 @@ const services = [
 
 export function Services() {
   return <section className="services" aria-labelledby="services-title">
-    <div className="landing">
-      <div className="landing-stripes" aria-hidden="true">
-        <svg width="100%" height="100%" preserveAspectRatio="none">
-          <defs><pattern id="stripes" width="24" height="24" patternUnits="userSpaceOnUse" patternTransform="rotate(-32)"><rect width="24" height="24" fill="#dfe8df"/><rect width="10" height="24" fill="#c9d9cb"/></pattern></defs>
-          <rect width="100%" height="100%" fill="url(#stripes)"/>
-        </svg>
-      </div>
-      <div className="landing-mid" aria-hidden="true"/>
-      <div className="landing-panel">
+    <div className="landing-home">
+      <div className="lh-top">
         <h1 id="services-title">Services</h1>
-        <p>Four parts, each tied to the offer version under review.</p>
+        <div className="lh-side">
+          <p>Four parts, each tied to the offer version under review.</p>
+        </div>
+      </div>
+      <div className="lh-band" aria-hidden="true">
+        <svg width="100%" height="100%">
+          <defs><pattern id="svc-stripes" width="28" height="28" patternUnits="userSpaceOnUse" patternTransform="rotate(-38)"><rect width="28" height="28" fill="#d4f5a0"/><rect width="9" height="28" fill="#bfe58a"/></pattern></defs>
+          <rect width="100%" height="100%" fill="url(#svc-stripes)"/>
+        </svg>
       </div>
     </div>
     <div className="service-block">
