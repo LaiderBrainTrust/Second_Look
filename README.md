@@ -10,7 +10,7 @@ Deal Flow @ Betaworks, October 24, 2026. **Track 4: Funds. Submission closes 4 P
 
 **Read [PLAN.md](docs/PLAN.md) first.** It covers the product, strategy, gaming example, sponsor use, X1 boundary, commercial hypothesis and path to submission. Claim work in [TEAM_BOARD.md](docs/TEAM_BOARD.md); use [BUILD.md](docs/BUILD.md) for implementation and [GAMING_BUILD.md](docs/GAMING_BUILD.md) for the presentation.
 
-Current status: the gaming workflow is built, and live Steam/Akta → Roundtable/Nicrron → PRISM checks succeeded. **27 tests and the build pass.** Remaining event work includes team-only Roundtable access, teammate setup verification, Ninoo eligibility clarification, a judge-accessible demo arrangement, presenter rehearsal and submission. This is not a publicly deployed product; X1 is not connected.
+Current status: the gaming workflow is built, and live Steam/Akta → Roundtable/Nicrron → PRISM checks succeeded. **27 tests and the build pass.** Remaining event work includes teammate setup verification, Ninoo eligibility clarification, a judge-accessible demo arrangement, presenter rehearsal and submission. This is not a publicly deployed product; X1 is not connected.
 
 ## Start here — teammates and coding agents
 
@@ -65,7 +65,7 @@ Open **http://localhost:5173**. The API is **http://127.0.0.1:3001/api/health**.
 | Complete live review | Send a saved finding through Roundtable → Nicrron; retrieve and explicitly share the question | Akta, Nicrron, and all four Roundtable settings below |
 | All four sponsor API integrations | Verified locally, including a real PRISM model trace | All listed settings; sponsor-specific eligibility still needs confirmation |
 
-**Credential status:** Repository admin access is active. `AKTA_API_KEY`, `NICRRON_API_KEY`, `PRISM_TRACE_KEY` and `PRISM_PROJECT_ID` are saved as both **repository Codespaces secrets** and **Actions secrets**. New/restarted Codespaces can receive them; cloning does not download keys. Roundtable still needs separate team-only credentials for other developers. [Access checklist](docs/TEAM_START.md).
+**Credential status:** Repository admin access is active. `AKTA_API_KEY`, `NICRRON_API_KEY`, `PRISM_TRACE_KEY`, `PRISM_PROJECT_ID`, `ROUNDTABLE_APP_KEY`, `ROUNDTABLE_WORKER_KEY`, `ROUNDTABLE_WORKER_ID` and `ROUNDTABLE_PROJECT` are saved as both **repository Codespaces secrets** and **Actions secrets**. New/restarted Codespaces can receive them; cloning does not download keys. Roundtable now uses the dedicated `second-look-team` bank; the distributed bot keys cannot read `vc-hackathon` or `shared-notes`. [Access checklist](docs/TEAM_START.md).
 
 For live review, `npm run doctor` checks these server-side settings:
 
@@ -102,7 +102,7 @@ These are illustrative contract scenarios with explicit zero purchase-price adju
 
 | Verified locally | Remaining event work |
 | --- | --- |
-| Three-step UI, real Steam samples and Akta studio research | Fresh teammate setup and team-only Roundtable access |
+| Three-step UI, real Steam samples and Akta studio research | Fresh teammate setup verification |
 | Live Roundtable/Nicrron review with a recorded PRISM trace | Ninoo-specific eligibility clarification |
 | Saved questions, responses, offer versions and historical approvals | Presenter rehearsal and video |
 | Integer-cent comparison and stale-revision rejection | Genuine founder-brief evidence and Devpost submission |
@@ -129,7 +129,7 @@ A changed case makes earlier research historical. Saved gaming evidence can be r
 
 For local development, run `npm run setup` to create `.env.local` without overwriting it, then configure Akta, `NICRRON_API_KEY`, plus `ROUNDTABLE_APP_KEY`, `ROUNDTABLE_WORKER_KEY`, `ROUNDTABLE_WORKER_ID`, and `ROUNDTABLE_PROJECT`. The app and reviewer need separate bot identities with access to the same project. Obtain these from your team's approved credential channel or provision your own Roundtable workspace. Never commit credentials. The live setup on Mat's machine uses a private runtime env file and will not exist on a teammate's clone.
 
-Roundtable credentials used on Mat's machine remain server-local; they are **not** in GitHub secrets. These provider grants can access the workspace beyond this app's folder, so they are not a safe substitute for a narrowly scoped team credential. Use a dedicated demo workspace before distributing keys. The personal reporting key is never needed by the app.
+The new Roundtable app and reviewer credentials are saved in repository Actions and Codespaces secrets. Both can use `second-look-team` and their own agent folder; actual reads of `vc-hackathon` and `shared-notes` returned HTTP 403. The old development credentials were not distributed. This restricts the bot keys, not workspace co-owners: co-owners retain dashboard access to all workspace data. Do not put private assistant history in this shared team workspace. The reporting key is never needed by the app.
 
 A future deployed app can hold the provider keys on its server so teammates use the UI without receiving them. Participant authentication and persistent deployment storage are still required; the current server deliberately remains loopback-only.
 

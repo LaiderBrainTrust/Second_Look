@@ -10,7 +10,7 @@ One fictional fund; three synthetic holdings in real game studios. Read real Ste
 
 No autonomous trades, true-value claims, fabricated live data, or false claim of actual ownership in the named studios. Current player counts are snapshots, not growth. Recent-review samples are not representative polling. No model controls money or approvals.
 
-PRISM uses the documented HTTP adapter; a real model trace and live/app-connected setup status are verified. Existing Ninoo Builder/Marketplace interpretation remains unresolved. Akta/Nicrron/PRISM Codespaces secrets now exist in the transferred repository LaiderBrainTrust/vc_hackathon; team-only Roundtable credentials remain pending.
+PRISM uses the documented HTTP adapter; a real model trace and live/app-connected setup status are verified. Existing Ninoo Builder/Marketplace interpretation remains unresolved. All four sponsor settings exist in repository Codespaces/Actions. Roundtable uses restricted bot keys for `second-look-team`; a fresh teammate Codespace still needs acceptance.
 
 ## Demo path (target under 3 minutes)
 

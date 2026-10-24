@@ -81,7 +81,7 @@ All four sponsors are required by the supplied Devpost requirements. Functional 
 | Sponsor | Real role in this product | Current evidence |
 | --- | --- | --- |
 | Akta / Wokelo | Resolves studios, retrieves business/ownership descriptions, and checks dated news | Live profiles and news lookups verified for the three studios. Empty news results are displayed honestly. |
-| Roundtable | Versioned evidence files, task assignment to a separate reviewer identity, saved result and reconciliation | Live app-specific task/input/output flow verified; not merely the standalone Funds template. |
+| Roundtable | Versioned evidence files, task assignment to a separate reviewer identity, saved result and reconciliation | Live app-specific task/input/output flow verified. Restricted team bot credentials are now saved in repository Codespaces/Actions; teammate runtime acceptance remains to be checked. |
 | NicrronNinoo | Model call inside the reviewer to propose the manager question | Live Nicrron request and model result verified. Builder/Marketplace interpretation still requires sponsor/organizer confirmation. |
 | PRISM / Block Convey | Trace of that actual model call, including evidence payload, output, model and latency | Real trace accepted; PRISM reports `live_connected: true`, `app_connected: true`, recorded application traces, and no blocked setup step. |
 
@@ -105,7 +105,7 @@ For today's critical path, finish the team setup and coherent presentation first
 
 Verification: 27 tests pass, TypeScript/Vite build passes, the actual gaming review completed, and the browser walkthrough covered the financial sequence and reload. A 390px mobile check found no horizontal overflow. The PRISM integration check caught and fixed a JSON field-order comparison bug; regression tests also prove that a genuinely different trace ID remains rejected.
 
-**Not built/verified:** public hosting with real authentication, cross-device participant accounts, real investment/document import, valuation models, executed transactions, true customer returns, automatic team credential provisioning for Roundtable, teammate Codespace acceptance, spoken presenter rehearsal, submission/video completion.
+**Not built/verified:** public hosting with real authentication, cross-device participant accounts, real investment/document import, valuation models, executed transactions, true customer returns, teammate Codespace acceptance, spoken presenter rehearsal, submission/video completion.
 
 ## 9. Team execution and ownership
 
