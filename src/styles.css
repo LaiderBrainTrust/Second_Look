@@ -646,3 +646,8 @@ main { padding-bottom: 0; }
 .shell .segmented button.on { background: var(--lime); color: #0a0a0a; }
 .footer { max-width: none; margin: 0; padding: 32px max(32px, calc(50vw - 640px)); background: #0a0a0a; color: #8a8a84; border-top: 1px solid #2e2e2e; }
 .shell .ledger { border-left-color: var(--lime); border-color: #2e2e2e; border-left-width: 4px; }
+
+/* Breathing room around the call to action band */
+.shell .bridge { margin: 48px 0 32px; padding: 32px; }
+.shell .bridge + p, .shell .detail ~ p.fine { margin-top: 24px; }
+.ledger .delta { white-space: normal; }
