@@ -483,7 +483,7 @@ function CasePage({
               <h2>The current sale, at a glance</h2>
               <CashTerms data={data} />
               <p className="sl-help">
-                Gross cash before taxes, fees and timing. These figures use the
+                Cash before taxes, fees and timing. These figures use the
                 entered terms and the manager’s stated distribution.
               </p>
               <details className="sl-source">
@@ -954,7 +954,7 @@ function CasePage({
         </>
       )}
       <div className="sl-case-bottom">
-        <span>Saved case · revision {data.revision}</span>
+        <span>Saved case · version {data.revision}</span>
         <button
           className="sl-text-button"
           disabled={busy}
@@ -1027,7 +1027,7 @@ function CashTerms({ data }: { data: CaseView }) {
             ? "Investor’s private review"
             : total == null
               ? "Before calling this your total"
-              : "Investor’s gross cash proceeds"}
+              : "What the investor receives"}
         </span>
         <strong>
           {!data.privateReview

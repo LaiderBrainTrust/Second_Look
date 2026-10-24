@@ -238,7 +238,7 @@ export function DecisionWorkbench({
       ) : (
         <>
           <p>
-            Case revision {analysis.revision} ·{" "}
+            Case version {analysis.revision} ·{" "}
             {analysis.status === "confirmed"
               ? "Current inputs confirmed"
               : analysis.status === "conditional"

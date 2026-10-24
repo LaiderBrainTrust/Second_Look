@@ -216,7 +216,7 @@ export function ResearchPanel({
               <div className="research-title">
                 <h3>{run.company.name}</h3>
                 <span>
-                  Case revision {run.caseRevision} ·{" "}
+                  Case version {run.caseRevision} ·{" "}
                   {run.acceptedRevision ? "Question shared" : run.status}
                 </span>
               </div>

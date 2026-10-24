@@ -76,7 +76,7 @@ export function AuthScreen({
           <h1>
             The price isn’t
             <br />
-            the whole deal.
+            the <em>whole</em> deal.
           </h1>
           <p className="sl-lead">
             Understand what you keep when you sell a fund interest. Check the
@@ -92,7 +92,11 @@ export function AuthScreen({
               <span>Distribution you may keep</span>
               <strong>+ $100,000</strong>
             </div>
-            <p>The same headline price. A very different outcome.</p>
+            <div className="sl-example-total">
+              <span>Illustrative cash before costs</span>
+              <strong>$800,000</strong>
+            </div>
+            <p>Same headline price. A different outcome.</p>
             <small>
               Illustrative example. The distribution and sale rights must be
               confirmed.
