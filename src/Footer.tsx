@@ -1,13 +1,7 @@
 import type { Page } from './Header';
 
 function Mark() {
-  // Original mark: scattered strokes around a centre, drawn in SVG.
-  const strokes = Array.from({ length: 14 }, (_, i) => {
-    const a = (i / 14) * Math.PI * 2 + (i % 3) * 0.12;
-    const r1 = 14 + (i % 2) * 6, r2 = r1 + 9 + (i % 3) * 3;
-    return <line key={i} x1={40 + Math.cos(a) * r1} y1={40 + Math.sin(a) * r1} x2={40 + Math.cos(a) * r2} y2={40 + Math.sin(a) * r2}/>;
-  });
-  return <svg className="footer-mark" viewBox="0 0 80 80" width="96" height="96" fill="none" stroke="currentColor" strokeWidth="5" strokeLinecap="round" aria-hidden="true">{strokes}</svg>;
+  return <span className="footer-mark" aria-hidden="true"/>;
 }
 
 export function Footer({ onPage }: { onPage: (page: Page) => void }) {

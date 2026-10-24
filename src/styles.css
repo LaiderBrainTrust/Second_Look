@@ -718,3 +718,7 @@ main { padding-bottom: 0; }
 .services .lh-side p { padding: 0; max-width: 480px; }
 .services .lh-band { min-height: 100vh; }
 @media (max-width: 960px) { .services .landing-home { grid-template-columns: 1fr; } .services .lh-band { min-height: 40vh; } }
+
+/* Footer mark: the same lime square at 45 degrees */
+.footer-mark { display: block; width: 56px; height: 56px; margin: 0 20px; background: var(--lime); border-radius: 4px; transform: rotate(45deg); }
+.sf-brand:hover .footer-mark { transform: rotate(135deg); }
