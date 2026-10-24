@@ -1,11 +1,18 @@
 :root {
-  --paper: #f6f5f0;
+  --paper: #f5f2ec;
   --surface: #fff;
-  --ink: #172d27;
-  --muted: #56645e;
-  --line: #dce2da;
-  --accent: #215c42;
-  --soft: #e9f1e9;
+  --ink: #192c40;
+  --muted: #566575;
+  --line: #d8d9d8;
+  --accent: #a94728;
+  --soft: #e9edf0;
+  --accent-hover: #89371e;
+  --positive: #246349;
+  --positive-soft: #eaf1eb;
+  --warning: #7b411b;
+  --warning-soft: #f9eddd;
+  --input-line: #98a2ad;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
   background: var(--paper);
   color: var(--ink);
 }
@@ -19,16 +26,17 @@
 }
 .sl-root h1,
 .sl-entry h1 {
-  font-family: "Libre Caslon Display", Georgia, serif;
+  font-family: "Source Serif 4", Georgia, serif;
   font-weight: 400;
-  letter-spacing: -1.1px;
-  font-size: clamp(38px, 4.5vw, 62px);
-  line-height: 1.08;
+  letter-spacing: -0.035em;
+  font-size: 42px;
+  line-height: 1.16;
+  text-wrap: balance;
 }
 .sl-root h2,
 .sl-entry h2 {
-  font-size: 23px;
-  line-height: 1.3;
+  font-size: 21px;
+  line-height: 1.35;
   letter-spacing: -0.45px;
 }
 .sl-root h3 {
@@ -61,7 +69,7 @@
   padding: 11px 12px;
   background: var(--surface);
   color: var(--ink);
-  border: 1px solid #aebbb1;
+  border: 1px solid #98a2ad;
   border-radius: 5px;
 }
 .sl-root label,
@@ -115,7 +123,7 @@
 .sl-entry-header {
   max-width: 1360px;
   margin: 0 auto;
-  padding: 24px 40px;
+  padding: 17px 40px;
   border-bottom: 1px solid var(--line);
   display: flex;
   align-items: center;
@@ -142,7 +150,7 @@
 .sl-workspace {
   max-width: 1240px;
   margin: auto;
-  padding: 28px 40px 64px;
+  padding: 20px 40px 64px;
 }
 .sl-app-footer {
   max-width: 1280px;
@@ -195,14 +203,14 @@
 }
 .sl-primary:hover:enabled,
 .sl-button:hover {
-  background: #163e2d;
+  background: #89371e;
   color: white;
 }
 .sl-secondary,
 .sl-button.sl-secondary {
   background: transparent;
   color: var(--accent);
-  border: 1px solid #a4b5a8;
+  border: 1px solid #98a2ad;
 }
 .sl-secondary:hover:enabled,
 .sl-button.sl-secondary:hover {
@@ -239,24 +247,27 @@ button.sl-text-button:hover:enabled {
   padding: 16px 18px;
   background: #fff2e8;
   color: #7a2d14;
-  border-left: 3px solid #a74625;
+  border: 1px solid #d4a38b;
+  border-radius: 6px;
   overflow-wrap: anywhere;
 }
 .sl-success {
   padding: 14px 18px;
-  color: #1d5136;
-  background: var(--soft);
-  border-left: 3px solid var(--accent);
+  color: var(--positive);
+  background: var(--positive-soft);
+  border: 1px solid #afc7b8;
+  border-radius: 6px;
 }
 .sl-entry-layout {
   max-width: 1240px;
   display: grid;
   grid-template-columns: minmax(0, 1.2fr) minmax(330px, 0.8fr);
   gap: 90px;
-  padding: 80px 40px;
+  padding: 64px 40px;
+  align-items: center;
 }
 .sl-intro h1 {
-  font-size: clamp(52px, 6vw, 82px);
+  font-size: 64px;
   margin: 0 0 28px;
 }
 .sl-lead {
@@ -267,7 +278,7 @@ button.sl-text-button:hover:enabled {
 .sl-example-illustration {
   margin: 36px 0 24px;
   padding: 26px 0;
-  border-block: 1px solid #bdcbbd;
+  border-block: 1px solid #c9cdd0;
   max-width: 510px;
 }
 .sl-example-illustration > div {
@@ -301,7 +312,8 @@ button.sl-text-button:hover:enabled {
 .sl-auth {
   padding: 30px;
   background: white;
-  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px -12px #192c402b;
   align-self: start;
 }
 .sl-auth h2 {
@@ -315,7 +327,7 @@ button.sl-text-button:hover:enabled {
   display: flex;
   gap: 0;
   border-bottom: 1px solid var(--line);
-  margin: 24px 0 18px;
+  margin: 16px 0 18px;
 }
 .sl-tabs button {
   flex: 1;
@@ -344,12 +356,12 @@ button.sl-text-button:hover:enabled {
   gap: 20px;
   font-size: 12px;
   color: var(--muted);
-  margin-bottom: 24px;
+  margin-bottom: 16px;
 }
 .sl-pill {
   display: inline-flex;
   padding: 5px 10px;
-  border: 1px solid #b9c7bb;
+  border: 1px solid #c9cdd0;
   border-radius: 3px;
   font-size: 11px;
   font-weight: 600;
@@ -361,8 +373,8 @@ button.sl-text-button:hover:enabled {
   align-items: start;
   justify-content: space-between;
   gap: 24px;
-  background: #eeeee5;
-  padding: 12px 16px;
+  background: #eae6de;
+  padding: 9px 14px;
   font-size: 12px;
   line-height: 1.6;
 }
@@ -401,12 +413,13 @@ button.sl-text-button:hover:enabled {
   font-weight: 600;
   padding: 9px 12px;
   background: var(--soft);
-  color: var(--accent);
+  color: var(--ink);
   white-space: nowrap;
+  border-radius: 4px;
 }
 .sl-status-warning {
-  color: #74420f;
-  background: #fff2de;
+  color: #7b411b;
+  background: #f9eddd;
 }
 .sl-step-nav {
   display: grid;
@@ -419,20 +432,20 @@ button.sl-text-button:hover:enabled {
   display: flex;
   gap: 10px;
   align-items: center;
-  min-height: 58px;
+  min-height: 50px;
   padding: 12px 6px;
   text-decoration: none;
   font-size: 14px;
   font-weight: 500;
   color: var(--muted);
-  border-bottom: 3px solid transparent;
+  border-bottom: 2px solid transparent;
   margin-bottom: -1px;
 }
 .sl-step-nav a span {
   display: inline-flex;
   width: 23px;
   height: 23px;
-  border: 1px solid #aebbaf;
+  border: 1px solid #98a2ad;
   border-radius: 50%;
   align-items: center;
   justify-content: center;
@@ -454,9 +467,10 @@ button.sl-text-button:hover:enabled {
 }
 .sl-change-alert {
   padding: 18px 20px;
-  border-left: 3px solid #8c531d;
-  background: #fff2de;
-  color: #74420f;
+  border: 1px solid #d9b58d;
+  border-radius: 6px;
+  background: #f9eddd;
+  color: #7b411b;
   margin: 20px 0;
 }
 .sl-change-alert strong,
@@ -471,18 +485,18 @@ button.sl-text-button:hover:enabled {
 .sl-conversation-layout {
   display: grid;
   grid-template-columns: minmax(0, 1.65fr) minmax(280px, 1fr);
-  gap: 48px;
+  gap: 56px;
   align-items: start;
-  margin: 32px 0 44px;
+  margin: 28px 0 36px;
 }
 .sl-sale h2 {
   margin-top: 0;
 }
 .sl-cash-terms {
-  margin: 24px 0 18px;
+  margin: 16px 0 18px;
 }
 .sl-cash-terms > div {
-  padding: 19px 0;
+  padding: 15px 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -495,7 +509,7 @@ button.sl-text-button:hover:enabled {
   max-width: 55%;
 }
 .sl-cash-terms strong {
-  font-size: clamp(20px, 2.7vw, 30px);
+  font-size: 28px;
   font-weight: 500;
   font-variant-numeric: tabular-nums;
   letter-spacing: -0.5px;
@@ -504,17 +518,19 @@ button.sl-text-button:hover:enabled {
 }
 .sl-cash-terms .sl-cash-unresolved strong {
   font-size: 17px;
-  color: #74420f;
+  color: #7b411b;
 }
 .sl-cash-terms .sl-cash-total {
   padding: 22px 18px;
-  background: var(--soft);
+  background: var(--ink);
+  color: var(--paper);
   border-bottom: 0;
-  margin-top: 16px;
+  border-radius: 6px;
+  margin-top: 12px;
 }
 .sl-cash-total strong {
-  font-weight: 600;
-  color: var(--accent);
+  font-weight: 500;
+  color: var(--paper);
 }
 .sl-cash-total > span {
   font-weight: 600;
@@ -523,13 +539,17 @@ button.sl-text-button:hover:enabled {
   max-width: 60%;
 }
 .sl-next-step {
-  padding: 28px;
+  padding: 26px;
   background: var(--surface);
-  border-top: 3px solid var(--accent);
+  border: 1px solid var(--line);
+  border-radius: 8px;
 }
 .sl-next-step h2 {
   font-size: 25px;
-  margin: 14px 0;
+  font-family: "Source Serif 4", Georgia, serif;
+  font-weight: 500;
+  margin: 0 0 14px;
+  text-wrap: balance;
 }
 .sl-next-step p {
   font-size: 14px;
@@ -587,6 +607,7 @@ button.sl-text-button:hover:enabled {
 .sl-sheet {
   background: var(--surface);
   border: 1px solid var(--line);
+  border-radius: 8px;
   padding: 28px;
   margin: 24px 0;
 }
@@ -680,7 +701,8 @@ button.sl-text-button:hover:enabled {
 }
 .sl-message-answer {
   padding: 24px;
-  background: var(--soft);
+  background: var(--positive-soft);
+  border-radius: 6px;
   margin-top: 24px;
   border: 0;
 }
@@ -709,6 +731,7 @@ button.sl-text-button:hover:enabled {
   background: white;
   border: 1px solid var(--line);
   padding: 32px;
+  border-radius: 8px;
   margin: 30px auto;
 }
 .sl-decision-title {
@@ -919,7 +942,7 @@ button.sl-text-button:hover:enabled {
     gap: 32px;
   }
   .sl-intro h1 {
-    font-size: 56px;
+    font-size: 46px;
   }
   .sl-lead {
     font-size: 16px;
@@ -1061,12 +1084,186 @@ button.sl-text-button:hover:enabled {
   margin: 12px 0 0;
 }
 .sl-case-heading {
-  margin-top: 28px;
-  margin-bottom: 22px;
+  margin-top: 24px;
+  margin-bottom: 16px;
 }
 .sl-step-nav {
   margin-bottom: 22px;
 }
 .sl-case-heading h1 {
-  font-size: clamp(36px, 4vw, 54px);
+  font-size: 38px;
+}
+
+/* The page moves at the reader's pace; only controls give press feedback. */
+.sl-root button,
+.sl-entry button,
+.sl-button {
+  transition:
+    background-color 140ms ease,
+    border-color 140ms ease,
+    transform 140ms var(--ease-out);
+}
+@media (hover: hover) and (pointer: fine) {
+  .sl-root button:active:enabled:not(:focus-visible),
+  .sl-entry button:active:enabled:not(:focus-visible),
+  .sl-button:active:not(:focus-visible) {
+    transform: scale(0.98);
+  }
+}
+.sl-root button:disabled,
+.sl-entry button:disabled {
+  cursor: not-allowed;
+}
+.sl-root button:focus-visible,
+.sl-entry button:focus-visible {
+  transition: none;
+}
+.sl-status-confirmed {
+  background: var(--positive-soft);
+  color: var(--positive);
+}
+.sl-case-top > div {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.sl-case-top > div > span:last-child {
+  font-weight: 500;
+  color: var(--ink);
+}
+.sl-sale > h2 {
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.sl-next-step .sl-help {
+  margin-bottom: 0;
+}
+.sl-person {
+  color: var(--muted);
+}
+.sl-checklist p span {
+  color: var(--ink);
+}
+.sl-root .research-run,
+.sl-root .research-bridge,
+.sl-root .studio-profile {
+  border-radius: 8px;
+}
+.sl-root .research-run {
+  background: var(--surface);
+}
+.sl-root .research-bridge {
+  background: var(--soft);
+}
+.sl-root .game-tab {
+  border-width: 1px;
+}
+.sl-root .game-tab.selected {
+  border: 2px solid var(--accent);
+  box-shadow: none;
+}
+.sl-root .game-tab small {
+  font-size: 12px;
+}
+.sl-root .game-metrics strong {
+  font-weight: 500;
+}
+.sl-root .game-metrics {
+  background: transparent;
+}
+.sl-root .sl-cash-terms .sl-cash-total strong {
+  color: var(--paper);
+}
+.sl-root .sl-cash-total.sl-cash-unresolved {
+  background: var(--warning-soft);
+  color: var(--warning);
+}
+.sl-root .sl-cash-total.sl-cash-unresolved strong {
+  color: var(--warning);
+}
+.sl-brand svg {
+  color: var(--accent);
+}
+.sl-app-header .sl-brand {
+  color: var(--ink);
+}
+.sl-example-illustration {
+  padding: 24px;
+  background: var(--ink);
+  color: var(--paper);
+  border: 0;
+  border-radius: 8px;
+}
+.sl-example-illustration small {
+  color: #c5cdd5;
+}
+.sl-example-illustration > div + div {
+  padding-top: 14px;
+  border-top: 1px solid #4b5c6d;
+}
+.sl-example-illustration > p {
+  margin-top: 24px;
+}
+@media (max-width: 760px) {
+  .sl-root .sl-case-heading h1 {
+    font-size: 32px;
+  }
+  .sl-root .sl-case-heading {
+    margin-top: 24px;
+    gap: 12px;
+  }
+  .sl-root .sl-cash-terms strong {
+    font-size: 22px;
+  }
+  .sl-root .sl-cash-total strong {
+    font-size: 22px;
+  }
+  .sl-root .sl-cash-terms > div {
+    gap: 12px;
+  }
+  .sl-root .sl-step-nav {
+    margin-bottom: 20px;
+  }
+  .sl-root .sl-deal-layout,
+  .sl-root .sl-conversation-layout {
+    margin-top: 20px;
+  }
+  .sl-root .sl-status {
+    white-space: normal;
+  }
+  .sl-root .sl-case-top > div {
+    max-width: none;
+  }
+  .sl-root .sl-app-header {
+    gap: 12px;
+  }
+  .sl-root .sl-app-header nav {
+    gap: 10px;
+  }
+  .sl-root .sl-next-step {
+    padding: 22px;
+  }
+  .sl-entry-layout {
+    padding-top: 32px;
+  }
+  .sl-intro h1 {
+    font-size: 44px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sl-root button,
+  .sl-entry button,
+  .sl-button {
+    transition: none;
+    transform: none !important;
+  }
+}
+
+.sl-cash-terms > div:not(.sl-cash-unresolved) > strong {
+  white-space: nowrap;
+}
+.sl-cash-terms > div > span {
+  min-width: 0;
 }

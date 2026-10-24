@@ -354,7 +354,9 @@ function CasePage({
                   : "This review applies to the current sale below. A change to the terms requires a fresh review."}
           </p>
         </div>
-        <span className={`sl-status ${changed ? "sl-status-warning" : ""}`}>
+        <span
+          className={`sl-status ${changed ? "sl-status-warning" : approved || data.answer ? "sl-status-confirmed" : ""}`}
+        >
           {approved
             ? "Review recorded"
             : changed
@@ -453,7 +455,6 @@ function CasePage({
               </details>
             </section>
             <aside className="sl-next-step">
-              <span className="sl-small-label">Your next move</span>
               <h2>
                 {role === "gp"
                   ? "Confirm what the investor keeps."
@@ -470,9 +471,11 @@ function CasePage({
                   ? "Give the investor the amount, contractual basis and source for your answer."
                   : role === "buyer"
                     ? "The investor will need to review the sale again if you change its terms."
-                    : data.answer
-                      ? "The manager has answered. Review the sale and record your decision for this version."
-                      : "A distribution can change the economics of a sale. Get the manager’s answer before treating it as money you will receive."}
+                    : approved
+                      ? "Your review is saved with these terms. You can revisit the record or download a copy to share."
+                      : data.answer
+                        ? "The manager has answered. Review the sale and record your decision for this version."
+                        : "A distribution can change the economics of a sale. Get the manager’s answer before treating it as money you will receive."}
               </p>
               <button
                 className="sl-primary"
@@ -492,9 +495,11 @@ function CasePage({
                   ? "Answer the investor"
                   : role === "buyer"
                     ? "Review requested terms"
-                    : data.answer
-                      ? "Review this sale"
-                      : "Open the manager question"}
+                    : approved
+                      ? "View your recorded review"
+                      : data.answer
+                        ? "Review this sale"
+                        : "Open the manager question"}
               </button>
               {role === "lp" && !data.answer && (
                 <button
@@ -606,9 +611,13 @@ function CasePage({
                 onPrepared={() => {
                   setResearchVersion((v) => v + 1);
                   void providerRefresh();
-                  document
-                    .getElementById("research-heading")
-                    ?.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
+                  document.getElementById("research-heading")?.scrollIntoView({
+                    behavior: matchMedia("(prefers-reduced-motion: reduce)")
+                      .matches
+                      ? "auto"
+                      : "smooth",
+                    block: "start",
+                  });
                 }}
               />
               <ResearchPanel
@@ -899,7 +908,11 @@ function CashTerms({ data }: { data: CaseView }) {
         <span>Sale payment to investor</span>
         <strong>{currency(data.offer.purchasePriceCents)}</strong>
       </div>
-      <div>
+      <div
+        className={
+          data.offer.priceAdjustmentCents === null ? "sl-cash-unresolved" : ""
+        }
+      >
         <span>Price adjustment</span>
         <strong>
           {data.offer.priceAdjustmentCents === null
@@ -921,7 +934,9 @@ function CashTerms({ data }: { data: CaseView }) {
               : `+ ${currency(amount)}`}
         </strong>
       </div>
-      <div className="sl-cash-total">
+      <div
+        className={`sl-cash-total ${total == null ? "sl-cash-unresolved" : ""}`}
+      >
         <span>
           {!data.privateReview
             ? "Investor’s private review"
