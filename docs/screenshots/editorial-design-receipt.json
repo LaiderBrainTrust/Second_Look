@@ -1,0 +1,39 @@
+{
+  "sourceCommit": "4379e44c9bc1986e31146f1f074065fd7be08119",
+  "sourceRoot": "/home/mat/Sites/vc_hackathon",
+  "url": "http://127.0.0.1:5173",
+  "screenshots": [
+    "editorial-deal.png",
+    "editorial-deal-mobile.png"
+  ],
+  "viewports": [
+    {
+      "width": 1280,
+      "height": 800,
+      "horizontalOverflow": false,
+      "cashTotalBottomPx": 723
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "horizontalOverflow": false
+    }
+  ],
+  "contrastRatios": {
+    "body": 12.74,
+    "secondary": 5.35,
+    "primaryAction": 5.8,
+    "confirmed": 6.18,
+    "warning": 6.96
+  },
+  "checks": [
+    "87 tests passed",
+    "TypeScript and production Vite build passed",
+    "Independent finish review: both material fixes resolved",
+    "Signed monetary values remain on one line; unknown prose wraps"
+  ],
+  "limitations": [
+    "Unknown-state style capture was a DOM-only synthetic fixture, not a new persisted-state acceptance test",
+    "Live deployment checked separately; no claim of timed presenter-device rehearsal"
+  ]
+}
