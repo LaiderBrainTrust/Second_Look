@@ -93,6 +93,6 @@ export interface CaseView {
 }
 export interface ProviderStatus {
   provider: Provider;
-  status: 'not_implemented' | 'not_configured' | 'not_verified' | 'verified' | 'failed';
+  status: 'available' | 'not_implemented' | 'not_configured' | 'not_verified' | 'verified' | 'failed';
   detail: string;
 }
