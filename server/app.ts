@@ -48,7 +48,7 @@ export function createApp(store: ReturnType<typeof createStore>, options: { rele
   const connections = access ? createX1Connections(store.db) : undefined;
   const x1OAuth = access && connections && options.hosted ? createX1OAuth(store.db, access, connections, options.hosted.origin) : undefined;
   if (x1OAuth) app.use(x1OAuth.publicRouter);
-  if (options.hosted) installHostedAuth(app, options.hosted, access);
+  if (options.hosted) installHostedAuth(app, options.hosted, store.db, access);
   else app.get('/api/session', (_req, res) => res.json({ hosted: false, authenticated: true }));
   if (x1OAuth) app.use('/api/connections/x1', x1OAuth.privateRouter);
   app.get('/api/health', (_req, res) => res.json({ ok: true, mode: options.rehearsal ? 'saved-research-rehearsal' : 'local-synthetic-scaffold', ...(/^[a-f0-9]{40}$/.test(options.releaseSha ?? '') ? { releaseSha: options.releaseSha } : {}) }));
