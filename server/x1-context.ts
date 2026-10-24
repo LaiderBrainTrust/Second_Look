@@ -1,3 +1,4 @@
+import type { X1OAuth } from './x1-oauth.js';
 import { Router, type Response } from 'express';
 import { Client, StreamableHTTPClientTransport } from '@modelcontextprotocol/client';
 import { createHash } from 'node:crypto';
@@ -69,7 +70,7 @@ export async function readX1(query:string,key=process.env.X1_API_KEY):Promise<X1
   return parseX1Evidence(await client.callTool({name:'search_my_document_contents',arguments:{query,limit:3}}),query);
  });
 }
-export function x1Router(store:CaseStore,reader=readX1,personal?:{access:WorkspaceAccess;connections:X1Connections;validate?:(key:string)=>Promise<void>}) {
+export function x1Router(store:CaseStore,reader=readX1,personal?:{access:WorkspaceAccess;connections:X1Connections;oauth?:X1OAuth;validate?:(key:string)=>Promise<void>}) {
  const router=Router();let active=false;let window=0;let count=0;
  const previews=new Map<string,{revision:number;actor:string;connectionVersion:string;evidence:X1Evidence;expires:number}>();
  router.use((_q,r,next)=>{if(r.locals.role!=='lp'){r.status(403).json({error:'X1 source evidence is private to the investor.'});return;}r.setHeader('Cache-Control','no-store');next();});
@@ -86,30 +87,34 @@ export function x1Router(store:CaseStore,reader=readX1,personal?:{access:Workspa
   if(personal&&userId)return personal.connections.metadata(caseId,userId)?.version;
   return process.env.X1_API_KEY && process.env.X1_CASE_ID===caseId ? createHash('sha256').update(process.env.X1_API_KEY).digest('hex'):undefined;
  };
- router.get('/',(_q,r)=>{const version=current(r);r.json({configured:Boolean(version),mode:version?(personal?'individual_case_read_only':'dedicated_case_read_only'):'not_connected',canConnect:Boolean(personal?.connections.ready()),evidence:store.read().diligence?.x1Evidence??[]});});
+ router.get('/',(_q,r)=>{const version=current(r);r.json({configured:Boolean(version),mode:version?(personal?'individual_case_read_only':'dedicated_case_read_only'):'not_connected',canConnect:Boolean(personal?.connections.ready()),canConnectOAuth:Boolean(personal?.oauth?.ready()),evidence:store.read().diligence?.x1Evidence??[]});});
+ router.post('/authorize',(_q,r,next)=>{try{if(Date.now()-window>60000){window=Date.now();count=0;}if(++count>6)throw new DomainError(429,'Wait one minute before reconnecting X1.');if(!personal?.oauth)throw new DomainError(503,'X1 browser connection is not enabled.');r.json(personal.oauth.begin(r,caseId));}catch(e){next(e);}});
  let connecting=false;let connectionEpoch=0;
  router.post('/connection',async(q,r,next)=>{
   try{
    const userId=identity(r);
    if(!personal||!userId)throw new DomainError(403,'Connect X1 from a case in your individual account.');
    if(!personal.connections.ready())throw new DomainError(503,'Individual X1 connections are not enabled on this server yet.');
+   if(current(r))throw new DomainError(409,'Disconnect the current X1 connection before replacing its key.');
    const key=z.string().trim().regex(/^x1k_[A-Za-z0-9_-]{16,500}$/).safeParse(q.body?.key);
    if(!key.success)throw new DomainError(400,'Paste a read-only X1 API key.');
    if(connecting)throw new DomainError(429,'An X1 connection check is already running.');
    if(Date.now()-window>60000){window=Date.now();count=0;}if(++count>6)throw new DomainError(429,'Wait one minute before another X1 connection check.');
    connecting=true;
-   const before=current(r);const epoch=connectionEpoch;
+   const before=current(r);const epoch=connectionEpoch;const savedEpoch=personal.connections.epoch(caseId,userId);
    try{
     await (personal.validate??validateX1Key)(key.data);
-    if(current(r)!==before||connectionEpoch!==epoch)throw new DomainError(409,'Your X1 connection changed. Try connecting again.');
+    if(current(r)!==before||connectionEpoch!==epoch||personal.connections.epoch(caseId,userId)!==savedEpoch)throw new DomainError(409,'Your X1 connection changed. Try connecting again.');
     personal.connections.save(caseId,userId,key.data);connectionEpoch++;previews.clear();
     r.json({configured:true,mode:'individual_case_read_only'});
    }finally{connecting=false;}
   }catch(e){next(e);}
  });
- router.post('/disconnect',(_q,r,next)=>{
+ router.post('/disconnect',async(_q,r,next)=>{
   try{const userId=identity(r);if(!personal||!userId)throw new DomainError(403,'Disconnect X1 from your individual case.');
-   personal.connections.disconnect(caseId,userId);connectionEpoch++;previews.clear();
+   connectionEpoch++;previews.clear();
+   if(personal.oauth){r.json(await personal.oauth.disconnect(caseId,userId));return;}
+   personal.connections.disconnect(caseId,userId);
    r.json({configured:false,notice:'Disconnected. Previously copied excerpts remain in the case history. Revoke the key in X1 to stop its use elsewhere.'});
   }catch(e){next(e);}
  });
@@ -123,7 +128,7 @@ export function x1Router(store:CaseStore,reader=readX1,personal?:{access:Workspa
    if(Date.now()-window>60000){window=Date.now();count=0;}if(++count>6)throw new DomainError(429,'Wait one minute before another X1 search.');
    active=true;
    try{
-    const key=personal?personal.connections.read(caseId,identity(r)!).key:undefined;
+    const key=personal?(personal.oauth?await personal.oauth.credential(caseId,identity(r)!):personal.connections.read(caseId,identity(r)!).key):undefined;
     const results=await reader(query.data,key);const revision=q.body.expectedRevision;store.current(revision);
     if(current(r)!==connectionVersion)throw new DomainError(409,'X1 was disconnected or changed during the search. Search again.');
     const now=Date.now();for(const [k,v] of previews)if(v.expires<now)previews.delete(k);
