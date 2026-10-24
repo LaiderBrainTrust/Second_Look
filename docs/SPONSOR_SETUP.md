@@ -74,7 +74,7 @@ npm run brief
 The CLI writes separate bot credentials to that directory's ignored `.env`. Do not use `--force` against the app root. The SDK is distributed as a release tarball, not a registry package:
 `https://github.com/roundtable-bot/roundtable-cli/releases/download/sdk-v0.1.1/roundtable-sdk-0.1.1.tgz`.
 
-For Second Look, adapt this handoff rather than adding a separate product: save the selected Akta findings with case ID and revision; dispatch review work to the fund-reader; save its answer to a task-specific path; return the exact input/output file versions. Use Nicrron for any model call and PRISM for its trace. Results are research proposals and cannot approve the LP response. A result for an older case revision remains historical. The product is only integrated after a live dispatch, result, and versioned file have been verified. This step is currently pending the workspace team key; no bot was provisioned and no task was dispatched by this setup.
+For Second Look, adapt this handoff rather than adding a separate product: save the selected Akta findings with case ID and revision; dispatch review work to the fund-reader; save its answer to a task-specific path; return the exact input/output file versions. Use Nicrron for any model call and PRISM for its trace. Results are research proposals and cannot approve the LP response. A result for an older case revision remains historical. The product is only integrated after a live dispatch, result, and versioned file have been verified. The sponsor template has now been provisioned and its task/file flow verified (below). Its connection to the Second Look case and Akta findings remains to be implemented.
 
 SDK retries handle backoff. Do not run a tight polling loop, overwrite a shared `latest.md` without a version check, or assume a timed-out task was cancelled: the SDK guide says it remains available to a worker. Prefer unique task paths and resume the existing task ID.
 
@@ -86,3 +86,14 @@ SDK retries handle backoff. Do not run a tight polling loop, overwrite a shared 
 - Connect X1 separately if retained in the team's final scope.
 
 Provider references: [Akta documentation](https://docs.akta.pro/llms.txt), [Roundtable CLI](https://github.com/roundtable-bot/roundtable-cli), [SDK guide](https://roundtable.bot/docs/bots), [Funds template](https://github.com/roundtable-bot/roundtable-cli/tree/main/templates/funds).
+
+
+### Verified Roundtable task/file test
+
+After workspace authorization, the supplied Funds template was initialized in temporary memory-backed storage on the build host. `fund-reader` and `quarter-brief` received separate identities. The worker handled both fictional funds, and a subsequent API read confirmed both task states as `done`:
+
+- `4fd43867c7524096adb2db8fbe959606` — seven pinned source references.
+- `9567d0308a3c4dce8d763174dc99284b` — eight pinned source references.
+- Final brief: `vc-hackathon:funds/briefs/latest.md`, version `62a38eb8637f`, 5,194 characters, read back from the provider.
+
+The test worker was stopped after verification. This was a sponsor-provided synthetic template test; its pre-existing code is not presented as newly authored app code. It establishes live SDK dispatch, completion and versioned-file retrieval, not a finished Second Look integration. The app's Roundtable adapter remains unimplemented. Workspace credentials and personal reporting configuration remain outside this team repository.
