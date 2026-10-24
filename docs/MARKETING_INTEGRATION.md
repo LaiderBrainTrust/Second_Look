@@ -1,5 +1,7 @@
 # Ryan's marketing site — integration handoff
 
+**Later owner direction (October 24):** stop waiting on this contribution for palette work. Apply the monochrome reference from `justus-lumin/x1-design` with a hot green/yellow accent; see [COLOR_PALETTE.md](COLOR_PALETTE.md). Any future Ryan contribution still needs deliberate integration against current working flows.
+
 Owner direction: Mat, October 24. Ryan is preparing a **black-and-white marketing site with neon green/yellow accents**. Preserve its actual composition, typography, colors and assets. Do not approximate it from this description or recolor it to match the current warm app theme. PR27's presentation improvements are not Ryan's design and do not supersede it.
 
 At this handoff, no Ryan marketing branch or PR was visible in LaiderBrainTrust/Second_Look. Integration is pending the actual contribution. A saved plan is not an automatic GitHub watcher.

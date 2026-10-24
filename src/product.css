@@ -1,17 +1,23 @@
 :root {
-  --paper: #f5f2ec;
-  --surface: #fff;
-  --ink: #192c40;
-  --muted: #566575;
-  --line: #d8d9d8;
-  --accent: #a94728;
-  --soft: #e9edf0;
-  --accent-hover: #89371e;
-  --positive: #246349;
-  --positive-soft: #eaf1eb;
-  --warning: #7b411b;
-  --warning-soft: #f9eddd;
-  --input-line: #98a2ad;
+  /* Soft monochrome: justus-lumin/x1-design, source 0f9923b. */
+  color-scheme: dark;
+  --on-accent: #0c0c0c;
+  --ink-2: #c2c2c2;
+  --elevated: #1c1c1c;
+  --shadow: #00000066;
+  --paper: #0c0c0c;
+  --surface: #121212;
+  --ink: #ededed;
+  --muted: #b0b0b0;
+  --line: #353535;
+  --accent: #d9ff43;
+  --soft: #1c1c1c;
+  --accent-hover: #c8ed36;
+  --positive: #ededed;
+  --positive-soft: #161616;
+  --warning: #ededed;
+  --warning-soft: #1c1c1c;
+  --input-line: #6e6e6e;
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
   background: var(--paper);
   color: var(--ink);
@@ -69,7 +75,7 @@
   padding: 11px 12px;
   background: var(--surface);
   color: var(--ink);
-  border: 1px solid #98a2ad;
+  border: 1px solid var(--input-line);
   border-radius: 5px;
 }
 .sl-root label,
@@ -172,7 +178,7 @@
   top: -100px;
   left: 20px;
   padding: 14px;
-  background: white;
+  background: var(--surface);
   z-index: 20;
 }
 .sl-skip:focus {
@@ -193,7 +199,7 @@
   justify-content: center;
   background: var(--accent);
   border: 1px solid var(--accent);
-  color: white;
+  color: var(--on-accent);
   padding: 12px 18px;
   border-radius: 5px;
   text-decoration: none;
@@ -203,14 +209,14 @@
 }
 .sl-primary:hover:enabled,
 .sl-button:hover {
-  background: #89371e;
-  color: white;
+  background: var(--accent-hover);
+  color: var(--on-accent);
 }
 .sl-secondary,
 .sl-button.sl-secondary {
   background: transparent;
   color: var(--accent);
-  border: 1px solid #98a2ad;
+  border: 1px solid var(--input-line);
 }
 .sl-secondary:hover:enabled,
 .sl-button.sl-secondary:hover {
@@ -245,9 +251,9 @@ button.sl-text-button:hover:enabled {
 }
 .sl-error {
   padding: 16px 18px;
-  background: #fff2e8;
-  color: #7a2d14;
-  border: 1px solid #d4a38b;
+  background: var(--warning-soft);
+  color: var(--warning);
+  border: 1px solid var(--input-line);
   border-radius: 6px;
   overflow-wrap: anywhere;
 }
@@ -255,7 +261,7 @@ button.sl-text-button:hover:enabled {
   padding: 14px 18px;
   color: var(--positive);
   background: var(--positive-soft);
-  border: 1px solid #afc7b8;
+  border: 1px solid var(--line);
   border-radius: 6px;
 }
 .sl-entry-layout {
@@ -278,7 +284,7 @@ button.sl-text-button:hover:enabled {
 .sl-example-illustration {
   margin: 36px 0 24px;
   padding: 26px 0;
-  border-block: 1px solid #c9cdd0;
+  border-block: 1px solid var(--line);
   max-width: 510px;
 }
 .sl-example-illustration > div {
@@ -311,9 +317,9 @@ button.sl-text-button:hover:enabled {
 }
 .sl-auth {
   padding: 30px;
-  background: white;
+  background: var(--surface);
   border-radius: 12px;
-  box-shadow: 0 8px 32px -12px #192c402b;
+  box-shadow: 0 8px 32px -12px var(--shadow);
   align-self: start;
 }
 .sl-auth h2 {
@@ -361,7 +367,7 @@ button.sl-text-button:hover:enabled {
 .sl-pill {
   display: inline-flex;
   padding: 5px 10px;
-  border: 1px solid #c9cdd0;
+  border: 1px solid var(--line);
   border-radius: 3px;
   font-size: 11px;
   font-weight: 600;
@@ -373,7 +379,7 @@ button.sl-text-button:hover:enabled {
   align-items: start;
   justify-content: space-between;
   gap: 24px;
-  background: #eae6de;
+  background: var(--soft);
   padding: 9px 14px;
   font-size: 12px;
   line-height: 1.6;
@@ -418,8 +424,8 @@ button.sl-text-button:hover:enabled {
   border-radius: 4px;
 }
 .sl-status-warning {
-  color: #7b411b;
-  background: #f9eddd;
+  color: var(--warning);
+  background: var(--warning-soft);
 }
 .sl-step-nav {
   display: grid;
@@ -445,7 +451,7 @@ button.sl-text-button:hover:enabled {
   display: inline-flex;
   width: 23px;
   height: 23px;
-  border: 1px solid #98a2ad;
+  border: 1px solid var(--input-line);
   border-radius: 50%;
   align-items: center;
   justify-content: center;
@@ -459,7 +465,7 @@ button.sl-text-button:hover:enabled {
 }
 .sl-step-nav a[aria-current="step"] span {
   background: var(--accent);
-  color: white;
+  color: var(--on-accent);
   border-color: var(--accent);
 }
 .sl-step-nav a:hover {
@@ -467,10 +473,10 @@ button.sl-text-button:hover:enabled {
 }
 .sl-change-alert {
   padding: 18px 20px;
-  border: 1px solid #d9b58d;
+  border: 1px solid var(--line);
   border-radius: 6px;
-  background: #f9eddd;
-  color: #7b411b;
+  background: var(--warning-soft);
+  color: var(--warning);
   margin: 20px 0;
 }
 .sl-change-alert strong,
@@ -518,7 +524,7 @@ button.sl-text-button:hover:enabled {
 }
 .sl-cash-terms .sl-cash-unresolved strong {
   font-size: 17px;
-  color: #7b411b;
+  color: var(--warning);
 }
 .sl-cash-terms .sl-cash-total {
   padding: 22px 18px;
@@ -728,7 +734,7 @@ button.sl-text-button:hover:enabled {
 }
 .sl-decision-sheet {
   max-width: 850px;
-  background: white;
+  background: var(--surface);
   border: 1px solid var(--line);
   padding: 32px;
   border-radius: 8px;
@@ -873,7 +879,7 @@ button.sl-text-button:hover:enabled {
   margin-top: 40px;
 }
 .sl-evidence-page .research-run {
-  background: white;
+  background: var(--surface);
 }
 .sl-evidence-page .research-bridge {
   border-radius: 4px;
@@ -1197,11 +1203,11 @@ button.sl-text-button:hover:enabled {
   border-radius: 8px;
 }
 .sl-example-illustration small {
-  color: #c5cdd5;
+  color: var(--muted);
 }
 .sl-example-illustration > div + div {
   padding-top: 14px;
-  border-top: 1px solid #4b5c6d;
+  border-top: 1px solid var(--line);
 }
 .sl-example-illustration > p {
   margin-top: 24px;
@@ -1300,12 +1306,7 @@ button.sl-text-button:hover:enabled {
    Presentation polish. Same palette and type; stronger hierarchy, quieter chrome.
    Appended as one block so it is easy to review or revert as a unit.
    --------------------------------------------------------------------------- */
-:root {
-  --paper: #f4f0e8;
-  --line: #ded9cf;
-  --soft: #ebe7df;
-  --ink-2: #27405a;
-}
+/* Palette is defined once at the top of this file. */
 .sl-root,
 .sl-entry {
   -webkit-font-smoothing: antialiased;
@@ -1402,7 +1403,7 @@ button.sl-text-button:hover:enabled {
 }
 .sl-status-warning {
   color: var(--warning);
-  border-color: #e0c4a1;
+  border-color: var(--input-line);
   background: var(--warning-soft);
 }
 .sl-status-warning::before {
@@ -1410,7 +1411,7 @@ button.sl-text-button:hover:enabled {
 }
 .sl-status-confirmed {
   color: var(--positive);
-  border-color: #b9cfc1;
+  border-color: var(--line);
   background: var(--positive-soft);
 }
 .sl-status-confirmed::before {
@@ -1477,24 +1478,24 @@ button.sl-text-button:hover:enabled {
   padding: 26px 24px;
   border-radius: 10px;
   background: var(--ink);
-  background-image: linear-gradient(135deg, #1d3349, #14263a 70%);
+  background-image: linear-gradient(135deg, #1c1c1c, #121212 70%);
 }
 .sl-root .sl-cash-terms .sl-cash-total > span {
   font-size: 12px;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.12em;
-  color: #c9d2db;
+  color: var(--muted);
 }
 .sl-root .sl-cash-terms .sl-cash-total strong {
   font-size: 44px;
   letter-spacing: -0.035em;
-  color: #fbf8f1;
+  color: var(--ink);
 }
 .sl-root .sl-cash-terms .sl-cash-total.sl-cash-unresolved {
   background: var(--warning-soft);
   background-image: none;
-  border: 1px solid #ebd3b3;
+  border: 1px solid var(--input-line);
 }
 .sl-root .sl-cash-terms .sl-cash-total.sl-cash-unresolved > span {
   color: var(--warning);
@@ -1579,8 +1580,8 @@ button.sl-text-button:hover:enabled {
   padding: 40px 44px;
   border-radius: 10px;
   box-shadow:
-    0 1px 0 #ffffff inset,
-    0 18px 50px -36px #192c4066;
+    0 1px 0 var(--line) inset,
+    0 18px 50px -36px var(--shadow);
 }
 .sl-root .sl-decision-title h2 {
   font-family: "Source Serif 4", Georgia, serif;
@@ -1647,8 +1648,8 @@ button.sl-text-button:hover:enabled {
   display: block;
   aspect-ratio: 460 / 215;
   background: var(--ink);
-  background-image: linear-gradient(135deg, #27405a, #14263a);
-  color: #fbf8f1;
+  background-image: linear-gradient(135deg, #1c1c1c, #121212);
+  color: var(--ink);
   font-family: "Source Serif 4", Georgia, serif;
   font-size: 26px;
   letter-spacing: -0.02em;
@@ -1734,30 +1735,30 @@ button.sl-text-button:hover:enabled {
   max-width: 560px;
   padding: 26px 28px;
   border-radius: 12px;
-  background-image: linear-gradient(135deg, #1d3349, #14263a 70%);
+  background-image: linear-gradient(135deg, #1c1c1c, #121212 70%);
 }
 .sl-example-illustration strong {
   font-size: 30px;
   letter-spacing: -0.03em;
 }
 .sl-example-illustration > div + div {
-  border-top-color: #35485c;
+  border-top-color: var(--line);
 }
 .sl-example-illustration .sl-example-total {
   margin-top: 6px;
   padding-top: 18px;
-  border-top: 1px solid #5d7086;
+  border-top: 1px solid var(--line);
 }
 .sl-example-illustration .sl-example-total span {
   font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 0.12em;
   font-weight: 600;
-  color: #c9d2db;
+  color: var(--muted);
 }
 .sl-example-illustration .sl-example-total strong {
   font-size: 40px;
-  color: #fbf8f1;
+  color: var(--ink);
 }
 .sl-example-illustration > p {
   margin-top: 18px;
@@ -1767,9 +1768,9 @@ button.sl-text-button:hover:enabled {
   padding: 36px;
   border-radius: 14px;
   box-shadow:
-    0 1px 0 #fff inset,
-    0 24px 60px -40px #192c4080;
-  border: 1px solid #ffffff;
+    0 1px 0 var(--line) inset,
+    0 24px 60px -40px var(--shadow);
+  border: 1px solid var(--line);
 }
 .sl-auth h2 {
   font-family: "Source Serif 4", Georgia, serif;
@@ -1896,5 +1897,52 @@ button.sl-text-button:hover:enabled {
   .sl-root .game-tab .game-cover-fallback {
     font-size: 16px;
     padding: 10px;
+  }
+}
+
+/* Inverse feature panels remain dark; primary controls use the pale ink tone. */
+.sl-example-illustration {
+  background-color: var(--surface);
+  color: var(--ink);
+}
+.sl-example-illustration > div,
+.sl-example-illustration > p {
+  color: var(--ink);
+}
+.sl-root .sl-cash-terms .sl-cash-total {
+  background-color: var(--elevated);
+}
+.sl-root .sl-cash-terms .sl-cash-total strong {
+  color: var(--ink);
+}
+.sl-change-alert,
+.sl-error,
+.error {
+  border-left-width: 3px;
+}
+:focus-visible {
+  outline-color: var(--accent);
+}
+@media print {
+  :root {
+    color-scheme: light;
+    --paper: #fff;
+    --surface: #fff;
+    --ink: #0c0c0c;
+    --ink-2: #2a2a2a;
+    --muted: #5c5c5c;
+    --soft: #f4f4f4;
+    --line: #c2c2c2;
+    --warning: #0c0c0c;
+    --warning-soft: #f4f4f4;
+    --positive: #0c0c0c;
+    --positive-soft: #f4f4f4;
+    --accent: #0c0c0c;
+    --on-accent: #fff;
+    --elevated: #f4f4f4;
+  }
+  .sl-root .sl-cash-terms .sl-cash-total,
+  .sl-example-illustration {
+    background-image: none;
   }
 }
