@@ -6,19 +6,36 @@ export type Session = {
   user?: { id: string; handle: string; displayName: string };
 };
 export async function request(path: string, body?: unknown, role = "lp") {
-  const response = await fetch(path, {
-    method: body === undefined ? "GET" : "POST",
-    headers: { "Content-Type": "application/json", "x-demo-role": role },
-    ...(body === undefined ? {} : { body: JSON.stringify(body) }),
-  });
+  let response: Response;
+  try {
+    response = await fetch(path, {
+      method: body === undefined ? "GET" : "POST",
+      headers: { "Content-Type": "application/json", "x-demo-role": role },
+      ...(body === undefined ? {} : { body: JSON.stringify(body) }),
+    });
+  } catch {
+    throw Error(
+      "We couldn’t reach Second Look. Check your connection and try again. Your edits are still here.",
+    );
+  }
   if (response.status === 401 && path !== "/api/session/login") {
     window.dispatchEvent(new Event("second-look-session-expired"));
   }
-  const value = await response.json();
-  if (!response.ok)
+  const value = await response.json().catch(() => null);
+  if (!response.ok || value === null) {
+    if (
+      response.status === 409 &&
+      value?.error ===
+        "This case changed. Refresh and review the current version."
+    )
+      throw Error(
+        "Someone updated this review while you were working. Your edits are still here. Load the latest version before saving again.",
+      );
     throw Error(
-      value.error ?? "We could not save that. Refresh the case and try again.",
+      value?.error ??
+        "Second Look couldn’t complete that request. Please try again.",
     );
+  }
   return value;
 }
 export const currency = (value: number | null | undefined) =>
@@ -35,6 +52,7 @@ export function cents(
 ): number {
   const value = String(raw ?? "")
     .trim()
+    .replace(/^\$/, "")
     .replaceAll(",", "");
   if (
     !(allowNegative ? /^-?\d+(\.\d{1,2})?$/ : /^\d+(\.\d{1,2})?$/).test(value)

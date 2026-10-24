@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { confirmDiscardChanges, useDraftGuard } from "./useDraftGuard";
 import { cents, navigate, request, type Session } from "./product-api";
 export function Brand() {
   return (
@@ -105,7 +106,7 @@ export function AuthScreen({
         <section className="sl-auth">
           <h2>
             {invite
-              ? "You’ve been invited to a case"
+              ? "You’ve been invited to a sale review"
               : mode === "example"
                 ? "Explore the team example"
                 : mode === "register"
@@ -114,10 +115,10 @@ export function AuthScreen({
           </h2>
           <p>
             {invite
-              ? "Sign in or create an account to join with the role the case owner assigned."
+              ? "Create an account if this is your first visit, or sign in. You’ll go straight to the review you were invited to."
               : mode === "example"
                 ? "Use your team access code. The fund and sale in this example are fictional."
-                : "Keep your cases, questions and decisions together."}
+                : "Keep your sale offers, questions and decisions together."}
           </p>
           <div className="sl-tabs" aria-label="Access options">
             {(
@@ -144,7 +145,7 @@ export function AuthScreen({
             {mode !== "example" && (
               <>
                 <label>
-                  Account handle
+                  Username
                   <input
                     name="handle"
                     autoComplete="username"
@@ -152,6 +153,9 @@ export function AuthScreen({
                     minLength={3}
                     maxLength={60}
                     pattern="[A-Za-z0-9][A-Za-z0-9._-]{2,59}"
+                    spellCheck={false}
+                    autoCapitalize="none"
+                    title="Use 3–60 letters, numbers, dots, underscores or hyphens. Start with a letter or number."
                     placeholder="e.g. alex.morgan"
                   />
                 </label>
@@ -190,7 +194,7 @@ export function AuthScreen({
               <label>
                 {mode === "example"
                   ? "Team access code"
-                  : "Early-access enrollment code"}
+                  : "Access code from the Second Look team"}
                 <input
                   name="code"
                   type="password"
@@ -224,6 +228,7 @@ export function AuthScreen({
   );
 }
 export function Workspace({ session }: { session: Session }) {
+  const draft = useDraftGuard();
   const [cases, setCases] = useState<
       { id: string; title: string; role: string; revision: number }[]
     >([]),
@@ -275,6 +280,7 @@ export function Workspace({ session }: { session: Session }) {
         ...body,
         requestId: retry.current.id,
       });
+      draft.markClean();
       navigate({ case: c.id, view: "deal" });
     } catch (e) {
       setError((e as Error).message);
@@ -286,14 +292,24 @@ export function Workspace({ session }: { session: Session }) {
     <main className="sl-workspace" id="workspace" tabIndex={-1}>
       <div className="sl-page-heading">
         <div>
-          <h1>Your decisions, in one place.</h1>
+          <h1 tabIndex={-1}>Your sale reviews</h1>
           <p>
-            Welcome, {session.user?.displayName}. Open a case or start with the
-            sale you’re considering.
+            Welcome, {session.user?.displayName}. Compare what an offer pays,
+            get the manager’s answer, and keep a record of what you reviewed.
           </p>
         </div>
-        <button className="sl-primary" onClick={() => setCreating(true)}>
-          New sale review
+        <button
+          className="sl-primary"
+          onClick={() => {
+            setCreating(true);
+            requestAnimationFrame(() =>
+              document
+                .querySelector<HTMLInputElement>('[name="title"]')
+                ?.focus(),
+            );
+          }}
+        >
+          Review a sale offer
         </button>
       </div>
       {error && (
@@ -305,10 +321,14 @@ export function Workspace({ session }: { session: Session }) {
         <section className="sl-sheet">
           <h2>What sale are you considering?</h2>
           <p>
-            Start with the terms you have. You can confirm the missing facts
-            with the manager next.
+            Have the buyer’s email or offer beside you. Enter its terms below;
+            then invite the fund manager to confirm the distribution.
           </p>
-          <form className="sl-form-grid" onSubmit={create}>
+          <form
+            className="sl-form-grid"
+            onSubmit={create}
+            onChange={draft.markDirty}
+          >
             <label>
               Fund or investment name
               <input
@@ -319,7 +339,7 @@ export function Workspace({ session }: { session: Session }) {
               />
             </label>
             <label>
-              Owner of the interest
+              Who owns the fund interest?
               <input
                 name="owner"
                 required
@@ -328,7 +348,7 @@ export function Workspace({ session }: { session: Session }) {
               />
             </label>
             <label>
-              Proposed sale payment (USD)
+              How much is the buyer offering? (USD)
               <input
                 name="payment"
                 inputMode="decimal"
@@ -337,19 +357,32 @@ export function Workspace({ session }: { session: Session }) {
               />
             </label>
             <label>
-              Price adjustment (USD)
+              Any additional price adjustment? (USD)
               <input
                 name="adjustment"
                 inputMode="decimal"
-                placeholder="Leave blank if unknown"
+                placeholder="0 if none; blank if not confirmed"
               />
+              <span className="sl-field-help">
+                For example, −2,000 for a reduction. Leave blank until
+                confirmed; an unknown amount will block a final review.
+              </span>
             </label>
             <label>
               Who keeps distributions under this offer?
-              <select name="recipient">
-                <option value="seller">Seller</option>
-                <option value="buyer">Buyer</option>
+              <select name="recipient" defaultValue="" required>
+                <option value="" disabled>
+                  Choose from the written offer
+                </option>
+                <option value="seller">
+                  The seller (owner of the interest)
+                </option>
+                <option value="buyer">The buyer</option>
               </select>
+              <span className="sl-field-help">
+                Distributions are payouts from the fund. Check who receives them
+                under this offer.
+              </span>
             </label>
             <label>
               Where are these offer terms from?
@@ -369,23 +402,28 @@ export function Workspace({ session }: { session: Session }) {
               />
             </label>
             <p className="sl-span sl-help">
-              These are your entered terms and references. Second Look has not
-              read or verified the underlying documents.
+              You’re entering the offer yourself. References help everyone find
+              the original; entering a reference does not upload or verify the
+              document.
             </p>
-            <label className="sl-check sl-span">
-              <input name="research" type="checkbox" />
-              Enable external research. Selected company evidence and relevant
-              sale terms will be processed by Akta, Roundtable, Nicrron and
-              PRISM.
-            </label>
+            <p className="sl-span sl-help">
+              You can add company research or connect X1 after creating the
+              review.
+            </p>
             <div className="sl-actions sl-span">
               <button className="sl-primary" disabled={busy}>
-                {busy ? "Creating case…" : "Start this review"}
+                {busy ? "Creating review…" : "Start this review"}
               </button>
               <button
                 type="button"
                 className="sl-secondary"
-                onClick={() => setCreating(false)}
+                disabled={busy}
+                onClick={() => {
+                  if (confirmDiscardChanges()) {
+                    draft.markClean();
+                    setCreating(false);
+                  }
+                }}
               >
                 Cancel
               </button>
@@ -394,11 +432,14 @@ export function Workspace({ session }: { session: Session }) {
         </section>
       )}
       {!loaded && !error ? (
-        <p role="status">Loading your cases…</p>
+        <p role="status">Loading your sale reviews…</p>
       ) : cases.length ? (
         <div className="sl-case-list">
           {cases.map((c) => (
-            <a key={c.id} href={`#case=${encodeURIComponent(c.id)}&view=deal`}>
+            <a
+              key={c.id}
+              href={`#case=${encodeURIComponent(c.id)}&view=${c.role === "lp" ? "deal" : "conversation"}`}
+            >
               <div>
                 <span className="sl-pill">
                   {c.role === "lp"
@@ -408,7 +449,13 @@ export function Workspace({ session }: { session: Session }) {
                       : "Buyer"}
                 </span>
                 <h2>{c.title}</h2>
-                <p>Open the current terms and conversation</p>
+                <p>
+                  {c.role === "gp"
+                    ? "Open the investor’s question and give your answer"
+                    : c.role === "buyer"
+                      ? "Confirm or update the offer terms"
+                      : "Open the offer, manager’s answer and your saved review"}
+                </p>
               </div>
               <span aria-hidden="true">→</span>
             </a>
@@ -417,13 +464,24 @@ export function Workspace({ session }: { session: Session }) {
       ) : (
         !creating && (
           <section className="sl-empty">
-            <h2>Start with one real question.</h2>
+            <h2>What would you actually keep from the sale?</h2>
             <p>
-              Create a sale review to put the offer, manager’s answer and your
-              decision in the same place.
+              Start with the offer. We’ll separate the buyer’s payment from fund
+              distributions, help you get the missing answer, and save the terms
+              you reviewed.
             </p>
-            <button className="sl-primary" onClick={() => setCreating(true)}>
-              Create your first case
+            <button
+              className="sl-primary"
+              onClick={() => {
+                setCreating(true);
+                requestAnimationFrame(() =>
+                  document
+                    .querySelector<HTMLInputElement>('[name="title"]')
+                    ?.focus(),
+                );
+              }}
+            >
+              Review a sale offer
             </button>
           </section>
         )
@@ -445,8 +503,8 @@ export function JoinCase({
       <section className="sl-sheet">
         <h1>Join this sale review</h1>
         <p>
-          The case owner has invited you to collaborate. Joining gives this
-          account the role assigned in the invitation.
+          Accept to open the investor’s question or offer. You’ll have the
+          specific access the investor assigned to you.
         </p>
         {error && (
           <p role="alert" className="sl-error">
