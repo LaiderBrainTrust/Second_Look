@@ -312,6 +312,9 @@ export function GamingPanel({
                       : holding.studio}
                   </small>
                   <strong>{holding.game}</strong>
+                  {item?.holding.id === holding.id && (
+                    <span className="sl-game-selected"><span aria-hidden="true">✓ </span>Selected game</span>
+                  )}
                   <small>
                     {holding.fundNavExposurePercent}% of the example fund’s
                     reported value
