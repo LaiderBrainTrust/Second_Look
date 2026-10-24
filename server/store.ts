@@ -76,6 +76,7 @@ export function createStore(path: string) {
       }
       return null;
     },
+    queuedResearch: (): ResearchRun[] => (db.prepare("SELECT body FROM research_runs WHERE json_extract(body, '$.status') = 'queued' AND json_extract(body, '$.taskId') IS NOT NULL ORDER BY created_at ASC").all() as { body: string }[]).map(row => researchFromStorage(row.body)),
     listResearch: (): ResearchRun[] => (db.prepare('SELECT body FROM research_runs ORDER BY created_at DESC LIMIT 30').all() as { body: string }[]).map(row => researchFromStorage(row.body)),
     publishResearch(id: string, expected: number) {
       db.exec('BEGIN IMMEDIATE');

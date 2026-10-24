@@ -6,8 +6,9 @@ import { DomainError, view } from './domain.js';
 import { createAktaClient, validateCutoff } from './adapters/akta.js';
 import { configured, createRoundtableAdapter } from './adapters/roundtable.js';
 import { recordProviderResult } from './adapters/status.js';
+import { createReviewRecovery } from './review-recovery.js';
 
-export function caseResearchRouter(store: ReturnType<typeof createStore>) {
+export function caseResearchRouter(store: ReturnType<typeof createStore>, recovery = createReviewRecovery(store)) {
   const router = Router();
   const akta = createAktaClient({ onResult: (ok, detail) => recordProviderResult('akta', ok, detail) });
   const rt = createRoundtableAdapter(); const active = new Set<string>();
@@ -68,17 +69,8 @@ export function caseResearchRouter(store: ReturnType<typeof createStore>) {
     } finally { active.delete(id); }
   });
   router.post('/:id/check', async (req, res, next) => {
-    const id = String(req.params.id);
-    if (active.has(id)) { res.json(store.research(id)); return; }
-    active.add(id);
-    try {
-      let run = store.research(id);
-      if (run.taskId && ['queued', 'blocked'].includes(run.status)) {
-        run = { ...run, error: undefined, ...await rt.result(run) }; store.saveResearch(run);
-      }
-      res.json(run);
-    } catch (error) { next(error); }
-    finally { active.delete(id); }
+    try { res.json(await recovery.check(String(req.params.id))); }
+    catch (error) { next(error); }
   });
   router.post('/:id/share', (req, res, next) => {
     try { res.json(view(store.publishResearch(String(req.params.id), req.body.expectedRevision), 'lp')); }
