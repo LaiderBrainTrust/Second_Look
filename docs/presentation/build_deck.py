@@ -61,8 +61,8 @@ text(s, 0.8, 3.7, 11.7, 1.0, 'Approve the deal you are actually getting.', size=
 s = slide('LPs sell on an old report. The deal keeps moving.', (
     '[0:05–0:30]\n'
     'Investors selling a fund stake decide from a quarterly report that’s months old, while the companies move and the buyer revises terms. '
-    'LPs sold about 125 billion dollars of fund stakes last year, at around 87 cents on the dollar, '
-    'so one point of price is worth about 1.4 billion a year. And about 40 percent of these sellers are first-timers.\n\n'
+    'LPs sold about 125 billion dollars of fund stakes last year, and this year they’re averaging around 87 cents on the dollar, '
+    'so one point of price is worth roughly 1.4 billion a year. And about 40 percent of these sellers are first-timers.\n\n'
     'TO VERIFY before presenting: $125B (Jefferies FY2025; Evercore says $120B), 87% of NAV (Jefferies H1 2026; bases may differ), '
     '~40% first-time sellers (Future Standard). The market doc says several of these came via blogs republishing the reports. '
     '$1.4B is our derivation: $125B / 0.87 ≈ $144B of NAV × 1%.'), kicker='THE PROBLEM')
@@ -86,29 +86,28 @@ s = slide('Today’s tools each cover part of it', (
     'Our difference: the manager’s answer becomes an explicit term of this sale, and a changed term automatically retires the old approval.'),
     kicker='WHY EXISTING SOLUTIONS FALL SHORT')
 rows = [('Secondary marketplaces', 'Nasdaq Fund Secondaries, LP Desk', 'Built to execute the trade, not to check the seller’s evidence'),
-        ('LP monitoring', 'Chronograph, Cobalt, Landytech', 'Built on periodic GP reports, so still dated at the decision'),
+        ('LP monitoring', 'Chronograph, Cobalt, Landytech', 'Mainly built on periodic GP reports, not a specific sale’s terms'),
         ('Advisors, email, spreadsheets', '', 'Answers scatter; nothing flags a term change after approval'),
         ('General AI chat', '', 'Reads documents, but no shared record or versioned approvals')]
 for i, (who, names, gap) in enumerate(rows):
     y = 2.2 + i * 1.1
     text(s, 0.8, y, 4.2, 1.0, [(who, 22, INK, True), (names, 14, MUTED, False)] if names else [(who, 22, INK, True)])
     text(s, 5.2, y + 0.05, 7.4, 1.0, gap, size=20, color=INK)
-source(s, 'Descriptions based on each vendor’s public positioning; not a hands-on evaluation.')
+source(s, 'Closest comparable: DiligenceVault (versioned diligence Q&A, approval trails). Descriptions from vendors’ public positioning; not a hands-on evaluation.')
 
 # 4. How it works (live demo) ---------------------------------------------
 s = slide('One record, from evidence to the exact deal', (
-    '[0:50–1:50] LIVE DEMO (about 60 seconds; click as you speak)\n'
+    '[0:50–1:50] DEMO (about 60 seconds; click as you speak)\n'
     'The fund and deal are fictional; the game data is real. '
     'Someone offers me 700,000 dollars for my gaming-fund stake. '
     'I open Tiny Glade: real Steam reviews from before and after the last report, and Akta’s studio profile. '
-    'Players love it, but that doesn’t tell me who gets the money. '
-    'So the evidence becomes a question for the manager: Roundtable routes it to a reviewer, Nicrron drafts it, PRISM traces the model call. '
+        'Roundtable and Nicrron turn that evidence into a question for the manager; PRISM records the trace. '
     'I share it. As the manager: a 100,000 dollar distribution belongs to this stake. '
     'As the investor: 800,000 dollars gross. I approve version one. '
-    'Now the buyer moves that distribution to themselves. Same 700,000 price, but I get 700,000, '
+    'Now the buyer moves that distribution to themselves. Same 700,000 price, but I receive 700,000 gross, '
     'and my old approval no longer applies. I reload: the record is still here.\n\n'
     'Note: the hosted demo opens a saved review captured earlier today. Say “captured earlier today,” not “live.” '
-    'If the live demo fails, use the next slide.'), kicker='OUR PRODUCT · LIVE DEMO')
+    'If the live demo fails, use the next slide.'), kicker='OUR PRODUCT · DEMO')
 steps = ['Real evidence\nSteam + Akta', 'Question to the GP\nRoundtable · Nicrron · PRISM', 'GP answers\n(fictional)',
          'LP approves\noffer v1', 'Buyer changes\na term (v2)', 'Old approval\nno longer applies']
 for i, st in enumerate(steps):
@@ -159,7 +158,7 @@ for i, (big, small, tag) in enumerate(mk):
     text(s, x, 4.3, 3.6, 0.5, tag.upper(), size=12, color=WARN, bold=True)
 text(s, 0.8, 5.2, 11.7, 0.8, [('Next: the LP’s ongoing evidence and approval record across all fund interests.', 20, INK, True),
                               ('Pricing is a hypothesis to test: start at $500 per team per month; the value at stake suggests testing higher.', 16, MUTED, False)])
-source(s, 'Estimates from Second Look market sizing (Oct 24, 2026), built on stated assumptions; pricing based on Jefferies H1 2026 (87% of NAV). Not validated with customers.')
+source(s, 'Second Look estimates (Oct 24, 2026) from stated assumptions; $75M stake is illustrative, ≈$86M NAV at Jefferies’ H1 2026 87%. $500/team/month is an untested hypothesis.')
 
 # 7. Close ----------------------------------------------------------------
 s = slide(None, (
