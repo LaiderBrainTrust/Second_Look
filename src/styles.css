@@ -1,12 +1,15 @@
 /* Second Look. White ground, flat color, one accent. 8px grid, 4px maximum radius, weights 400 and 500. */
 :root {
-  --ink: #111418;
-  --muted: #5b6470;
-  --line: #dfe3e8;
-  --surface: #f6f7f9;
-  --accent: #1d3fbf;
-  --accent-hover: #17329a;
+  --ink: #0a0d14;
+  --muted: #4b566d;
+  --line: #dbe2ee;
+  --surface: #f3f6fd;
+  --tint: #eaf0ff;
+  --tint-line: #c3d3fa;
+  --accent: #1743d6;
+  --accent-hover: #0d2a9e;
   --alert: #a4262c;
+  --ease: cubic-bezier(.2, .7, .2, 1);
   --radius: 4px;
   --body: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --display: 'Space Grotesk', 'Inter', system-ui, sans-serif;
@@ -233,6 +236,116 @@ h3 + .events, h3 + .approval { margin-top: 8px; }
 .segmented button.on { background: var(--ink); color: #fff; border-color: var(--ink); position: relative; }
 .row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
 .providers li { display: flex; justify-content: space-between; padding: 8px 0; border-top: 1px solid var(--line); font-size: 14px; }
+
+/* Visual system: flat blue on white, black text, underline motion. No gradients, glow or blur. */
+a { text-decoration-line: underline; text-decoration-thickness: 1px; text-decoration-color: var(--tint-line); text-underline-offset: 4px; transition: color .2s var(--ease), text-decoration-color .2s var(--ease), text-decoration-thickness .2s var(--ease), text-underline-offset .2s var(--ease); }
+a:hover { color: var(--accent-hover); text-decoration-color: var(--accent); text-decoration-thickness: 2px; text-underline-offset: 6px; }
+summary { text-decoration-line: underline; text-decoration-thickness: 1px; text-decoration-color: var(--tint-line); text-underline-offset: 4px; transition: text-decoration-color .2s var(--ease), text-underline-offset .2s var(--ease); }
+summary:hover { text-decoration-color: var(--accent); text-underline-offset: 6px; }
+
+button { transition: background-color .2s var(--ease), border-color .2s var(--ease), color .2s var(--ease), transform .2s var(--ease); }
+button:hover:enabled { transform: translateY(-1px); }
+button:active:enabled { transform: translateY(0); }
+button.primary { white-space: nowrap; }
+button.primary::after { content: '\2192'; display: inline-block; margin-left: 8px; transition: transform .2s var(--ease); }
+button.primary:hover:enabled::after { transform: translateX(4px); }
+button.secondary:hover:enabled, .button-link:hover { border-color: var(--accent); color: var(--accent); background: var(--tint); }
+button.link, .tab, .segmented button, .case-list button, .holding, .decision-table button { transform: none; }
+button.link:hover:enabled, .tab:hover:enabled { transform: none; }
+input, select, textarea { transition: border-color .2s var(--ease); }
+input:hover, select:hover, textarea:hover { border-color: var(--tint-line); }
+input:focus, select:focus, textarea:focus { outline: none; border-color: var(--accent); }
+.button-link { transition: border-color .2s var(--ease), color .2s var(--ease), background-color .2s var(--ease); text-decoration: none; }
+
+/* Frame */
+.brand { display: inline-flex; align-items: center; gap: 12px; text-decoration: none; }
+.brand:hover { color: var(--ink); }
+.brand::before { content: ''; width: 12px; height: 12px; background: var(--accent); border-radius: 2px; transition: transform .35s var(--ease); }
+.brand:hover::before { transform: rotate(90deg); }
+.topbar { border-bottom: 1px solid var(--ink); }
+.footer { border-top: 1px solid var(--ink); }
+.viewing { padding: 4px 8px; background: var(--tint); color: var(--accent); border-radius: var(--radius); }
+
+/* Section headings carry a rule that lengthens on hover. */
+.section-head h2::after, .section-head h1::after { content: ''; display: block; width: 32px; height: 2px; margin-top: 12px; background: var(--accent); transition: width .4s var(--ease); }
+.section-head:hover h2::after, .section-head:hover h1::after { width: 96px; }
+.label { color: var(--accent); }
+.rail .label, .presenter .label { color: var(--muted); }
+.lede { color: var(--muted); }
+
+/* Rail */
+.rail { border-color: var(--line); border-top: 4px solid var(--accent); transition: border-color .2s var(--ease); }
+.terms > div { transition: background-color .2s var(--ease), padding .2s var(--ease); }
+.terms > div:hover { background: var(--surface); padding-left: 8px; }
+.receipts { border-top: 1px solid var(--ink); }
+.ledger { background: var(--tint); border-color: var(--tint-line); border-left: 4px solid var(--accent); }
+.ledger .label { color: var(--accent); }
+.delta { font-size: 28px; line-height: 32px; }
+.status-line.approved { color: var(--accent); }
+
+/* Content blocks */
+blockquote { background: var(--surface); border-left: 4px solid var(--accent); }
+.notice { background: var(--tint); border: 1px solid var(--tint-line); border-left: 4px solid var(--accent); }
+.callout { background: var(--tint); border-color: var(--tint-line); border-left: 4px solid var(--accent); }
+.badge { background: #fff; }
+.badge.strong { background: var(--tint); border-color: var(--tint-line); }
+.chain li { transition: background-color .2s var(--ease), padding-left .2s var(--ease); }
+.chain li:hover { background: var(--surface); padding-left: 48px; }
+.chain li::before { color: var(--accent); border-color: var(--tint-line); background: var(--tint); transition: background-color .2s var(--ease), color .2s var(--ease); }
+.chain li:hover::before { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+/* Tabs: the underline sweeps in from the left */
+.tabs { border-bottom: 1px solid var(--line); }
+.tab { position: relative; border-bottom: 0; transition: color .2s var(--ease); }
+.tab::after { content: ''; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: var(--accent); transform: scaleX(0); transform-origin: left; transition: transform .3s var(--ease); }
+.tab:hover { color: var(--ink); }
+.tab:hover::after { transform: scaleX(.45); }
+.tab[aria-current='page'] { color: var(--ink); }
+.tab[aria-current='page']::after { transform: scaleX(1); }
+
+/* Game cards */
+.holding { position: relative; border-color: var(--line); transition: border-color .2s var(--ease), background-color .2s var(--ease), transform .25s var(--ease); }
+.holding::before { content: ''; position: absolute; left: 0; right: 0; top: 0; height: 4px; z-index: 1; background: var(--accent); transform: scaleX(0); transform-origin: left; transition: transform .35s var(--ease); }
+.holding:hover:enabled::before, .holding.on::before { transform: scaleX(1); }
+.holding:hover:enabled:not(.on) { border-color: var(--tint-line); background: var(--surface); transform: translateY(-2px); }
+.holding.on { border: 1px solid var(--accent); }
+.holding img { transition: transform .6s var(--ease); }
+.holding:hover:enabled img { transform: scale(1.04); }
+.holding-text strong { transition: color .2s var(--ease); }
+.holding:hover:enabled .holding-text strong, .holding.on .holding-text strong { color: var(--accent); }
+.detail { border-top: 4px solid var(--accent); }
+.metrics { border-color: var(--ink); }
+.metrics > div { transition: background-color .2s var(--ease); }
+.metrics > div:hover { background: var(--surface); }
+.metrics .figure { color: var(--ink); }
+
+/* The call to action band */
+.bridge { background: var(--accent); border-color: var(--accent); color: #fff; }
+.bridge strong { font-family: var(--display); font-size: 20px; line-height: 24px; font-weight: 500; }
+.bridge p { color: #dbe5ff; }
+.bridge button.primary { background: #fff; color: var(--accent); border-color: #fff; }
+.bridge button.primary:hover:enabled { background: var(--ink); color: #fff; border-color: var(--ink); }
+
+/* Cards that respond */
+.run, .approval, .start { border-color: var(--line); transition: border-color .25s var(--ease); }
+.run:hover, .approval:hover { border-color: var(--tint-line); }
+.case-list button { border-color: var(--line); position: relative; overflow: hidden; transition: border-color .2s var(--ease), background-color .2s var(--ease); }
+.case-list button::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--accent); transform: scaleY(0); transform-origin: top; transition: transform .3s var(--ease); }
+.case-list button:hover { border-color: var(--tint-line); background: var(--surface); }
+.case-list button:hover::before { transform: scaleY(1); }
+.case-title { transition: color .2s var(--ease); }
+.case-list button:hover .case-title { color: var(--accent); }
+.people li, .events li, .news li, .providers li { transition: background-color .2s var(--ease); }
+.people li:hover, .events li:hover, .providers li:hover { background: var(--surface); }
+.segmented button.on { background: var(--accent); border-color: var(--accent); }
+
+/* Tab content settles in */
+.workspace > section, .cases > * { animation: rise .45s var(--ease) both; }
+@keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.login > * { animation: rise .5s var(--ease) both; }
+.login > *:nth-child(2) { animation-delay: .05s; }
+.login > *:nth-child(3) { animation-delay: .1s; }
+.login > *:nth-child(n+4) { animation-delay: .15s; }
 
 @media (max-width: 960px) {
   .shell { grid-template-columns: 1fr; gap: 32px; }

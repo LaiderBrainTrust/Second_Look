@@ -80,13 +80,13 @@ export function Holdings({ revision, onPrepared }: { revision: number; onPrepare
     <div className="section-head">
       <div>
         <h2 id="holdings-heading">Holdings</h2>
-        <p className="lede">Three games in the illustrative fund. Player and company observations come from Steam and Akta. Exposure to each game is shown as an illustrative share of fund NAV.</p>
+        <p className="lede">Three games in the fund. Player and company observations come from Steam and Akta. Each game is shown with its share of fund NAV.</p>
       </div>
       <button className="primary" disabled={busy || snapshot?.status === 'fetching'} onClick={() => void run(async () => { setUseSaved(false); setSnapshot(await api('/api/case/gaming/refresh', { expectedRevision: revision })); })}>
         {snapshot?.status === 'fetching' ? 'Checking Steam and Akta' : snapshot ? 'Refresh external evidence' : 'Check the three holdings'}
       </button>
     </div>
-    <p className="fine disclosure">Exposure percentages are illustrative shares of fund NAV. They are not equity ownership in these studios, a revenue entitlement, or a basis for estimating proceeds.</p>
+    <p className="fine disclosure">Exposure is each game&rsquo;s share of fund NAV. It is not equity ownership in the studio, a revenue entitlement, or a basis for estimating proceeds.</p>
 
     {error && <p role="alert" className="alert">{error}</p>}
     {snapshot?.error && <p role="alert" className="alert">{snapshot.error}</p>}
@@ -107,7 +107,7 @@ export function Holdings({ revision, onPrepared }: { revision: number; onPrepare
           <span className="holding-text">
             <strong>{holding.game}</strong>
             <span className="fine">{holding.studio}</span>
-            <span className="fine">{holding.fundNavExposurePercent}% of fund NAV (illustrative)</span>
+            <span className="fine">{holding.fundNavExposurePercent}% of fund NAV</span>
             <span className="fine">{evidence ? `Investigation priority ${evidence.rank}` : 'No evidence captured'}</span>
           </span>
         </button>;
@@ -118,7 +118,7 @@ export function Holdings({ revision, onPrepared }: { revision: number; onPrepare
     {item && <article className="detail" aria-label={`${item.holding.game} evidence`}>
       <header className="detail-head">
         <div><p className="label">{item.holding.studio}</p><h3>{item.holding.game}</h3></div>
-        <span className="fine">Observed evidence, illustrative exposure</span>
+        <span className="fine">Observed evidence</span>
       </header>
       <Evidence item={item}/>
       <div className="bridge">
@@ -135,6 +135,6 @@ export function Holdings({ revision, onPrepared }: { revision: number; onPrepare
       </div>
     </article>}
     {message && <p role="status" className="notice">{message}</p>}
-    {displaySnapshot && <p className="fine">Evidence captured {shortDate(displaySnapshot.createdAt)}. Report cutoff {displaySnapshot.reportCutoff}. The ordering prioritizes investigation, not expected returns: a sample decline of at least 10 percentage points first, then missing Steam evidence, then the remaining games by sample change and illustrative exposure.</p>}
+    {displaySnapshot && <p className="fine">Evidence captured {shortDate(displaySnapshot.createdAt)}. Report cutoff {displaySnapshot.reportCutoff}. The ordering prioritizes investigation, not expected returns: a sample decline of at least 10 percentage points first, then missing Steam evidence, then the remaining games by sample change and fund exposure.</p>}
   </section>;
 }

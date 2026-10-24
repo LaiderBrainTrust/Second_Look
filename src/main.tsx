@@ -156,7 +156,7 @@ function App() {
 
     <footer className="footer">
       <span>Second Look, Deal Flow 2026</span>
-      <span>{userCase ? 'Figures are as entered by the investor. Documents are not parsed or verified. ' : 'Illustrative fund and deal. '}This application sends no offers and moves no money.</span>
+      <span>{userCase ? 'Figures are as entered by the investor. Documents are not parsed or verified. ' : 'Example case. '}This application sends no offers and moves no money.</span>
     </footer>
 
     {!account && <Presenter open={presenterOpen} onClose={() => setPresenterOpen(false)} role={role} onRole={next => void selectRole(next).then(() => setPresenterOpen(false))} busy={busy}

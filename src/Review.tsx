@@ -91,7 +91,7 @@ export function Respond({ data, role, busy, userCase, answer, setAnswer, onAnswe
             <input id="amount" inputMode="decimal" value={amount} onChange={e => setAmount(e.target.value)} required/>
             <p className="fine">This is your own statement. It is recorded under your account and is not checked against fund documents.</p>
           </>
-        : <p className="fine">Scenario assumption: a {usd(SCENARIO_DISTRIBUTION_CENTS)} distribution attributable to this LP interest. It is entered by the manager role, not inferred from game performance. The presenter panel can insert a labeled illustrative response.</p>}
+        : <p className="fine">Scenario assumption: a {usd(SCENARIO_DISTRIBUTION_CENTS)} distribution attributable to this LP interest. It is entered by the manager role, not inferred from game performance.</p>}
       <label htmlFor="answer">Explanation of the rights and the distribution</label>
       <textarea id="answer" value={answer} onChange={e => setAnswer(e.target.value)} maxLength={5000} required rows={5}/>
       <button className="primary" disabled={busy || !answer.trim() || (userCase && !amount.trim())}>{busy ? 'Saving' : 'Save response'}</button>
