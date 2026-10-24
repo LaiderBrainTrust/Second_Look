@@ -8,14 +8,14 @@ Product authority: [PLAN.md](PLAN.md). Work claims: [TEAM_BOARD.md](TEAM_BOARD.m
 
 ## Stack and authority
 
-React 19 + Vite 6; Express 5; TypeScript/ESM; Node 22.13+; native SQLite. `npm run dev` starts UI 5173, API 3001 and the configured Roundtable worker. Use `npm ci`, not a new scaffold. The app is one fictional case per clone, persisted in ignored `.local/second-look.sqlite`.
+React 19 + Vite 6; Express 5; TypeScript/ESM; Node 22.13+; native SQLite. `npm run dev` starts UI 5173, API 3001 and the configured Roundtable worker. Use `npm ci`, not a new scaffold. The app supports a separate fictional presenter case plus individually owned account cases, persisted in SQLite. Local development storage is ignored `.local/second-look.sqlite`.
 
 - SQLite owns the case, offer revision, manager response, approvals, evidence snapshots and research-run state.
 - Roundtable owns task delivery and versioned input/output artifacts. A completed task is a proposal, not a human approval.
 - Nicrron generates question/explanation prose. It does not own IDs, prices, ownership, distributions or approvals.
 - PRISM stores a trace of that actual model call. A trace is not proof of factual correctness.
 - Steam/Akta are external evidence providers; source identity, retrieval dates, sample coverage and uncertainty remain visible.
-- The optional X1 adapter reads selected document excerpts using the synthetic presentation connection or an individually connected read-only key bound to the case owner. The individual funding-panel controls require Ryan's account/case-picker UI. X1 retains authority over source records and access policy. See [X1_CONTEXT.md](X1_CONTEXT.md).
+- The optional X1 adapter reads selected document excerpts using the synthetic presentation connection or an individually connected read-only key bound to the case owner. The customer UI now provides account sign-in, a case picker, and X1 linking under The evidence. X1 retains authority over source records and access policy. See [X1_CONTEXT.md](X1_CONTEXT.md).
 
 ## File map
 
@@ -39,7 +39,7 @@ Local `/api/case` requests use `x-demo-role: lp | gp | buyer`; this is developme
 
 Hosted UI session contract: `GET /api/session` returns `{ hosted, authenticated, role? }`; `POST /api/session/login` takes `{ code }`; `POST /api/session/role` takes `{ role }`; `POST /api/session/logout` takes `{}`. Login sets the HttpOnly session cookie. Keep it browser/server managed. A 401 should lead back to sign-in; a 409 requires refreshing current state and reviewing the change before retrying. Never auto-approve after a conflict.
 
-Ryan owns UI composition; see [RYAN_PRODUCT_BRIEF.md](RYAN_PRODUCT_BRIEF.md). No backend migration is required for his redesign.
+Mat reassigned UI ownership to Codex; the connected customer journey shipped in PR 23. See [CUSTOMER_JOURNEY_ACCEPTANCE.md](CUSTOMER_JOURNEY_ACCEPTANCE.md).
 
 | Route | Contract |
 | --- | --- |

@@ -1,4 +1,4 @@
-<!-- Current UI ownership: Mat explicitly reassigned the main screen, navigation and styles to Codex on October 24, after confirming Ryan has no unpublished work to preserve. The historical Ryan assignments below are superseded for this takeover. -->
+**Current UI ownership (October 24): Mat explicitly reassigned the main screen, navigation and styles to Codex after confirming Ryan had no unpublished work to preserve. PR 23 is merged and live. This supersedes the historical Ryan assignments below. Hosted acceptance: `docs/CUSTOMER_JOURNEY_ACCEPTANCE.md` (or `CUSTOMER_JOURNEY_ACCEPTANCE.md` from this folder). Coordinate any further UI edits with Mat.**
 
 # Team board — claim a bounded task
 
@@ -6,12 +6,12 @@ Read [PLAN.md](PLAN.md) first. This board records proposed work, not automatic d
 
 | Priority | Task | Owner / state | Acceptance |
 | --- | --- | --- | --- |
-| P0 | Real-use accounts, cases and participant invitations | Mat/Codex backend implemented; Ryan owns UI | [REAL_CASE_API.md](REAL_CASE_API.md); isolated memberships, fixed roles, one-time invites, revocation, persisted sessions, actor attribution |
+| P0 | Real-use accounts, cases and participant invitations | Mat/Codex — backend and UI shipped; two-account hosted acceptance passed | [REAL_CASE_API.md](REAL_CASE_API.md); isolated memberships, fixed roles, one-time invites, revocation, persisted sessions, actor attribution |
 | P0 | Railway + custom domain | Container/config prepared by Mat/Codex; account/DNS setup pending | [RAILWAY.md](RAILWAY.md); persistent volume, private runtime secrets, tested cutover and restore |
 | P0 | Background review recovery and safe release path | Mat/Codex — merged and deployed; 34 tests/build and live checks passed | [BACKEND_READINESS.md](BACKEND_READINESS.md); queued results survive closed browser/restart, unchanged case, preserved API |
 | P1 | Darren workflow tranche: competing offers, term/consent checklist, assigned questions | Mat/Codex — backend implemented and tested; Ryan retains UI | [WORKFLOW_API.md](WORKFLOW_API.md); missing terms withheld, assigned-role responses, stale edits rejected, history durable |
-| P1 | Downloadable decision record | Mat/Codex backend implemented; Ryan owns button integration | [DECISION_RECORD.md](DECISION_RECORD.md); HTML/JSON, investor-only, guarded revision, original approval history |
-| P0 | Final customer UI and product design | Ryan — assigned by Mat; implementation/acceptance pending | [RYAN_PRODUCT_BRIEF.md](RYAN_PRODUCT_BRIEF.md); cohesive real-API journey, useful in the first minute, exact deployed commit verified |
+| P1 | Downloadable decision record | Mat/Codex — export and UI shipped; hosted download passed | [DECISION_RECORD.md](DECISION_RECORD.md); HTML/JSON, investor-only, guarded revision, original approval history |
+| P0 | Final customer UI and product design | Mat/Codex — shipped in PR 23; two-account hosted acceptance passed | [RYAN_PRODUCT_BRIEF.md](RYAN_PRODUCT_BRIEF.md); cohesive real-API journey, useful in the first minute, exact deployed commit verified |
 | P0 | Core gaming → review → changed-offer workflow | Mat/Codex — implemented and locally verified | 29 tests/build; live source/task/trace receipts; browser financial sequence. These verify the reference implementation, not the future redesign |
 | P0 | PRISM setup | Mat/Codex — live verified | Actual model trace accepted; setup doctor reports live/app connected |
 | P0 | Team Roundtable credentials | Mat/Codex — configured, restricted grants verified | New bot keys in Actions/Codespaces; access to reporting/shared-notes banks denied. Workspace co-owners remain fully privileged |

@@ -1,0 +1,33 @@
+{
+  "observedAt": "2026-10-24T18:58:58.861573+00:00",
+  "url": "https://secondlook.ac",
+  "releaseSha": "d15732f0d0a6dc40f8f8b259944097429829fd4e",
+  "sourceSha": "1ae353a2b62c0d1d84b5f10d13780e12b7e1b0cc",
+  "caseId": "20ab04d8-ed6d-414b-923e-4ade29772725",
+  "data": "synthetic financial inputs; real sponsor requests",
+  "verified": [
+    "individual sign-in and case creation",
+    "one-use invitation accepted by separate manager account",
+    "no presenter controls in individual accounts",
+    "manager entered response and editable distribution",
+    "860000 USD proceeds calculated from735000 payment and125000 distribution",
+    "recorded review survives reload",
+    "dedicated HTML download",
+    "keyboard skip link preserves selected case",
+    "case-scoped X1 controls visible",
+    "Akta search and ten news findings",
+    "selected finding sent for Roundtable review",
+    "Nicrron result and recorded PRISM trace",
+    "shared research question requires fresh manager answer",
+    "second account answers new question and investor records fresh review"
+  ],
+  "researchRun": "ea37e991-1d82-4369-9abe-eab3412bbf07",
+  "roundtableTask": "ab50625aecec41189d5b44e805bcc878",
+  "prismTrace": "d3eda405-6b77-410d-b4cb-4aa6ddee5faf",
+  "prismStatus": "recorded",
+  "remaining": [
+    "timed rehearsal on presenter laptop",
+    "email notifications and recovery/MFA",
+    "confidential-client operational readiness"
+  ]
+}

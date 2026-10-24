@@ -8,7 +8,7 @@ Inspected source/deployment: `30adb3937c02f372cd69aa611d2d412f89985c33`. Mat/Cod
 
 Mat explicitly reassigned the UI to Codex after confirming no unpublished Ryan UI work. The customer-experience branch replaces the presentation page with individual sign-in/registration, case navigation, invitation acceptance, and Deal → Evidence → Conversation → Decision navigation. Amount entry and the actual sale are distinct from optional comparison quotes. X1 and research use the selected case. The dedicated decision export replaces printing the application.
 
-Local browser acceptance: entered $125,000 distribution, $720,000 payment and −$2,000 adjustment; seller-retained distribution computed $843,000. Changed terms required a fresh review; approval survived reload; the HTML decision record downloaded. Desktop and narrow layouts inspected. Hosted UI acceptance is still required after this release.
+Local browser acceptance: entered $125,000 distribution, $720,000 payment and −$2,000 adjustment; seller-retained distribution computed $843,000. Changed terms required a fresh review; approval survived reload; the HTML decision record downloaded. Desktop and narrow layouts inspected. Hosted two-account UI acceptance subsequently passed on release `d15732f0d0a6dc40f8f8b259944097429829fd4e`; see [CUSTOMER_JOURNEY_ACCEPTANCE.md](CUSTOMER_JOURNEY_ACCEPTANCE.md) for the exact tested flow.
 
 The session fix is now proven across **two real Railway deployments**: a cookie issued on `502515d2794b2aae8e371c720f431b4bb3e87da9` remained authenticated with its GP role on `94a028068e39e128a10364e581532d75af1f766f`. Logout then invalidated it. Older memory-only sessions still need one new login.
 
