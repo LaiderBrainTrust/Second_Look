@@ -25,5 +25,5 @@ export interface ResearchRun {
 export interface ResearchInput {
   caseId: string; caseRevision: number; runId: string; after: string; finding: Finding;
   gamingContext?: GamingContext;
-  offer: { version: number; purchasePriceCents: number; distributionRecipient: 'seller' | 'buyer' };
+  offer: { version: number; purchasePriceCents: number; distributionRecipient: 'seller' | 'buyer' | null };
 }

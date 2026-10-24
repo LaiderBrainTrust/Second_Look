@@ -2,16 +2,8 @@ import { useEffect, useState } from "react";
 import type { CaseView } from "../shared/contracts";
 import type { Company, ResearchRun } from "../shared/research";
 
-async function api(path: string, body?: unknown) {
-  const response = await fetch(path, {
-    method: body === undefined ? "GET" : "POST",
-    headers: { "Content-Type": "application/json", "x-demo-role": "lp" },
-    ...(body === undefined ? {} : { body: JSON.stringify(body) }),
-  });
-  const data = await response.json();
-  if (!response.ok) throw new Error(data.error ?? "The request failed.");
-  return data;
-}
+import { request as api } from "./product-api";
+
 export function ResearchPanel({
   data,
   refreshVersion,
@@ -31,7 +23,9 @@ export function ResearchPanel({
   );
   const [companies, setCompanies] = useState<Company[]>([]);
   const [companyId, setCompanyId] = useState("");
-  const [after, setAfter] = useState("2026-09-30");
+  const [after, setAfter] = useState(
+    caseBase === "/api/case" ? "2026-09-30" : "",
+  );
   const [runs, setRuns] = useState<ResearchRun[]>([]);
   const [chosen, setChosen] = useState<Record<string, string>>({});
   const [busy, setBusy] = useState(false);
@@ -46,14 +40,25 @@ export function ResearchPanel({
     setRuns((await api(`${caseBase}/research`)).runs);
   }
   useEffect(() => {
-    void load().catch((e) => setError(e.message));
-  }, [data.revision, refreshVersion]);
+    let active = true;
+    void api(`${caseBase}/research`)
+      .then((result) => {
+        if (active) setRuns(result.runs);
+      })
+      .catch((e) => {
+        if (active) setError(e.message);
+      });
+    return () => {
+      active = false;
+    };
+  }, [caseBase, data.revision, refreshVersion]);
   useEffect(() => {
     const pending = runs.filter((run) => run.status === "queued");
     if (!pending.length) return;
     let stopped = false;
     const timer = setTimeout(async () => {
       for (const run of pending) {
+        if (stopped) break;
         try {
           const next = await api(`${caseBase}/research/${run.id}/check`, {});
           if (!stopped) replace(next);
@@ -72,7 +77,7 @@ export function ResearchPanel({
       stopped = true;
       clearTimeout(timer);
     };
-  }, [runs]);
+  }, [runs, caseBase]);
   async function action(fn: () => Promise<void>) {
     setBusy(true);
     setError("");
@@ -98,10 +103,14 @@ export function ResearchPanel({
       : runs.filter((run) => run.gamingContext).slice(0, 1);
   return (
     <section className="research" aria-labelledby="research-heading">
-      <h2 id="research-heading">Turn evidence into a focused question</h2>
+      <h2 id="research-heading">
+        Find company news worth asking your fund about
+      </h2>
       <p>
-        Connect the company evidence to a specific question: what cash, if any,
-        belongs to this fund interest, and who keeps it in the sale?
+        Look up a company named in your fund report. We find recent news and
+        help draft a question for your contact at the fund. Their answer can
+        help you understand whether the news affects your investment before you
+        sell.
       </p>
       {caseBase === "/api/case" && (
         <p className="muted">
@@ -113,7 +122,12 @@ export function ResearchPanel({
         className="extra-research"
         open={caseBase !== "/api/case" ? true : undefined}
       >
-        <summary>Research another company with Akta</summary>
+        <summary>Look up a company from your fund report</summary>
+        <p>
+          Enter a company named in your report, such as “Pounce Light”, or paste
+          its website. Choose the correct match, then enter the date of your
+          latest fund report to find newer news.
+        </p>
         <form
           className="research-search"
           onSubmit={(e) => {
@@ -123,7 +137,7 @@ export function ResearchPanel({
                 caseBase === "/api/case"
                   ? "/api/research/search"
                   : `${caseBase}/research/lookup/search`,
-                { query },
+                { query: query.trim() },
               );
               setCompanies(result.companies);
               setCompanyId("");
@@ -140,10 +154,13 @@ export function ResearchPanel({
             <input
               id="company-search"
               name="company"
+              placeholder="For example, Pounce Light…"
+              autoComplete="off"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               required
               maxLength={300}
+              pattern={".*\\S.*"}
             />
           </div>
           <button disabled={busy}>
@@ -167,7 +184,7 @@ export function ResearchPanel({
             }}
           >
             <div>
-              <label htmlFor="company-match">Confirm the company</label>
+              <label htmlFor="company-match">Choose the matching company</label>
               <select
                 id="company-match"
                 value={companyId}
@@ -183,7 +200,9 @@ export function ResearchPanel({
               </select>
             </div>
             <div>
-              <label htmlFor="report-cutoff">Report cutoff date</label>
+              <label htmlFor="report-cutoff">
+                Date of your latest fund report
+              </label>
               <input
                 id="report-cutoff"
                 type="date"
@@ -193,7 +212,7 @@ export function ResearchPanel({
               />
             </div>
             <button disabled={busy || !companyId}>
-              {busy ? "Fetching…" : "Find changes since report"}
+              {busy ? "Fetching…" : "Find news since that report"}
             </button>
           </form>
         )}
@@ -206,7 +225,9 @@ export function ResearchPanel({
       <div aria-live="polite">
         {!visibleRuns.length && (
           <p className="waiting">
-            Choose a game above or search a company to begin.
+            {caseBase === "/api/case"
+              ? "Choose a game above and select ‘Draft a question about this game’, or look up another company. Your research and draft question will appear here."
+              : "Start with one company from your fund report. Search above to see matching companies; nothing is sent to your fund contact until you choose a question and invite them."}
           </p>
         )}
         {visibleRuns.slice(0, 15).map((run) => {
@@ -216,22 +237,30 @@ export function ResearchPanel({
               <div className="research-title">
                 <h3>{run.company.name}</h3>
                 <span>
-                  Case revision {run.caseRevision} ·{" "}
-                  {run.acceptedRevision ? "Question shared" : run.status}
+                  {run.acceptedRevision
+                    ? "Added to your conversation"
+                    : {
+                        fetching: "Finding news…",
+                        ready: "Choose an article below",
+                        dispatching: "Preparing your draft…",
+                        queued: "Drafting your question…",
+                        done: "Your question is ready",
+                        blocked: "Research needs attention",
+                      }[run.status]}
                 </span>
               </div>
               <p className="muted">
                 Saved research started{" "}
                 {new Date(run.createdAt).toLocaleString()}.{" "}
                 {run.status === "done"
-                  ? "Completed result retained from that check; opening it does not make a new model call."
+                  ? "This is a saved result from that date."
                   : ""}
               </p>
               {stale && !run.acceptedRevision && (
                 <p className="changed">
-                  <strong>Historical research.</strong> The case changed after
-                  this check started. Its result cannot be shared as a review of
-                  the current terms.
+                  <strong>This review has changed.</strong> This research
+                  belongs to an earlier version. Start a new search above before
+                  adding a question about the current offer.
                 </p>
               )}
               {run.error && <p className="error">{run.error}</p>}
@@ -243,7 +272,9 @@ export function ResearchPanel({
                   <p className="muted">{run.coverage}</p>
                   {run.findings.length ? (
                     <fieldset disabled={busy || stale}>
-                      <legend>Choose a development to review</legend>
+                      <legend>
+                        Which news should your fund contact explain?
+                      </legend>
                       {run.findings.map((f) => (
                         <div className="finding" key={f.source.id}>
                           <label>
@@ -319,14 +350,14 @@ export function ResearchPanel({
                     )
                   }
                 >
-                  Reconcile saved request
+                  Check whether your draft is ready
                 </button>
               )}
               {run.status === "queued" && (
                 <>
                   <p>
-                    Waiting for the Roundtable reviewer. Leaving this page does
-                    not cancel the saved task.
+                    Your question is being drafted. You can leave this page and
+                    return later; the work will continue.
                   </p>
                   <button
                     className="secondary"
@@ -339,7 +370,7 @@ export function ResearchPanel({
                       )
                     }
                   >
-                    Check for an answer
+                    Check for your draft
                   </button>
                 </>
               )}
@@ -355,7 +386,7 @@ export function ResearchPanel({
                     )
                   }
                 >
-                  Recheck saved result
+                  Try checking your draft again
                 </button>
               )}
               {run.taskId && (
@@ -370,12 +401,15 @@ export function ResearchPanel({
                     {run.result.question}
                     <footer>{run.result.explanation}</footer>
                   </blockquote>
-                  <p className="muted">
-                    PRISM trace:{" "}
-                    {run.result.trace?.status.replaceAll("_", " ") ??
-                      "not recorded for this older review"}
-                    {run.result.trace?.id ? ` · ${run.result.trace.id}` : ""}
-                  </p>
+                  <details>
+                    <summary>How this draft was created</summary>
+                    <p className="muted">
+                      PRISM trace:{" "}
+                      {run.result.trace?.status.replaceAll("_", " ") ??
+                        "not recorded for this older review"}
+                      {run.result.trace?.id ? ` · ${run.result.trace.id}` : ""}
+                    </p>
+                  </details>
                   <details>
                     <summary>Source versions used by the reviewer</summary>
                     <ul>
@@ -389,9 +423,10 @@ export function ResearchPanel({
                     </ul>
                   </details>
                   <p className="muted">
-                    Sharing replaces the case question, clears the previous
-                    answer, and requires a fresh fund-manager response. It sends
-                    no email and accepts no sale.
+                    Add this draft to the conversation with your fund contact.
+                    This replaces the current question and clears its previous
+                    answer. You’ll then see how to invite your contact; no email
+                    is sent automatically.
                   </p>
                   <button
                     disabled={busy || stale || Boolean(run.acceptedRevision)}
@@ -407,10 +442,10 @@ export function ResearchPanel({
                     }
                   >
                     {run.acceptedRevision
-                      ? "Question shared with fund manager"
+                      ? "Question added to your conversation"
                       : busy
-                        ? "Sharing…"
-                        : "Share question with fund manager"}
+                        ? "Adding question…"
+                        : "Use this question"}
                   </button>
                 </>
               )}

@@ -1,0 +1,22 @@
+{
+  "sourceSha": "fdf821cc649557978fb3cc1af3ff04a88bd549e6",
+  "worktree": "/home/mat/Sites/vc_hackathon",
+  "origin": "https://localhost:3191",
+  "synthetic": true,
+  "screenshots": [
+    "usability-desktop.png",
+    "usability-mobile.png"
+  ],
+  "checks": [
+    "two-account review journey",
+    "manager list opens conversation",
+    "automatic update when no draft",
+    "cancel navigation preserves draft",
+    "saving one condition preserves another draft",
+    "required conditions resolve and unblock review"
+  ],
+  "limits": [
+    "human first-use comprehension not verified",
+    "timed presentation rehearsal not verified"
+  ]
+}

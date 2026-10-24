@@ -22,7 +22,8 @@ export const shortDate = (value: string) =>
   new Date(value).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
 export const dateTime = (value: string) => new Date(value).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' });
 
-export const recipientLabel = (recipient: 'seller' | 'buyer') => (recipient === 'seller' ? 'the seller' : 'the buyer');
+// The offer may not yet say who receives the distribution; that stays visible as unknown.
+export const recipientLabel = (recipient: 'seller' | 'buyer' | null) => (recipient === null ? 'not stated in the offer' : recipient === 'seller' ? 'the seller' : 'the buyer');
 
 type ReviewStatus = NonNullable<CaseView['privateReview']>['status'];
 export const statusLabel: Record<ReviewStatus, string> = {

@@ -1,0 +1,23 @@
+.comparison-field-help {
+  display: block;
+  margin-top: 0.4rem;
+  color: var(--muted);
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.5;
+}
+.comparison-start-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin: 1rem 0;
+}
+.comparison-offer-editor {
+  margin: 1.5rem 0;
+}
+.comparison-offer-editor form label {
+  margin-bottom: 1rem;
+}
+.comparison-status {
+  font-weight: 600;
+}

@@ -92,13 +92,13 @@ export function createWorkspaceAccess(db: DatabaseSync) {
     const owner = account(userId);
     if (typeof input.requestId !== 'string' || !/^[a-zA-Z0-9_-]{8,100}$/.test(input.requestId)) throw new DomainError(400, 'Provide a stable case-creation requestId of 8–100 letters, numbers, hyphens or underscores.');
     if (typeof input.allowExternalResearch !== 'boolean') throw new DomainError(400, 'Explicitly choose whether this case may use external research services.');
-    if (!['seller', 'buyer'].includes(String(input.distributionRecipient))) throw new DomainError(400, 'Choose a distribution recipient.');
+    if (input.distributionRecipient !== null && !['seller', 'buyer'].includes(String(input.distributionRecipient))) throw new DomainError(400, 'Choose who keeps the fund payout, or not confirmed yet.');
     const caseId = randomUUID(); const at = new Date().toISOString();
     const state: CaseState = {
       id: caseId, mode: 'user', allowExternalResearch: input.allowExternalResearch,
       title: text(input.title, 'case title', 200), ownerEntity: text(input.ownerEntity, 'owner or entity', 200), revision: 1,
       report: { id: randomUUID(), kind: 'user', label: input.reportNote == null ? 'No report reference supplied' : text(input.reportNote, 'report reference') },
-      offer: { version: 1, currency: 'USD', purchasePriceCents: money(input.purchasePriceCents), priceAdjustmentCents: adjustment(input.priceAdjustmentCents), distributionRecipient: input.distributionRecipient as 'seller' | 'buyer', source: { id: randomUUID(), kind: 'user', label: text(input.offerNote, 'offer source reference') } },
+      offer: { version: 1, currency: 'USD', purchasePriceCents: money(input.purchasePriceCents), priceAdjustmentCents: adjustment(input.priceAdjustmentCents), distributionRecipient: input.distributionRecipient as 'seller' | 'buyer' | null, source: { id: randomUUID(), kind: 'user', label: text(input.offerNote, 'offer source reference') } },
       question: text(input.question, 'initial manager question'), answer: null, reviews: [],
       events: [{ revision: 1, at, text: 'Investor created this case from entered terms and source references. No document was parsed or independently verified.', actor: { userId, displayName: owner.displayName, role: 'lp' } }],
     };

@@ -1,3 +1,5 @@
+**Latest design direction — October 24:** Ryan is preparing the marketing site in black and white with neon green/yellow accents. Preserve his actual incoming design and assets; the current earthy app palette is not a constraint on it. Mat/Codex owns reviewing PR27 and integrating Ryan’s work while preserving the working account/review flows. See [marketing integration handoff](MARKETING_INTEGRATION.md). This update supersedes conflicting historical design ownership below.
+
 # Ryan's product design brief
 
 Owner direction: Mat, October 24, 2026. **Ryan owns the final customer experience and visual design.** This is a design brief, not a prescribed wireframe. [PLAN.md](PLAN.md) owns product scope; [BUILD.md](BUILD.md) owns API behavior.

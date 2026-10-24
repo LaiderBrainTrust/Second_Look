@@ -95,7 +95,7 @@ export function Respond({ data, role, busy, userCase, answer, setAnswer, onAnswe
   const [amount, setAmount] = useState('');
   const [price, setPrice] = useState(centsToInput(data.offer.purchasePriceCents));
   const [adjustment, setAdjustment] = useState(data.offer.priceAdjustmentCents === null ? '' : centsToInput(data.offer.priceAdjustmentCents));
-  const [recipient, setRecipient] = useState<'seller' | 'buyer'>(data.offer.distributionRecipient);
+  const [recipient, setRecipient] = useState<'seller' | 'buyer' | ''>(data.offer.distributionRecipient ?? '');
   const [sourceNote, setSourceNote] = useState('');
   const [localError, setLocalError] = useState('');
   const guard = (work: () => void) => { setLocalError(''); try { work(); } catch (e) { setLocalError(e instanceof Error ? e.message : 'Check the entered amounts.'); } };
@@ -129,7 +129,7 @@ export function Respond({ data, role, busy, userCase, answer, setAnswer, onAnswe
       <button className="primary" disabled={busy} onClick={onRevise}>{busy ? 'Saving' : `Assign the distribution to ${recipientLabel(next)}`}</button>
     </section>}
 
-    {role === 'buyer' && userCase && <form className="block" onSubmit={e => { e.preventDefault(); guard(() => onReviseOffer({ purchasePriceCents: toCents(price)!, priceAdjustmentCents: toCents(adjustment, true), distributionRecipient: recipient, sourceNote: sourceNote.trim() })); }}>
+    {role === 'buyer' && userCase && <form className="block" onSubmit={e => { e.preventDefault(); guard(() => onReviseOffer({ purchasePriceCents: toCents(price)!, priceAdjustmentCents: toCents(adjustment, true), distributionRecipient: recipient as 'seller' | 'buyer', sourceNote: sourceNote.trim() })); }}>
       <h3>Revise the offer</h3>
       <p className="fine">Saving creates offer version {data.offer.version + 1} and makes any earlier approval historical. Taxes, fees and timing are not modeled.</p>
       <div className="two">
@@ -137,7 +137,7 @@ export function Respond({ data, role, busy, userCase, answer, setAnswer, onAnswe
         <div><label htmlFor="r-adj">Price adjustment (USD, blank if unknown)</label><input id="r-adj" inputMode="decimal" value={adjustment} onChange={e => setAdjustment(e.target.value)}/></div>
       </div>
       <label htmlFor="r-recipient">Distribution goes to</label>
-      <select id="r-recipient" value={recipient} onChange={e => setRecipient(e.target.value as 'seller' | 'buyer')}><option value="seller">The seller</option><option value="buyer">The buyer</option></select>
+      <select id="r-recipient" value={recipient} onChange={e => setRecipient(e.target.value as 'seller' | 'buyer' | '')} required><option value="">Choose who receives it</option><option value="seller">The seller</option><option value="buyer">The buyer</option></select>
       <label htmlFor="r-source">Reference for this revision (written offer, clause)</label>
       <input id="r-source" value={sourceNote} onChange={e => setSourceNote(e.target.value)} required maxLength={1000}/>
       <button className="primary" disabled={busy}>{busy ? 'Saving' : 'Save the revised offer'}</button>

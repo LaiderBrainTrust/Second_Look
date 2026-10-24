@@ -1267,3 +1267,634 @@ button.sl-text-button:hover:enabled {
 .sl-cash-terms > div > span {
   min-width: 0;
 }
+
+.sl-field-help {
+  display: block;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 400;
+  margin-top: 6px;
+}
+.sl-people {
+  padding: 0;
+  list-style: none;
+  margin: 20px 0;
+}
+.sl-people li {
+  padding: 10px 0;
+  border-block-end: 1px solid var(--line);
+}
+.sl-people span {
+  display: block;
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 4px;
+}
+.sl-next-step .sl-invite-result {
+  padding: 16px;
+}
+.sl-root h1:focus {
+  outline: none;
+}
+/* ---------------------------------------------------------------------------
+   Presentation polish. Same palette and type; stronger hierarchy, quieter chrome.
+   Appended as one block so it is easy to review or revert as a unit.
+   --------------------------------------------------------------------------- */
+:root {
+  --paper: #f4f0e8;
+  --line: #ded9cf;
+  --soft: #ebe7df;
+  --ink-2: #27405a;
+}
+.sl-root,
+.sl-entry {
+  -webkit-font-smoothing: antialiased;
+}
+.sl-root h1,
+.sl-entry h1 {
+  letter-spacing: -0.04em;
+  line-height: 1.08;
+}
+/* Header: lighter, with a thin rule that runs the full width. */
+.sl-app-header,
+.sl-entry-header {
+  max-width: none;
+  padding: 18px 48px;
+  border-bottom: 1px solid var(--line);
+}
+.sl-app-header nav > a,
+.sl-app-header nav > span {
+  font-size: 13px;
+  letter-spacing: 0.01em;
+}
+.sl-brand {
+  font-size: 21px;
+  letter-spacing: -0.02em;
+  font-weight: 600;
+}
+.sl-brand span span {
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 500;
+}
+.sl-brand svg {
+  color: var(--ink);
+}
+.sl-workspace {
+  max-width: 1200px;
+  padding: 22px 48px 72px;
+}
+/* Case path, demo strip and status read as one thin line of annotations. */
+.sl-case-top {
+  margin-bottom: 10px;
+}
+.sl-case-top > div > span:last-child {
+  color: var(--muted);
+  font-weight: 500;
+}
+.sl-pill {
+  border-radius: 999px;
+  padding: 6px 12px;
+  letter-spacing: 0.02em;
+  border-color: var(--ink);
+}
+.sl-demo-strip {
+  background: transparent;
+  padding: 8px 0 10px;
+  border-bottom: 1px solid var(--line);
+  color: var(--muted);
+}
+.sl-demo-strip strong {
+  color: var(--ink);
+}
+.sl-root .sl-case-heading {
+  margin: 48px 0 26px;
+  align-items: end;
+}
+.sl-root .sl-case-heading h1 {
+  font-size: 56px;
+  margin-bottom: 14px;
+}
+.sl-case-heading p {
+  font-size: 17px;
+  max-width: 620px;
+}
+.sl-status {
+  border-radius: 999px;
+  padding: 9px 14px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  background: transparent;
+  border: 1px solid var(--line);
+  color: var(--muted);
+}
+.sl-status::before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 8px;
+  vertical-align: 1px;
+  background: var(--muted);
+}
+.sl-status-warning {
+  color: var(--warning);
+  border-color: #e0c4a1;
+  background: var(--warning-soft);
+}
+.sl-status-warning::before {
+  background: var(--warning);
+}
+.sl-status-confirmed {
+  color: var(--positive);
+  border-color: #b9cfc1;
+  background: var(--positive-soft);
+}
+.sl-status-confirmed::before {
+  background: var(--positive);
+}
+/* Step rail: a numbered line rather than four tabs. */
+.sl-root .sl-step-nav {
+  gap: 0;
+  margin-bottom: 40px;
+  border-bottom: 1px solid var(--line);
+}
+.sl-step-nav a {
+  min-height: 54px;
+  padding: 14px 18px 14px 0;
+  font-size: 14px;
+  letter-spacing: -0.005em;
+  border-bottom-width: 2px;
+}
+.sl-step-nav a span {
+  width: 24px;
+  height: 24px;
+  font-size: 11px;
+  font-weight: 600;
+  border-color: var(--line);
+  color: var(--muted);
+}
+.sl-step-nav a:hover {
+  background: transparent;
+  color: var(--ink);
+}
+/* The calculation: the eye lands on the numbers, then on the total. */
+.sl-deal-layout,
+.sl-conversation-layout {
+  grid-template-columns: minmax(0, 1.55fr) minmax(300px, 1fr);
+  gap: 72px;
+  margin-top: 0;
+}
+.sl-root .sl-sale > h2 {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  margin: 6px 0 4px;
+}
+.sl-cash-terms > div {
+  padding: 20px 0;
+}
+.sl-cash-terms > div > span {
+  font-size: 15px;
+  color: var(--ink-2);
+}
+.sl-root .sl-cash-terms strong {
+  font-size: 34px;
+  letter-spacing: -0.03em;
+  font-weight: 500;
+}
+.sl-root .sl-cash-terms .sl-cash-unresolved strong {
+  font-size: 18px;
+  font-weight: 600;
+}
+.sl-root .sl-cash-terms .sl-cash-total {
+  margin-top: 16px;
+  padding: 26px 24px;
+  border-radius: 10px;
+  background: var(--ink);
+  background-image: linear-gradient(135deg, #1d3349, #14263a 70%);
+}
+.sl-root .sl-cash-terms .sl-cash-total > span {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #c9d2db;
+}
+.sl-root .sl-cash-terms .sl-cash-total strong {
+  font-size: 44px;
+  letter-spacing: -0.035em;
+  color: #fbf8f1;
+}
+.sl-root .sl-cash-terms .sl-cash-total.sl-cash-unresolved {
+  background: var(--warning-soft);
+  background-image: none;
+  border: 1px solid #ebd3b3;
+}
+.sl-root .sl-cash-terms .sl-cash-total.sl-cash-unresolved > span {
+  color: var(--warning);
+}
+.sl-root .sl-cash-terms .sl-cash-total.sl-cash-unresolved strong {
+  font-size: 20px;
+  color: var(--warning);
+}
+.sl-root .sl-cash-terms .sl-cash-total.sl-cash-unresolved strong:last-child {
+  max-width: none;
+}
+/* Next step: a flush column with a rule on top, not a card. */
+.sl-root .sl-next-step {
+  background: transparent;
+  border: 0;
+  border-top: 2px solid var(--ink);
+  border-radius: 0;
+  padding: 22px 0 0;
+}
+.sl-root .sl-next-step h2 {
+  font-size: 30px;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  font-weight: 400;
+}
+.sl-root .sl-next-step p {
+  font-size: 15px;
+}
+.sl-root .sl-next-step > .sl-primary {
+  margin-top: 18px;
+  min-height: 50px;
+  font-size: 15px;
+}
+.sl-root .sl-next-step > .sl-text-button {
+  margin: 14px 0 0;
+}
+.sl-primary,
+.sl-button {
+  border-radius: 6px;
+}
+.sl-root .sl-option {
+  margin: 0;
+  padding: 2px 0;
+}
+.sl-root .sl-option > summary {
+  font-size: 17px;
+  letter-spacing: -0.01em;
+}
+.sl-root .sl-option > summary > span {
+  margin-left: 0;
+}
+.sl-root .sl-change-alert {
+  border-left: 4px solid var(--warning);
+  border-radius: 6px;
+}
+.sl-root .sl-change-alert .sl-change-amount {
+  font-size: 28px;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+}
+/* Conversation: the question is the headline. */
+.sl-root .sl-message h2 {
+  font-family: "Source Serif 4", Georgia, serif;
+  font-weight: 400;
+  font-size: 34px;
+  line-height: 1.25;
+  letter-spacing: -0.025em;
+}
+.sl-root .sl-person {
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 11px;
+}
+.sl-root .sl-message-answer {
+  border-left: 4px solid var(--positive);
+  border-radius: 0 8px 8px 0;
+}
+/* Decision sheet: a document, with the record set in the same ledger style. */
+.sl-root .sl-decision-sheet {
+  max-width: 880px;
+  padding: 40px 44px;
+  border-radius: 10px;
+  box-shadow:
+    0 1px 0 #ffffff inset,
+    0 18px 50px -36px #192c4066;
+}
+.sl-root .sl-decision-title h2 {
+  font-family: "Source Serif 4", Georgia, serif;
+  font-weight: 400;
+  font-size: 32px;
+  letter-spacing: -0.03em;
+}
+.sl-root .sl-decision-title > span {
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 11px;
+  font-weight: 600;
+}
+.sl-root .sl-checklist p span {
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 11px;
+  color: var(--muted);
+}
+.sl-history h2 {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+}
+/* Evidence: games read as a strip of covers, metrics read as a ledger. */
+.sl-root .gaming-heading h2 {
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+}
+.sl-root .scenario-label {
+  border: 0;
+  padding: 0;
+  margin: 12px 0 20px;
+}
+.sl-root .game-tab {
+  border: 1px solid var(--line);
+  background: var(--surface);
+  border-radius: 10px;
+  position: relative;
+}
+.sl-root .game-tab.selected {
+  border: 1px solid var(--ink);
+  box-shadow: 0 0 0 2px var(--ink);
+}
+.sl-root .game-tab > span {
+  padding: 14px 16px 16px;
+  gap: 4px;
+}
+.sl-root .game-tab small:first-child {
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 10px;
+  font-weight: 600;
+}
+.sl-root .game-tab strong {
+  font-size: 17px;
+  letter-spacing: -0.015em;
+}
+.sl-root .game-tab .game-cover-fallback {
+  display: block;
+  aspect-ratio: 460 / 215;
+  background: var(--ink);
+  background-image: linear-gradient(135deg, #27405a, #14263a);
+  color: #fbf8f1;
+  font-family: "Source Serif 4", Georgia, serif;
+  font-size: 26px;
+  letter-spacing: -0.02em;
+  padding: 18px;
+  display: flex;
+  align-items: flex-end;
+}
+.sl-root .game-evidence h3 {
+  font-family: "Source Serif 4", Georgia, serif;
+  font-weight: 400;
+  font-size: 34px;
+  letter-spacing: -0.03em;
+}
+.sl-root .priority {
+  border-radius: 999px;
+  padding: 5px 12px;
+}
+.sl-root .game-metrics {
+  border-block: 1px solid var(--line);
+  padding: 24px 0;
+  gap: 24px;
+}
+.sl-root .game-metrics > div + div {
+  border-left: 1px solid var(--line);
+  padding-left: 24px;
+}
+.sl-root .game-metrics strong {
+  font-size: 40px;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+}
+.sl-root .game-metrics span {
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 11px;
+  font-weight: 600;
+}
+.sl-root .studio-profile,
+.sl-root .research-bridge {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+.sl-root .research-bridge {
+  padding: 22px 24px;
+}
+.sl-root .research-bridge p:first-child,
+.sl-root .research-bridge strong {
+  font-family: "Source Serif 4", Georgia, serif;
+  font-size: 22px;
+  letter-spacing: -0.02em;
+  font-weight: 400;
+}
+.sl-root .research-run {
+  border-radius: 10px;
+  padding: 28px;
+}
+.sl-root blockquote {
+  background: var(--surface);
+  border-left: 4px solid var(--ink);
+  border-radius: 0 8px 8px 0;
+  font-size: 17px;
+  line-height: 1.6;
+}
+/* Entry: the headline price and the outcome, side by side with the form. */
+.sl-entry-layout {
+  gap: 72px;
+  padding: 72px 48px 80px;
+}
+.sl-intro h1 {
+  font-size: 80px;
+  margin-bottom: 30px;
+}
+.sl-intro h1 em {
+  font-style: italic;
+  color: var(--accent);
+}
+.sl-lead {
+  font-size: 19px;
+  max-width: 540px;
+}
+.sl-example-illustration {
+  max-width: 560px;
+  padding: 26px 28px;
+  border-radius: 12px;
+  background-image: linear-gradient(135deg, #1d3349, #14263a 70%);
+}
+.sl-example-illustration strong {
+  font-size: 30px;
+  letter-spacing: -0.03em;
+}
+.sl-example-illustration > div + div {
+  border-top-color: #35485c;
+}
+.sl-example-illustration .sl-example-total {
+  margin-top: 6px;
+  padding-top: 18px;
+  border-top: 1px solid #5d7086;
+}
+.sl-example-illustration .sl-example-total span {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 600;
+  color: #c9d2db;
+}
+.sl-example-illustration .sl-example-total strong {
+  font-size: 40px;
+  color: #fbf8f1;
+}
+.sl-example-illustration > p {
+  margin-top: 18px;
+  font-size: 15px;
+}
+.sl-auth {
+  padding: 36px;
+  border-radius: 14px;
+  box-shadow:
+    0 1px 0 #fff inset,
+    0 24px 60px -40px #192c4080;
+  border: 1px solid #ffffff;
+}
+.sl-auth h2 {
+  font-family: "Source Serif 4", Georgia, serif;
+  font-weight: 400;
+  font-size: 28px;
+  letter-spacing: -0.025em;
+}
+.sl-tabs button {
+  font-size: 13px;
+  font-weight: 600;
+}
+.sl-app-footer {
+  max-width: none;
+  padding: 26px 48px;
+}
+@media (max-width: 1100px) {
+  .sl-intro h1 {
+    font-size: 64px;
+  }
+  .sl-root .sl-case-heading h1 {
+    font-size: 48px;
+  }
+}
+@media (max-width: 900px) {
+  .sl-deal-layout,
+  .sl-conversation-layout {
+    grid-template-columns: minmax(0, 1.4fr) minmax(240px, 1fr);
+    gap: 32px;
+  }
+  .sl-root .sl-cash-terms strong {
+    font-size: 28px;
+  }
+  .sl-root .sl-cash-terms .sl-cash-total strong {
+    font-size: 34px;
+  }
+}
+@media (max-width: 760px) {
+  .sl-deal-layout,
+  .sl-conversation-layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+  }
+  .sl-root .sl-app-header {
+    flex-wrap: wrap;
+  }
+  .sl-app-header nav {
+    margin-left: auto;
+  }
+  .sl-app-header nav a {
+    white-space: nowrap;
+  }
+  .sl-root .sl-cash-terms .sl-cash-total {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .sl-root .sl-cash-terms .sl-cash-total > span {
+    max-width: none;
+  }
+  .sl-app-header,
+  .sl-entry-header,
+  .sl-app-footer {
+    padding-inline: 20px;
+  }
+  .sl-workspace {
+    padding: 20px 20px 48px;
+  }
+  .sl-root .sl-case-heading {
+    margin: 28px 0 18px;
+  }
+  .sl-root .sl-case-heading h1 {
+    font-size: 38px;
+  }
+  .sl-case-heading p {
+    font-size: 15px;
+  }
+  .sl-root .sl-step-nav {
+    margin-bottom: 24px;
+  }
+  .sl-step-nav a {
+    padding: 12px 6px 12px 0;
+  }
+  .sl-root .sl-cash-terms strong {
+    font-size: 24px;
+  }
+  .sl-root .sl-cash-terms .sl-cash-total {
+    padding: 20px 18px;
+  }
+  .sl-root .sl-cash-terms .sl-cash-total strong {
+    font-size: 28px;
+  }
+  .sl-root .sl-next-step {
+    padding: 18px 0 0;
+  }
+  .sl-root .sl-next-step h2 {
+    font-size: 26px;
+  }
+  .sl-entry-layout {
+    padding: 36px 20px 48px;
+  }
+  .sl-intro h1 {
+    font-size: 48px;
+  }
+  .sl-example-illustration {
+    padding: 20px;
+  }
+  .sl-example-illustration .sl-example-total strong {
+    font-size: 30px;
+  }
+  .sl-root .game-metrics > div + div {
+    border-left: 0;
+    padding-left: 0;
+    border-top: 1px solid var(--line);
+    padding-top: 16px;
+  }
+  .sl-root .game-metrics strong {
+    font-size: 32px;
+  }
+  .sl-root .sl-message h2 {
+    font-size: 26px;
+  }
+  .sl-root .sl-decision-sheet {
+    padding: 24px 20px;
+  }
+  .sl-root .game-tab .game-cover-fallback {
+    font-size: 16px;
+    padding: 10px;
+  }
+}
