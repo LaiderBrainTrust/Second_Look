@@ -26,7 +26,7 @@ async function harness(){
  }) as unknown as typeof fetch;
  const validate=vi.fn(async()=>{});
  const oauth=createX1OAuth(store.db,access,connections,'https://secondlook.ac',{fetch:fetcher,validate});
- const app=express();app.use(express.json());app.use(oauth.publicRouter);installHostedAuth(app,{origin:'https://secondlook.ac',accessCode:'synthetic-code-long-enough-for-test'},access);
+ const app=express();app.use(express.json());app.use(oauth.publicRouter);installHostedAuth(app,{origin:'https://secondlook.ac',accessCode:'synthetic-code-long-enough-for-test'},store.db,access);
  app.use('/api/connections/x1',oauth.privateRouter);
  app.post('/api/start',(req,res,next)=>{try{res.json(oauth.begin(res,caseId));}catch(e){next(e);}});
  app.use((e:any,_q:any,r:any,_n:any)=>r.status(e.status??500).json({error:e.status?e.message:'Failed'}));

@@ -722,3 +722,18 @@ main { padding-bottom: 0; }
 /* Footer mark: the same lime square at 45 degrees */
 .footer-mark { display: block; width: 56px; height: 56px; margin: 0 20px; background: var(--lime); border-radius: 4px; transform: rotate(45deg); }
 .sf-brand:hover .footer-mark { transform: rotate(135deg); }
+
+/* Mat's reused components, in this format */
+.sl-sheet, .research-run, .sl-source-result { border: 1px solid var(--line); border-radius: 4px; padding: 24px; margin: 16px 0; }
+.sl-primary { background: var(--lime); border-color: var(--lime); color: #0a0a0a; }
+.sl-primary:hover:enabled { background: #fff; border-color: #fff; color: #0a0a0a; }
+.sl-secondary, .sl-text-button { background: transparent; color: var(--ink); }
+.sl-help, .muted { color: var(--muted); font-size: 13px; }
+.sl-error, .error { color: #ff8a80; border: 1px solid #ff8a80; border-radius: 4px; padding: 16px; }
+.sl-success { color: var(--lime); }
+.sl-search-row, .research-search { display: flex; gap: 16px; align-items: flex-end; flex-wrap: wrap; }
+.sl-search-row > *, .research-search > div { flex: 1; min-width: 240px; }
+.sl-pill { display: inline-block; padding: 4px 12px; border: 1px solid var(--line); border-radius: 999px; font-size: 12px; }
+.refine { border-top: 1px solid var(--line); padding-top: 8px; }
+.refine form { display: grid; gap: 8px; max-width: 720px; padding: 8px 0 16px; }
+.refine form button { justify-self: start; }

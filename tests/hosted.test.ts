@@ -32,6 +32,16 @@ it('keeps hosted data behind a case-scoped session and ignores forged role heade
     expect((await request('/api/case/gaming')).status).toBe(403);
     expect((await (await request('/api/case', undefined, { 'x-demo-role': 'lp' })).json()).privateReview).toBeUndefined();
     expect((await request('/api/case/commands', command)).status).toBe(200);
+    expect((await request('/api/case/commands', { expectedRevision: 2, command: { kind: 'revise_offer', purchasePriceCents: 73500000, priceAdjustmentCents: -50000, distributionRecipient: 'seller', sourceNote: 'Fictional revised offer' } })).status).toBe(403);
+    await request('/api/session/role', { role: 'buyer' });
+    const revised = await request('/api/case/commands', { expectedRevision: 2, command: { kind: 'revise_offer', purchasePriceCents: 73500000, priceAdjustmentCents: -50000, distributionRecipient: 'seller', sourceNote: 'Fictional revised offer' } });
+    expect(revised.status).toBe(200);
+    expect((await revised.json()).offer).toMatchObject({ purchasePriceCents: 73500000, priceAdjustmentCents: -50000 });
+    await request('/api/session/role', { role: 'lp' });
+    const question = await request('/api/case/commands', { expectedRevision: 3, command: { kind: 'set_question', text: 'Who receives the revised distribution?', sourceNote: 'Investor question' } });
+    expect(question.status).toBe(200);
+    expect(await question.json()).toMatchObject({ revision: 4, answer: null });
+    expect((await request('/api/case/commands', { expectedRevision: 3, command: { kind: 'set_question', text: 'Stale question', sourceNote: 'Investor question' } })).status).toBe(409);
     await request('/api/session/logout', {});
     expect((await request('/api/case')).status).toBe(401);
   } finally { await new Promise<void>(resolve => server.close(() => resolve())); store.close(); }

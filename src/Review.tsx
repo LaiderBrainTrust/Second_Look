@@ -22,7 +22,8 @@ function Answer({ data }: { data: CaseView }) {
 }
 
 // Investor view: the question, the answer and the review of the current offer version.
-export function Review({ data, busy, onApprove }: { data: CaseView; busy: boolean; onApprove: () => void }) {
+export function Review({ data, busy, onApprove, onSetQuestion }: { data: CaseView; busy: boolean; onApprove: () => void; onSetQuestion: (text: string) => void }) {
+  const [draft, setDraft] = useState(data.question);
   const review = data.privateReview!;
   const context = data.researchContext;
   return <section aria-labelledby="review-heading">
@@ -58,6 +59,15 @@ export function Review({ data, busy, onApprove }: { data: CaseView; busy: boolea
     </ol>
 
     <Question data={data}/>
+    <details className="refine">
+      <summary>Refine the question</summary>
+      <form onSubmit={e => { e.preventDefault(); onSetQuestion(draft.trim()); }}>
+        <label htmlFor="refine-question">Question for the fund manager</label>
+        <textarea id="refine-question" rows={3} value={draft} onChange={e => setDraft(e.target.value)} required maxLength={2000}/>
+        <p className="fine">Saving replaces the shared question and clears the current answer. Earlier approvals stay on the record as historical.</p>
+        <button className="primary" disabled={busy || !draft.trim() || draft.trim() === data.question}>{busy ? 'Saving' : 'Save the question'}</button>
+      </form>
+    </details>
     <Answer data={data}/>
 
     <section className="block approve" aria-label="Your review">

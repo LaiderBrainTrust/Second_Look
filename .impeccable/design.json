@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-24T19:02:31.300260+00:00",
+  "title": "Design System: Second Look",
+  "extensions": {
+    "shadows": [
+      {
+        "name": "entry-form",
+        "value": "0 8px 32px -12px #192c402b",
+        "purpose": "One lifted sign-in form; financial workspace remains flat."
+      }
+    ],
+    "motion": [
+      {
+        "name": "control-response",
+        "value": "140ms cubic-bezier(0.23, 1, 0.32, 1)",
+        "purpose": "Pointer press feedback only; keyboard and reduced motion are immediate."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "single-column",
+        "value": "760px"
+      },
+      {
+        "name": "compact-desktop",
+        "value": "900px"
+      },
+      {
+        "name": "wide",
+        "value": "1600px"
+      }
+    ]
+  }
+}

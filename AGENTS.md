@@ -1,3 +1,5 @@
+**Current UI ownership (October 24): Mat explicitly reassigned the main screen, navigation and styles to Codex after confirming Ryan had no unpublished work to preserve. PR 23 is merged and live. This supersedes the historical Ryan assignments below. Hosted acceptance: `docs/CUSTOMER_JOURNEY_ACCEPTANCE.md` (or `CUSTOMER_JOURNEY_ACCEPTANCE.md` from this folder). Coordinate any further UI edits with Mat.**
+
 # Team coding-agent instructions
 
 Start with the coding-agent prompt in README.md and the environment checklist in docs/TEAM_START.md. Read docs/PLAN.md for the canonical strategy, docs/TEAM_BOARD.md for work ownership, and docs/BUILD.md before changing code. docs/PROPOSAL.md points to the current plan; files under docs/archive are historical, not active instructions.

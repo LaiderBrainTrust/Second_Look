@@ -19,11 +19,12 @@ import { Header, type Page } from './Header';
 import { Hero, type NextStep } from './Hero';
 import { Services } from './Services';
 import { Footer } from './Footer';
+import { CaseEvidence } from './CaseEvidence';
 import { startReveal } from './reveal';
 
-type Tab = 'holdings' | 'question' | 'review' | 'offers' | 'people' | 'history';
+type Tab = 'holdings' | 'question' | 'evidence' | 'review' | 'offers' | 'people' | 'history';
 const exampleTabs: [Tab, string][] = [['holdings', 'Holdings'], ['question', 'Question'], ['review', 'Review'], ['offers', 'Compare offers'], ['history', 'Record']];
-const caseTabs: [Tab, string][] = [['review', 'Question and answer'], ['offers', 'Compare offers'], ['people', 'People'], ['history', 'Record']];
+const caseTabs: [Tab, string][] = [['evidence', 'Evidence'], ['review', 'Question and answer'], ['offers', 'Compare offers'], ['people', 'People'], ['history', 'Record']];
 
 interface SessionInfo { hosted: boolean; authenticated: boolean; mode?: 'presenter' | 'account'; role?: Role; user?: { id: string; handle: string; displayName: string } }
 
@@ -78,6 +79,13 @@ function App() {
     if (firstScroll.current) { firstScroll.current = false; return; }
     document.getElementById('workspace')?.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth', block: 'start' });
   }, [tab, selected?.id]);
+
+  // A 401 from any call means the session ended; return to sign-in without losing the page.
+  useEffect(() => {
+    const expired = () => { void loadSession(); };
+    window.addEventListener('second-look-session-expired', expired);
+    return () => window.removeEventListener('second-look-session-expired', expired);
+  }, []);
 
   const refreshProviders = () => { void api('/api/providers').then(setProviders).catch(() => setProviders([])); };
   useEffect(() => { if (session?.authenticated && !account) refreshProviders(); }, [session?.authenticated, account]);
@@ -154,7 +162,8 @@ function App() {
                     </nav>
                     {tab === 'holdings' && !userCase && <Holdings revision={data.revision} onPrepared={() => { setResearchVersion(v => v + 1); refreshProviders(); setTab('question'); }}/>}
                     {tab === 'question' && !userCase && <Question data={data} refreshVersion={researchVersion} onProviderChange={refreshProviders} onShared={next => { setData(next); setTab('review'); }}/>}
-                    {tab === 'review' && <Review data={data} busy={busy} onApprove={() => void act({ kind: 'approve' })}/>}
+                    {tab === 'evidence' && userCase && <CaseEvidence base={caseBase} data={data} busy={busy} refreshVersion={researchVersion} onChanged={() => void refresh()} onShared={next => { setData(next); setTab('review'); }} onProviderChange={refreshProviders}/>}
+                    {tab === 'review' && <Review data={data} busy={busy} onApprove={() => void act({ kind: 'approve' })} onSetQuestion={text => void act({ kind: 'set_question', text, sourceNote: 'Question written by the investor' })}/>}
                     {tab === 'offers' && <DecisionWorkbench caseBase={caseBase} onChanged={() => void refresh()}/>}
                     {tab === 'people' && userCase && <People base={caseBase} data={data} onChanged={() => void refresh()}/>}
                     {tab === 'history' && <History data={data} base={caseBase}/>}
