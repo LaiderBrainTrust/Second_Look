@@ -179,10 +179,43 @@ function FundingPanelBody({
               </button>
             </p>
           )}
+          {caseBase === "/api/case" && (
+            <aside className="funding-example" aria-label="Fictional payment example">
+              <p>
+                <strong>Try this without typing everything.</strong> Fill in a
+                fictional $750,000 capital call due November 1, with no other
+                cash available. Review the details, then save when ready.
+              </p>
+              <button
+                type="button"
+                className="secondary"
+                disabled={busy || formRevision !== revision}
+                onClick={() => {
+                  if (!confirmDiscardChanges()) return;
+                  update({
+                    ownerEntity,
+                    amount: "750000",
+                    neededBy: "2026-11-01",
+                    cash: "0",
+                    cashAsOf: "2026-10-24",
+                    confirmed: false,
+                    source: "Fictional capital-call example: $750,000 due November 1, 2026.",
+                  });
+                }}
+              >
+                Fill with fictional example
+              </button>
+              <p className="sl-help">
+                These are sample details, not information imported from X1.
+                The cash confirmation stays unchecked for you to review.
+              </p>
+            </aside>
+          )}
           <h4>1. What payment do you need to cover?</h4>
           <label>
             Who needs to make this payment?
             <input
+              name="funding-ownerEntity"
               value={form.ownerEntity}
               placeholder="e.g. Your family trust"
               required
@@ -196,6 +229,7 @@ function FundingPanelBody({
             Amount you need (USD)
             <input
               inputMode="decimal"
+              name="funding-amount"
               value={form.amount}
               placeholder="e.g. 750,000"
               required
@@ -206,6 +240,7 @@ function FundingPanelBody({
             Payment deadline
             <input
               type="date"
+              name="funding-neededBy"
               value={form.neededBy}
               required
               onChange={(e) => update({ neededBy: e.target.value })}
@@ -214,6 +249,7 @@ function FundingPanelBody({
           <label>
             What is this payment for?
             <input
+              name="funding-source"
               value={form.source}
               required
               maxLength={2000}
@@ -226,6 +262,7 @@ function FundingPanelBody({
             Cash you can use before selling (USD)
             <input
               inputMode="decimal"
+              name="funding-cash"
               value={form.cash}
               placeholder="Enter 0 if none; leave blank if unknown"
               onChange={(e) => update({ cash: e.target.value })}
@@ -235,6 +272,7 @@ function FundingPanelBody({
             When did you check that balance?
             <input
               type="date"
+              name="funding-cashAsOf"
               value={form.cashAsOf}
               onChange={(e) => update({ cashAsOf: e.target.value })}
             />
@@ -249,29 +287,33 @@ function FundingPanelBody({
               checked={form.confirmed}
               onChange={(e) => update({ confirmed: e.target.checked })}
             />
-            I checked that this cash belongs to the same owner, is available for
-            this payment, and does not include money from this sale.
+            <span>
+              I checked that this cash belongs to the same owner, is available
+              for this payment, and does not include money from this sale.
+            </span>
           </label>
           <p className="sl-help">
             Unknown cash can be saved, but the comparison will wait for you to
             confirm it. Saving updates this review; it does not transfer money.
           </p>
-          <button disabled={busy || formRevision !== revision}>
-            {busy ? "Saving…" : "Save amount and deadline"}
-          </button>
-          <button
-            type="button"
-            className="secondary"
-            disabled={busy}
-            onClick={() => {
-              if (confirmDiscardChanges()) {
-                setEditing(false);
-                draft.markClean();
-              }
-            }}
-          >
-            Cancel
-          </button>
+          <div className="sl-actions">
+            <button disabled={busy || formRevision !== revision}>
+              {busy ? "Saving…" : "Save amount and deadline"}
+            </button>
+            <button
+              type="button"
+              className="secondary"
+              disabled={busy}
+              onClick={() => {
+                if (confirmDiscardChanges()) {
+                  setEditing(false);
+                  draft.markClean();
+                }
+              }}
+            >
+              Cancel
+            </button>
+          </div>
         </form>
       )}
       {data?.funding && (

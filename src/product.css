@@ -2069,3 +2069,32 @@ button.sl-text-button:hover:enabled {
 @media print {
   .sl-deal-summary { position: static; box-shadow: none; }
 }
+
+/* Keep the cash confirmation readable when its label wraps. */
+.sl-root .funding-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  min-height: 44px;
+  cursor: pointer;
+}
+.sl-root .funding-check input[type="checkbox"] {
+  flex: 0 0 22px;
+  height: 22px;
+  min-height: 22px;
+  margin-top: 2px;
+  padding: 0;
+}
+.funding-example {
+  margin: 20px 0;
+  padding: 18px;
+  border: 1px solid var(--input-line);
+  border-radius: 8px;
+  background: var(--surface);
+}
+.funding-example p:first-child {
+  margin-top: 0;
+}
+.funding-example p:last-child {
+  margin-bottom: 0;
+}
