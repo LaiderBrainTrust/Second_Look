@@ -6,6 +6,7 @@ import type { ResearchInput, ResearchRun } from '../shared/research.js';
 import { reviewInput } from '../server/adapters/roundtable.js';
 import { createStore } from '../server/store.js';
 import { createApp } from '../server/app.js';
+import { GAMING_HOLDINGS } from '../shared/gaming.js';
 
 const input: ResearchInput = {
   caseId: 'sample-fund', caseRevision: 1, runId: 'run-one', after: '2026-09-30',
@@ -18,6 +19,30 @@ function run(): ResearchRun {
     result: { ...reviewInput(input), sources: [] }, writeRequestId: 'write-one', dispatchRequestId: 'dispatch-one' };
 }
 describe('research-to-case handoff', () => {
+  it('retains the game and exact answer reviewed after a different question is shared and storage reopens', () => {
+    const dir = mkdtempSync(join(tmpdir(), 'second-look-chain-'));
+    const file = join(dir, 'case.sqlite');
+    let store = createStore(file);
+    try {
+      store.saveResearch({ ...run(), gamingContext: { holding: GAMING_HOLDINGS[0], snapshotId: 'snapshot-one', news: [], priority: 'Watch', reason: 'No material change', ownershipDisclosure: 'Fictional' } });
+      const shared = store.publishResearch('run-one', 1);
+      expect(shared.researchContext).toMatchObject({ game: 'Tiny Glade', snapshotId: 'snapshot-one', sharedAtRevision: 2 });
+      store.command('gp', 2, { kind: 'answer', distributionCents: 10000000, text: 'Fictional rights and distribution notice.' });
+      store.command('lp', 3, { kind: 'approve' });
+      store.command('buyer', 3, { kind: 'revise', distributionRecipient: 'buyer' });
+      store.saveResearch({ ...run(), id: 'other-research', caseRevision: 4 });
+      const replaced = store.publishResearch('other-research', 4);
+      expect(replaced.researchContext).toBeUndefined();
+      expect(replaced.answer).toBeNull();
+      store.close(); store = createStore(file);
+      const approval = store.read().reviews[0];
+      expect(approval.revision).toBe(3);
+      expect(approval.researchContext?.game).toBe('Tiny Glade');
+      expect(approval.answer?.text).toBe('Fictional rights and distribution notice.');
+      expect(approval.answer?.distributionCents).toBe(10000000);
+      expect(approval.question).toBe(shared.question);
+    } finally { store.close(); rmSync(dir, { recursive: true }); }
+  });
   it('proposes a source-bound question without inventing a value or approval', () => {
     const result = reviewInput(input);
     expect(result.question).toContain('Does this change');

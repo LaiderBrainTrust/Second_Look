@@ -47,7 +47,7 @@ export function ResearchPanel({ data, refreshVersion, onShared, onProviderChange
   return <section className="research" aria-labelledby="research-heading">
     <p className="eyebrow">Live external research · Akta + Roundtable</p>
     <h2 id="research-heading">Your evidence → a question worth asking</h2>
-    <p>Find a dated development, ask the reviewer to check its source, then share the proposed question with the fund manager.</p>
+    <p>Connect the game and studio evidence to a specific question: what cash, if any, belongs to this fund interest, and who keeps it in the sale?</p>
     <p className="muted">The fund is fictional. The company and news are real demonstration inputs; no holding in this fund is established.</p>
     <details className="extra-research"><summary>Research another company with Akta</summary>
     <form className="research-search" onSubmit={e => { e.preventDefault(); void action(async () => {
