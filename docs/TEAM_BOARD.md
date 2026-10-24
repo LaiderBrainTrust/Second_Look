@@ -5,6 +5,7 @@ Read [PLAN.md](PLAN.md) first. This board records proposed work, not automatic d
 | Priority | Task | Owner / state | Acceptance |
 | --- | --- | --- | --- |
 | P0 | Background review recovery and safe release path | Mat/Codex — merged and deployed; 34 tests/build and live checks passed | [BACKEND_READINESS.md](BACKEND_READINESS.md); queued results survive closed browser/restart, unchanged case, preserved API |
+| P1 | Downloadable decision record | Mat/Codex backend implemented; Ryan owns button integration | [DECISION_RECORD.md](DECISION_RECORD.md); HTML/JSON, investor-only, guarded revision, original approval history |
 | P0 | Final customer UI and product design | Ryan — assigned by Mat; implementation/acceptance pending | [RYAN_PRODUCT_BRIEF.md](RYAN_PRODUCT_BRIEF.md); cohesive real-API journey, useful in the first minute, exact deployed commit verified |
 | P0 | Core gaming → review → changed-offer workflow | Mat/Codex — implemented and locally verified | 29 tests/build; live source/task/trace receipts; browser financial sequence. These verify the reference implementation, not the future redesign |
 | P0 | PRISM setup | Mat/Codex — live verified | Actual model trace accepted; setup doctor reports live/app connected |
